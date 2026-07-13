@@ -23,8 +23,7 @@ export default function AdminLoginPage() {
       });
 
       if (res.ok) {
-        router.push("/admin");
-        router.refresh();
+        window.location.href = "/admin";
       } else {
         const data = await res.json();
         setError(data.error || "Password salah");
@@ -85,7 +84,7 @@ export default function AdminLoginPage() {
           color: "var(--admin-text-sub)",
           marginTop: "25px"
         }}>
-          Default password is <strong>admin123</strong> (dapat dikonfigurasi di .env)
+
         </p>
       </div>
     </div>
