@@ -100,7 +100,7 @@ export default function OpeningCoverClient({
                 Kami yang berbahagia,
               </h3>
               <p className="footer-names">
-                Daffa &amp; Regina
+                {config?.groomNickname || "Daffa"} &amp; {config?.brideNickname || "Regina"}
               </p>
             </section>
           </ScrollReveal>
