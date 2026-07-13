@@ -7,8 +7,13 @@ function getPrismaInstance(): PrismaClient {
 
   if (process.env.TURSO_DATABASE_URL) {
     const { PrismaLibSql } = require('@prisma/adapter-libsql/web');
+    // Automatically rewrite libsql:// to https:// for fetch-based web adapter compatibility
+    let url = process.env.TURSO_DATABASE_URL;
+    if (url.startsWith("libsql://")) {
+      url = url.replace("libsql://", "https://");
+    }
     adapter = new PrismaLibSql({
-      url: process.env.TURSO_DATABASE_URL,
+      url,
       authToken: process.env.TURSO_AUTH_TOKEN,
     });
   } else {
