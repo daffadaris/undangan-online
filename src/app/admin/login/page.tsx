@@ -84,7 +84,6 @@ export default function AdminLoginPage() {
           color: "var(--admin-text-sub)",
           marginTop: "25px"
         }}>
-
         </p>
       </div>
     </div>
