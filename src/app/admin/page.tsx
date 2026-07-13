@@ -95,7 +95,7 @@ export default async function AdminDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {recentRsvps.map((guest) => (
+                {recentRsvps.map((guest: any) => (
                   <tr key={guest.id}>
                     <td style={{ fontWeight: "600" }}>{guest.name}</td>
                     <td>
