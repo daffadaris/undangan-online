@@ -17,7 +17,13 @@ async function run() {
   const turso = createClient({ url, authToken });
 
   console.log("📂 Reading local SQLite schema...");
-  const dbPath = path.join(__dirname, "../prisma/dev.db");
+  const fs = require("fs");
+  let dbPath = path.join(__dirname, "../dev.db");
+  if (!fs.existsSync(dbPath) || fs.statSync(dbPath).size === 0) {
+    dbPath = path.join(__dirname, "../prisma/dev.db");
+  }
+  
+  console.log(`   - Using database file at: ${dbPath}`);
   let localDb;
   try {
     localDb = new betterSqlite3(dbPath);
