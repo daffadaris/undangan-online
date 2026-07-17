@@ -10,8 +10,9 @@ export async function loginAdmin(password: string): Promise<boolean> {
     cookieStore.set(SESSION_COOKIE, SESSION_VALUE, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      maxAge: 60 * 60 * 24 * 7, // 1 week
+      maxAge: 60 * 30, // 30 minutes
       path: "/",
+      sameSite: "lax",
     });
     return true;
   }
