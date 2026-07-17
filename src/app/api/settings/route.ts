@@ -53,6 +53,9 @@ export async function PUT(request: Request) {
       akadTitle: body.akadTitle,
       resepsiTitle: body.resepsiTitle,
       whatsappTemplate: body.whatsappTemplate,
+      groomImagePosition: body.groomImagePosition,
+      brideImagePosition: body.brideImagePosition,
+      heroImagePosition: body.heroImagePosition,
     };
 
     const config = await prisma.weddingConfig.upsert({

@@ -61,4 +61,7 @@ model WeddingConfig {
   akadTitle      String    @default("Akad Nikah")
   resepsiTitle   String    @default("Resepsi Pernikahan")
   whatsappTemplate String?
+  groomImagePosition String?   @default("center")
+  brideImagePosition String?   @default("center")
+  heroImagePosition  String?   @default("center")
 }

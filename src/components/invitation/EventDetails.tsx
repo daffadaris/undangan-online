@@ -1,4 +1,5 @@
 import React from "react";
+import { FloralHeaderDecor, SectionCorners } from "./FloralDecor";
 
 interface EventDetailsProps {
   config: any;
@@ -18,6 +19,8 @@ export default function EventDetails({ config }: EventDetailsProps) {
 
   return (
     <section className="invitation-section">
+      <SectionCorners />
+      <FloralHeaderDecor />
       <h2 className="section-title">Waktu &amp; Tempat Acara</h2>
       <p className="events-intro">
         Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud menyelenggarakan acara pernikahan kami pada:

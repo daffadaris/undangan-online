@@ -64,11 +64,11 @@ export default function OpeningCoverClient({
 
       {isOpened && (
         <div className="animate-fade-in">
-          {/* Hero with floating petals */}
-          <div style={{ position: "relative" }}>
-            {heroSection}
-            <FloatingPetals count={6} />
-          </div>
+          {/* Global floating petals background */}
+          <FloatingPetals count={15} />
+
+          {/* Hero */}
+          {heroSection}
           
           {/* Islamic Verse / Ayat Section */}
           <ScrollReveal animation="blur-in">

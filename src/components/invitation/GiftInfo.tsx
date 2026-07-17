@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { FloralHeaderDecor, SectionCorners } from "./FloralDecor";
 
 interface GiftItem {
   bankName: string;
@@ -49,6 +50,8 @@ export default function GiftInfo({ config }: GiftInfoProps) {
 
   return (
     <section className="invitation-section">
+      <SectionCorners />
+      <FloralHeaderDecor />
       <h2 className="section-title">Kado Digital</h2>
       <p className="gift-intro">
         Doa restu Anda merupakan karunia terindah bagi kami. Namun apabila Anda ingin memberikan tanda kasih secara digital, Anda dapat menyalurkannya melalui rekening berikut:

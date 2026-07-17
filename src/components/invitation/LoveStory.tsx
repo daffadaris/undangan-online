@@ -1,4 +1,5 @@
 import React from "react";
+import { FloralHeaderDecor, SectionCorners } from "./FloralDecor";
 
 interface StoryItem {
   year: string;
@@ -42,6 +43,8 @@ export default function LoveStory({ config }: LoveStoryProps) {
 
   return (
     <section className="invitation-section">
+      <SectionCorners />
+      <FloralHeaderDecor />
       <h2 className="section-title">Kisah Cinta Kami</h2>
       <p className="timeline-intro">
         Bagaimana awal mula perjalanan cinta kami hingga sampai di titik ini.

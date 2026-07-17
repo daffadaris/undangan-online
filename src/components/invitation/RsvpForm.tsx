@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { FloralHeaderDecor, SectionCorners } from "./FloralDecor";
 
 interface Wish {
   id: string;
@@ -73,14 +74,14 @@ export default function RsvpForm({
       });
 
       if (res.ok) {
-        setSubmitMessage("Terima kasih! RSVP dan ucapan Anda telah berhasil dikirim.");
+        setSubmitMessage("Konfirmasi berhasil dikirim. Terima kasih!");
         fetchWishes();
       } else {
-        setSubmitMessage("Gagal mengirim RSVP. Silakan coba beberapa saat lagi.");
+        setSubmitMessage("Gagal mengirim konfirmasi.");
       }
     } catch (e) {
       console.error(e);
-      setSubmitMessage("Terjadi kesalahan. Silakan periksa koneksi Anda.");
+      setSubmitMessage("Terjadi kesalahan sistem.");
     } finally {
       setIsSubmitting(false);
     }
@@ -88,6 +89,8 @@ export default function RsvpForm({
 
   return (
     <section className="invitation-section">
+      <SectionCorners />
+      <FloralHeaderDecor />
       <h2 className="section-title">Konfirmasi Kehadiran</h2>
       <p className="rsvp-intro">
         Bantu kami mempersiapkan kenyamanan acara dengan mengisi konfirmasi kehadiran di bawah ini:

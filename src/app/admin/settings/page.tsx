@@ -56,6 +56,9 @@ export default function AdminSettingsPage() {
   const [brideImage, setBrideImage] = useState("");
   const [coupleImage, setCoupleImage] = useState("");
   const [galleryImagesText, setGalleryImagesText] = useState("");
+  const [groomImagePosition, setGroomImagePosition] = useState("center");
+  const [brideImagePosition, setBrideImagePosition] = useState("center");
+  const [heroImagePosition, setHeroImagePosition] = useState("center");
 
   // Section Visibility Toggles
   const [showLoveStory, setShowLoveStory] = useState(true);
@@ -108,6 +111,9 @@ export default function AdminSettingsPage() {
             setShowAkad(config.showAkad !== false);
             setShowResepsi(config.showResepsi !== false);
             setWhatsappTemplate(config.whatsappTemplate || "");
+            setGroomImagePosition(config.groomImagePosition || "center");
+            setBrideImagePosition(config.brideImagePosition || "center");
+            setHeroImagePosition(config.heroImagePosition || "center");
 
             try {
               const gallery = JSON.parse(config.galleryImages || "[]");
@@ -255,6 +261,9 @@ export default function AdminSettingsPage() {
           showAkad,
           showResepsi,
           whatsappTemplate,
+          groomImagePosition,
+          brideImagePosition,
+          heroImagePosition,
         }),
       });
 
@@ -787,6 +796,25 @@ export default function AdminSettingsPage() {
                   <span style={{ fontSize: "0.8rem", color: "var(--admin-primary)" }}>✓ Tersedia</span>
                 )}
               </div>
+              <div style={{ marginTop: "12px" }}>
+                <label style={{ fontSize: "0.75rem", color: "var(--admin-text-sub)", display: "block", marginBottom: "4px" }}>
+                  Fokus Potong Gambar (Crop Alignment)
+                </label>
+                <select 
+                  className="admin-input" 
+                  value={heroImagePosition} 
+                  onChange={(e) => setHeroImagePosition(e.target.value)}
+                  style={{ padding: "6px 10px", fontSize: "0.8rem", height: "auto" }}
+                >
+                  <option value="center">Tengah (Center)</option>
+                  <option value="top">Atas (Top)</option>
+                  <option value="bottom">Bawah (Bottom)</option>
+                  <option value="left">Kiri (Left)</option>
+                  <option value="right">Kanan (Right)</option>
+                  <option value="center top">Tengah Atas</option>
+                  <option value="center bottom">Tengah Bawah</option>
+                </select>
+              </div>
             </div>
             
             <div className="admin-input-group">
@@ -851,6 +879,25 @@ export default function AdminSettingsPage() {
                   <span style={{ fontSize: "0.8rem", color: "var(--admin-primary)" }}>✓ Tersedia</span>
                 )}
               </div>
+              <div style={{ marginTop: "12px" }}>
+                <label style={{ fontSize: "0.75rem", color: "var(--admin-text-sub)", display: "block", marginBottom: "4px" }}>
+                  Fokus Potong Gambar (Crop Alignment)
+                </label>
+                <select 
+                  className="admin-input" 
+                  value={groomImagePosition} 
+                  onChange={(e) => setGroomImagePosition(e.target.value)}
+                  style={{ padding: "6px 10px", fontSize: "0.8rem", height: "auto" }}
+                >
+                  <option value="center">Tengah (Center)</option>
+                  <option value="top">Atas (Top)</option>
+                  <option value="bottom">Bawah (Bottom)</option>
+                  <option value="left">Kiri (Left)</option>
+                  <option value="right">Kanan (Right)</option>
+                  <option value="center top">Tengah Atas</option>
+                  <option value="center bottom">Tengah Bawah</option>
+                </select>
+              </div>
             </div>
 
             <div className="admin-input-group">
@@ -881,6 +928,25 @@ export default function AdminSettingsPage() {
                 {brideImage && (
                   <span style={{ fontSize: "0.8rem", color: "var(--admin-primary)" }}>✓ Tersedia</span>
                 )}
+              </div>
+              <div style={{ marginTop: "12px" }}>
+                <label style={{ fontSize: "0.75rem", color: "var(--admin-text-sub)", display: "block", marginBottom: "4px" }}>
+                  Fokus Potong Gambar (Crop Alignment)
+                </label>
+                <select 
+                  className="admin-input" 
+                  value={brideImagePosition} 
+                  onChange={(e) => setBrideImagePosition(e.target.value)}
+                  style={{ padding: "6px 10px", fontSize: "0.8rem", height: "auto" }}
+                >
+                  <option value="center">Tengah (Center)</option>
+                  <option value="top">Atas (Top)</option>
+                  <option value="bottom">Bawah (Bottom)</option>
+                  <option value="left">Kiri (Left)</option>
+                  <option value="right">Kanan (Right)</option>
+                  <option value="center top">Tengah Atas</option>
+                  <option value="center bottom">Tengah Bawah</option>
+                </select>
               </div>
             </div>
           </div>
