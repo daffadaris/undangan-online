@@ -2,8 +2,18 @@ import { NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"];
-const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+const ALLOWED_TYPES = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "image/svg+xml",
+  "image/pjpeg",
+  "image/x-png"
+];
+const ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
+const MAX_SIZE = 10 * 1024 * 1024; // Increase limit to 10MB to accommodate high-res camera photos
 
 export async function POST(request: Request) {
   try {
@@ -14,10 +24,18 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: "No file uploaded" }, { status: 400 });
     }
 
-    // Validate file type
-    if (!ALLOWED_TYPES.includes(file.type)) {
+    const fileExtension = file.name.split(".").pop()?.toLowerCase() || "";
+
+    // Validate file type and extension (using extension as fallback for browser compatibility)
+    const isAllowedMime = ALLOWED_TYPES.includes(file.type.toLowerCase());
+    const isAllowedExt = ALLOWED_EXTENSIONS.includes(fileExtension);
+
+    if (!isAllowedMime && !isAllowedExt) {
       return NextResponse.json(
-        { success: false, error: `Tipe file tidak didukung: ${file.type}. Gunakan JPEG, PNG, GIF, atau WebP.` },
+        { 
+          success: false, 
+          error: `Format file tidak didukung: ${file.type || "unknown"}. Gunakan JPG, PNG, GIF, atau WebP.` 
+        },
         { status: 400 }
       );
     }
@@ -25,7 +43,7 @@ export async function POST(request: Request) {
     // Validate file size
     if (file.size > MAX_SIZE) {
       return NextResponse.json(
-        { success: false, error: "Ukuran file terlalu besar. Maksimal 5MB." },
+        { success: false, error: "Ukuran file terlalu besar. Maksimal 10MB." },
         { status: 400 }
       );
     }
@@ -42,7 +60,6 @@ export async function POST(request: Request) {
     }
 
     // Generate a unique filename to prevent conflicts
-    const fileExtension = file.name.split(".").pop();
     const uniqueFilename = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExtension}`;
     const filePath = join(uploadsDir, uniqueFilename);
 
@@ -53,6 +70,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, url: fileUrl });
   } catch (error) {
     console.error("Upload error:", error);
-    return NextResponse.json({ success: false, error: "Failed to upload file" }, { status: 500 });
+    return NextResponse.json({ success: false, error: "Gagal mengunggah berkas" }, { status: 500 });
   }
 }

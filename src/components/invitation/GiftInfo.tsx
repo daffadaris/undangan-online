@@ -57,16 +57,18 @@ export default function GiftInfo({ config }: GiftInfoProps) {
       <div className="gift-grid">
         {giftItems.map((item, idx) => (
           <div key={idx} className="bank-card">
-            <div className="bank-logo">{item.bankName}</div>
+            <div className="bank-card-header">
+              <div className="bank-logo">{item.bankName}</div>
+              <button
+                onClick={() => handleCopy(item.accountNumber, idx)}
+                className="bank-copy-btn"
+              >
+                {copiedIndex === idx ? "Tersalin!" : "Salin"}
+              </button>
+            </div>
+            
             <div className="bank-number">{item.accountNumber}</div>
             <div className="bank-holder">a.n. {item.accountName}</div>
-            
-            <button
-              onClick={() => handleCopy(item.accountNumber, idx)}
-              className="bank-copy-btn"
-            >
-              {copiedIndex === idx ? "Tersalin!" : "Salin No. Rek"}
-            </button>
           </div>
         ))}
       </div>
