@@ -6,13 +6,11 @@ function getPrismaInstance(): PrismaClient {
   let adapter: any;
 
   if (process.env.TURSO_DATABASE_URL) {
-    const { createClient } = require("@libsql/client");
     const { PrismaLibSql } = require("@prisma/adapter-libsql");
-    const libsql = createClient({
+    adapter = new PrismaLibSql({
       url: process.env.TURSO_DATABASE_URL,
       authToken: process.env.TURSO_AUTH_TOKEN,
     });
-    adapter = new PrismaLibSql(libsql);
   } else {
     const Database = require("better-sqlite3");
     const { PrismaBetterSqlite3 } = require("@prisma/adapter-better-sqlite3");
