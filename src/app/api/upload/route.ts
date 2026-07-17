@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import { join } from "path";
 
 const ALLOWED_TYPES = [
   "image/jpeg",
@@ -13,7 +11,7 @@ const ALLOWED_TYPES = [
   "image/x-png"
 ];
 const ALLOWED_EXTENSIONS = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
-const MAX_SIZE = 10 * 1024 * 1024; // Increase limit to 10MB to accommodate high-res camera photos
+const MAX_SIZE = 5 * 1024 * 1024; // 5MB limit for Base64 database persistence
 
 export async function POST(request: Request) {
   try {
@@ -26,7 +24,7 @@ export async function POST(request: Request) {
 
     const fileExtension = file.name.split(".").pop()?.toLowerCase() || "";
 
-    // Validate file type and extension (using extension as fallback for browser compatibility)
+    // Validate file type and extension
     const isAllowedMime = ALLOWED_TYPES.includes(file.type.toLowerCase());
     const isAllowedExt = ALLOWED_EXTENSIONS.includes(fileExtension);
 
@@ -34,7 +32,7 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { 
           success: false, 
-          error: `Format file tidak didukung: ${file.type || "unknown"}. Gunakan JPG, PNG, GIF, atau WebP.` 
+          error: `Format file tidak didukung. Gunakan JPG, PNG, GIF, atau WebP.` 
         },
         { status: 400 }
       );
@@ -43,7 +41,7 @@ export async function POST(request: Request) {
     // Validate file size
     if (file.size > MAX_SIZE) {
       return NextResponse.json(
-        { success: false, error: "Ukuran file terlalu besar. Maksimal 10MB." },
+        { success: false, error: "Ukuran file terlalu besar. Maksimal 5MB." },
         { status: 400 }
       );
     }
@@ -51,28 +49,20 @@ export async function POST(request: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Create the public/uploads directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), "public", "uploads");
-    try {
-      await mkdir(uploadsDir, { recursive: true });
-    } catch (err) {
-      // Ignore if directory already exists
-    }
+    // Convert file to Base64 Data URL to allow serverless persistence inside Turso database
+    const base64Data = buffer.toString("base64");
+    const mimeType = file.type || `image/${fileExtension === "jpg" ? "jpeg" : fileExtension}`;
+    const fileUrl = `data:${mimeType};base64,${base64Data}`;
 
-    // Generate a unique filename to prevent conflicts
-    const uniqueFilename = `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExtension}`;
-    const filePath = join(uploadsDir, uniqueFilename);
-
-    await writeFile(filePath, buffer);
-
-    // Serve via API route instead of static — Next.js doesn't serve runtime-created public files
-    const fileUrl = `/api/upload/${uniqueFilename}`;
     return NextResponse.json({ success: true, url: fileUrl });
-  } catch (error: any) {
+  } catch (error) {
     console.error("Upload error:", error);
-    return NextResponse.json({ 
-      success: false, 
-      error: `Gagal mengunggah berkas: ${error?.message || String(error)}`
-    }, { status: 500 });
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: `Gagal mengunggah berkas: ${(error as Error).message}` 
+      }, 
+      { status: 500 }
+    );
   }
 }
