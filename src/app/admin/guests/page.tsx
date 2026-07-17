@@ -159,9 +159,31 @@ export default function AdminGuestsPage() {
     }
   };
 
-  const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text);
-    alert("Tautan undangan berhasil disalin!");
+  const copyToClipboard = async (text: string) => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        alert("Tautan undangan berhasil disalin!");
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        const successful = document.execCommand("copy");
+        document.body.removeChild(textArea);
+        if (successful) {
+          alert("Tautan undangan berhasil disalin!");
+        } else {
+          alert("Gagal menyalin tautan. Silakan salin secara manual.");
+        }
+      }
+    } catch (err) {
+      console.error("Gagal menyalin: ", err);
+      alert("Gagal menyalin tautan. Silakan salin secara manual.");
+    }
   };
 
   const getWhatsAppLink = (guest: Guest) => {

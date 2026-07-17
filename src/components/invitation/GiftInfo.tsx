@@ -40,12 +40,31 @@ export default function GiftInfo({ config }: GiftInfoProps) {
     ];
   }
 
-  const handleCopy = (number: string, idx: number) => {
-    navigator.clipboard.writeText(number);
-    setCopiedIndex(idx);
-    setTimeout(() => {
-      setCopiedIndex(null);
-    }, 2000);
+  const handleCopy = async (number: string, idx: number) => {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(number);
+        setCopiedIndex(idx);
+      } else {
+        const textArea = document.createElement("textarea");
+        textArea.value = number;
+        textArea.style.position = "fixed";
+        textArea.style.opacity = "0";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        const successful = document.execCommand("copy");
+        document.body.removeChild(textArea);
+        if (successful) {
+          setCopiedIndex(idx);
+        }
+      }
+      setTimeout(() => {
+        setCopiedIndex(null);
+      }, 2000);
+    } catch (err) {
+      console.error("Gagal menyalin: ", err);
+    }
   };
 
   return (
