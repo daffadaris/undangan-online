@@ -1,5 +1,5 @@
 import React from "react";
-import { FloralHeaderDecor, SectionCorners } from "./FloralDecor";
+import { FloralHeaderDecor, SectionCorners, FloralTimelineNode } from "./FloralDecor";
 
 interface StoryItem {
   year: string;
@@ -56,6 +56,7 @@ export default function LoveStory({ config }: LoveStoryProps) {
             key={idx}
             className={`timeline-item ${idx % 2 === 0 ? "left-item" : "right-item"}`}
           >
+            <FloralTimelineNode className="timeline-flower-node" />
             <div className="timeline-content">
               <span className="timeline-year">{item.year}</span>
               <h3 className="timeline-title">
@@ -71,3 +72,4 @@ export default function LoveStory({ config }: LoveStoryProps) {
     </section>
   );
 }
+

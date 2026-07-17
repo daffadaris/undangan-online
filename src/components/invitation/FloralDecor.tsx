@@ -358,3 +358,95 @@ export const SideLeafDecorRight = ({ className = "" }: { className?: string }) =
     </svg>
   </div>
 );
+
+/* Leaf wreath floral frame overlay for couple photos */
+export const FloralPhotoFrame = ({ className = "" }: { className?: string }) => (
+  <svg
+    viewBox="0 0 100 100"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={{ pointerEvents: "none" }}
+  >
+    {/* Wreath circle outlines */}
+    <circle cx="50" cy="50" r="46" stroke="var(--primary-sage)" strokeWidth="1" strokeDasharray="3 3" opacity="0.6" />
+    <circle cx="50" cy="50" r="43" stroke="var(--accent-gold)" strokeWidth="0.75" opacity="0.4" />
+    
+    {/* Leaf pairs rotated around the circle */}
+    <g transform="rotate(0 50 50)">
+      <path d="M50 4 C43 4 38 9 38 16 C43 16 48 11 50 4Z" fill="var(--primary-sage)" opacity="0.55" />
+      <path d="M50 4 C57 4 62 9 62 16 C57 16 52 11 50 4Z" fill="var(--primary-sage)" opacity="0.55" />
+    </g>
+    <g transform="rotate(30 50 50)">
+      <path d="M50 4 C45 6 42 12 44 17 C49 15 52 10 50 4Z" fill="var(--secondary-olive)" opacity="0.5" />
+    </g>
+    <g transform="rotate(60 50 50)">
+      <path d="M50 4 C45 6 42 12 44 17 C49 15 52 10 50 4Z" fill="var(--primary-sage)" opacity="0.5" />
+    </g>
+    <g transform="rotate(90 50 50)">
+      <path d="M50 4 C43 4 38 9 38 16 C43 16 48 11 50 4Z" fill="var(--primary-sage)" opacity="0.55" />
+      <path d="M50 4 C57 4 62 9 62 16 C57 16 52 11 50 4Z" fill="var(--primary-sage)" opacity="0.55" />
+    </g>
+    <g transform="rotate(120 50 50)">
+      <path d="M50 4 C45 6 42 12 44 17 C49 15 52 10 50 4Z" fill="var(--secondary-olive)" opacity="0.5" />
+    </g>
+    <g transform="rotate(150 50 50)">
+      <path d="M50 4 C45 6 42 12 44 17 C49 15 52 10 50 4Z" fill="var(--primary-sage)" opacity="0.5" />
+    </g>
+    <g transform="rotate(180 50 50)">
+      <path d="M50 4 C43 4 38 9 38 16 C43 16 48 11 50 4Z" fill="var(--primary-sage)" opacity="0.55" />
+      <path d="M50 4 C57 4 62 9 62 16 C57 16 52 11 50 4Z" fill="var(--primary-sage)" opacity="0.55" />
+    </g>
+    <g transform="rotate(210 50 50)">
+      <path d="M50 4 C45 6 42 12 44 17 C49 15 52 10 50 4Z" fill="var(--secondary-olive)" opacity="0.5" />
+    </g>
+    <g transform="rotate(240 50 50)">
+      <path d="M50 4 C45 6 42 12 44 17 C49 15 52 10 50 4Z" fill="var(--primary-sage)" opacity="0.5" />
+    </g>
+    <g transform="rotate(270 50 50)">
+      <path d="M50 4 C43 4 38 9 38 16 C43 16 48 11 50 4Z" fill="var(--primary-sage)" opacity="0.55" />
+      <path d="M50 4 C57 4 62 9 62 16 C57 16 52 11 50 4Z" fill="var(--primary-sage)" opacity="0.55" />
+    </g>
+    <g transform="rotate(300 50 50)">
+      <path d="M50 4 C45 6 42 12 44 17 C49 15 52 10 50 4Z" fill="var(--secondary-olive)" opacity="0.5" />
+    </g>
+    <g transform="rotate(330 50 50)">
+      <path d="M50 4 C45 6 42 12 44 17 C49 15 52 10 50 4Z" fill="var(--primary-sage)" opacity="0.5" />
+    </g>
+    
+    {/* Small gold berries */}
+    <circle cx="50" cy="11" r="2.5" fill="var(--accent-gold)" />
+    <circle cx="89" cy="50" r="2.5" fill="var(--accent-gold)" />
+    <circle cx="50" cy="89" r="2.5" fill="var(--accent-gold)" />
+    <circle cx="11" cy="50" r="2.5" fill="var(--accent-gold)" />
+  </svg>
+);
+
+/* Elegant floral timeline node replacing plain circles */
+export const FloralTimelineNode = ({ className = "" }: { className?: string }) => (
+  <svg
+    width="24"
+    height="24"
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    style={{ pointerEvents: "none" }}
+  >
+    {/* Outer container leaf shapes */}
+    <path
+      d="M12 2C12 2 15 5 15 8C15 11 12 12 12 12C12 12 9 11 9 8C9 5 12 2 12 2Z"
+      fill="var(--primary-sage)"
+      opacity="0.75"
+    />
+    <path
+      d="M12 22C12 22 9 19 9 16C9 13 12 12 12 12C12 12 15 13 15 16C15 19 12 22 12 22Z"
+      fill="var(--primary-sage)"
+      opacity="0.75"
+    />
+    <circle cx="12" cy="12" r="6" fill="var(--bg-cream-light)" stroke="var(--accent-gold)" strokeWidth="1.5" />
+    <circle cx="12" cy="12" r="3.5" fill="var(--secondary-olive)" />
+    <circle cx="12" cy="12" r="1.5" fill="var(--accent-gold)" />
+  </svg>
+);
+

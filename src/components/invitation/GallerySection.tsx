@@ -1,5 +1,5 @@
 import React from "react";
-import { FloralHeaderDecor } from "./FloralDecor";
+import { FloralHeaderDecor, SectionCorners } from "./FloralDecor";
 
 interface GallerySectionProps {
   config: any;
@@ -27,6 +27,7 @@ export default function GallerySection({ config }: GallerySectionProps) {
 
   return (
     <section className="invitation-section">
+      <SectionCorners />
       <FloralHeaderDecor />
       <h2 className="section-title">Galeri Foto</h2>
       <p className="section-subtitle" style={{ marginBottom: "2rem" }}>Momen Bahagia Kami</p>
@@ -46,3 +47,4 @@ export default function GallerySection({ config }: GallerySectionProps) {
     </section>
   );
 }
+

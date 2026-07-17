@@ -1,5 +1,5 @@
 import React from "react";
-import { FloralDivider } from "./FloralDecor";
+import { FloralDivider, SectionCorners } from "./FloralDecor";
 
 interface HeroSectionProps {
   config: any;
@@ -27,6 +27,7 @@ export default function HeroSection({ config }: HeroSectionProps) {
         backgroundPosition: config?.heroImagePosition || "center",
       }}
     >
+      <SectionCorners />
       <div className="animate-fade-in hero-wrapper">
         <p className="cover-subtitle">Walimatul 'Ursy</p>
         <h1 className="hero-names">
@@ -43,3 +44,4 @@ export default function HeroSection({ config }: HeroSectionProps) {
     </section>
   );
 }
+

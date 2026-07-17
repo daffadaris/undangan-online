@@ -167,7 +167,7 @@ export default function AdminGuestsPage() {
   const getWhatsAppLink = (guest: Guest) => {
     const groom = weddingConfig?.groomNickname || "Daffa";
     const bride = weddingConfig?.brideNickname || "Regina";
-    const link = `${origin}/${guest.slug}`;
+    const link = `${origin}/pingkan-daffa/${guest.slug}`;
     
     const defaultTemplate = `Halo Bapak/Ibu/Saudara/i *{{nama}}*,
 
@@ -478,7 +478,7 @@ Terima kasih.`;
                     <td>{guest.phone || "-"}</td>
                     <td>
                       <button
-                        onClick={() => copyToClipboard(`${origin}/${guest.slug}`)}
+                        onClick={() => copyToClipboard(`${origin}/pingkan-daffa/${guest.slug}`)}
                         className="admin-btn-outline"
                         style={{ padding: "4px 8px", fontSize: "0.75rem" }}
                       >
