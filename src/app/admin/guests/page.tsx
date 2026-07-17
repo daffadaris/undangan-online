@@ -52,6 +52,8 @@ export default function AdminGuestsPage() {
   const [csvRows, setCsvRows] = useState<CSVRow[]>([]);
   const [csvImporting, setCsvImporting] = useState(false);
   const [csvResult, setCsvResult] = useState<{ imported: number; skipped: string[] } | null>(null);
+  const [pastedText, setPastedText] = useState("");
+  const [defaultImportGroup, setDefaultImportGroup] = useState("");
 
   // Origin for links
   const [origin, setOrigin] = useState("");
@@ -265,6 +267,23 @@ Terima kasih.`);
     e.target.value = "";
   };
 
+  const handleProcessPastedText = () => {
+    if (!pastedText.trim()) return;
+
+    const rawNames = pastedText.replace(/\r/g, "").split(/[,\n]/);
+    const names = rawNames.map(n => n.trim()).filter(Boolean);
+
+    const parsed: CSVRow[] = names.map(name => ({
+      name,
+      phone: "",
+      group: defaultImportGroup.trim() || "",
+      include: true,
+    }));
+
+    setCsvRows(parsed);
+    setCsvResult(null);
+  };
+
   const toggleCSVRow = (index: number) => {
     setCsvRows(prev => prev.map((row, i) => 
       i === index ? { ...row, include: !row.include } : row
@@ -330,7 +349,26 @@ Terima kasih.`);
           <button className="admin-btn-outline" onClick={exportToCSV}>
             Ekspor CSV
           </button>
-          {/* CSV Import Button */}
+          {/* CSV Import Trigger */}
+          <button 
+            className="admin-btn-outline" 
+            onClick={() => {
+              setCsvRows([]);
+              setCsvResult(null);
+              setPastedText("");
+              setDefaultImportGroup("");
+              setShowCSVModal(true);
+            }}
+            style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            Impor Massal / CSV
+          </button>
+          
           <input
             type="file"
             accept=".csv,.txt"
@@ -338,18 +376,6 @@ Terima kasih.`);
             style={{ display: "none" }}
             id="csv-import-input"
           />
-          <label
-            htmlFor="csv-import-input"
-            className="admin-btn-outline"
-            style={{ cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "6px" }}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="17 8 12 3 7 8" />
-              <line x1="12" y1="3" x2="12" y2="15" />
-            </svg>
-            Impor CSV
-          </label>
           <button className="admin-btn" onClick={() => setShowAddModal(true)}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: "6px" }}><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             Tambah Tamu
@@ -633,6 +659,72 @@ Terima kasih.`);
                   Tutup
                 </button>
               </div>
+            ) : csvRows.length === 0 ? (
+              /* Initial Import Options (Textarea or CSV file upload) */
+              <div style={{ marginTop: "15px" }}>
+                <div className="admin-input-group">
+                  <label className="admin-input-label">Cara 1: Tempel Daftar Nama Tamu (Pisahkan dengan koma atau baris baru)</label>
+                  <textarea
+                    className="admin-input"
+                    rows={6}
+                    value={pastedText}
+                    onChange={(e) => setPastedText(e.target.value)}
+                    placeholder="Contoh: Thoriq Afif Habibi, Mukhammad Ikhsan, Rheza Firmanda&#10;Atau masukkan satu nama per baris..."
+                  />
+                </div>
+
+                <div className="admin-input-group" style={{ marginBottom: "25px" }}>
+                  <label className="admin-input-label">Kategori / Grup Default untuk Nama yang Ditempel (Opsional)</label>
+                  <input
+                    type="text"
+                    className="admin-input"
+                    value={defaultImportGroup}
+                    onChange={(e) => setDefaultImportGroup(e.target.value)}
+                    placeholder="Contoh: Teman, Keluarga, Kantor"
+                  />
+                </div>
+
+                <div style={{
+                  border: "2px dashed var(--admin-border)",
+                  borderRadius: "8px",
+                  padding: "20px",
+                  textAlign: "center",
+                  backgroundColor: "var(--admin-bg)",
+                  marginBottom: "25px"
+                }}>
+                  <p style={{ fontSize: "0.85rem", fontWeight: "500", color: "var(--admin-text)", marginBottom: "10px" }}>
+                    Cara 2: Pilih / Unggah Berkas CSV
+                  </p>
+                  <label
+                    htmlFor="csv-import-input"
+                    className="admin-btn-outline"
+                    style={{ cursor: "pointer", display: "inline-flex", padding: "8px 16px", fontSize: "0.8rem" }}
+                  >
+                    Pilih Berkas CSV (.csv)
+                  </label>
+                  <p style={{ fontSize: "0.75rem", color: "var(--admin-text-sub)", marginTop: "8px" }}>
+                    Format kolom yang didukung: Nama, No HP (opsional), Grup (opsional)
+                  </p>
+                </div>
+
+                <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+                  <button
+                    type="button"
+                    className="admin-btn-outline"
+                    onClick={() => { setShowCSVModal(false); setCsvRows([]); setCsvResult(null); }}
+                  >
+                    Batal
+                  </button>
+                  <button
+                    type="button"
+                    className="admin-btn"
+                    onClick={handleProcessPastedText}
+                    disabled={!pastedText.trim()}
+                  >
+                    Proses Nama
+                  </button>
+                </div>
+              </div>
             ) : (
               /* Preview Table */
               <div style={{ marginTop: "15px" }}>
@@ -688,9 +780,9 @@ Terima kasih.`);
                     <button
                       type="button"
                       className="admin-btn-outline"
-                      onClick={() => { setShowCSVModal(false); setCsvRows([]); setCsvResult(null); }}
+                      onClick={() => setCsvRows([])}
                     >
-                      Batal
+                      Kembali / Reset
                     </button>
                     <button
                       className="admin-btn"
