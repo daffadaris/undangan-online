@@ -28,7 +28,7 @@ export default function EventDetails({ config }: EventDetailsProps) {
         {/* Akad Nikah */}
         {config?.showAkad !== false && (
           <div className="event-card">
-            <h3 className="event-title">Akad Nikah</h3>
+            <h3 className="event-title">{config?.akadTitle || "Akad Nikah"}</h3>
             
             <div className="event-detail-item">
               <span className="event-label">Hari / Tanggal</span>
@@ -78,7 +78,7 @@ export default function EventDetails({ config }: EventDetailsProps) {
         {/* Resepsi Pernikahan */}
         {config?.showResepsi !== false && (
           <div className="event-card">
-            <h3 className="event-title">Resepsi Pernikahan</h3>
+            <h3 className="event-title">{config?.resepsiTitle || "Resepsi Pernikahan"}</h3>
             
             <div className="event-detail-item">
               <span className="event-label">Hari / Tanggal</span>

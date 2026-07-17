@@ -197,6 +197,80 @@ a {
   transform: translateY(0);
 }
 
+.reveal-fade-left {
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-fade-left.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-fade-right {
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-fade-right.revealed {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.reveal-zoom-in {
+  opacity: 0;
+  transform: scale(0.85);
+  transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-zoom-in.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.reveal-blur-in {
+  opacity: 0;
+  filter: blur(10px);
+  transition: opacity 0.9s ease, filter 0.9s ease;
+}
+
+.reveal-blur-in.revealed {
+  opacity: 1;
+  filter: blur(0);
+}
+
+/* Floating Petal Animations */
+@keyframes petal-fall {
+  0% {
+    transform: translateY(-10%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(110vh);
+    opacity: 0;
+  }
+}
+
+@keyframes petal-sway {
+  0%, 100% { transform: rotate(0deg) translateX(0); }
+  25% { transform: rotate(15deg) translateX(15px); }
+  50% { transform: rotate(-5deg) translateX(-10px); }
+  75% { transform: rotate(10deg) translateX(8px); }
+}
+
+@keyframes gentle-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 /* Layout Utilities */
 .container {
   max-width: 1200px;

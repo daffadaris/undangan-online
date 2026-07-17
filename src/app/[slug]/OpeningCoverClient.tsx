@@ -3,7 +3,13 @@
 import React, { useState } from "react";
 import OpeningCover from "@/components/invitation/OpeningCover";
 import MusicPlayer from "@/components/invitation/MusicPlayer";
-import { FloralHeaderDecor } from "@/components/invitation/FloralDecor";
+import {
+  FloralHeaderDecor,
+  FloralSwirl,
+  GoldSeparator,
+  FloatingPetals,
+  SectionCorners,
+} from "@/components/invitation/FloralDecor";
 import ScrollReveal from "@/components/invitation/ScrollReveal";
 import GallerySection from "@/components/invitation/GallerySection";
 
@@ -58,44 +64,83 @@ export default function OpeningCoverClient({
 
       {isOpened && (
         <div className="animate-fade-in">
-          {heroSection}
+          {/* Hero with floating petals */}
+          <div style={{ position: "relative" }}>
+            {heroSection}
+            <FloatingPetals count={6} />
+          </div>
           
           {/* Islamic Verse / Ayat Section */}
-          <ScrollReveal>
+          <ScrollReveal animation="blur-in">
             <section className="invitation-section">
+              <SectionCorners />
               <FloralHeaderDecor />
               <p className="ayat-text">
-                "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir."
+                &quot;Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir.&quot;
               </p>
               <p className="ayat-reference">
                 - QS. Ar-Rum: 21 -
               </p>
+              <GoldSeparator />
             </section>
           </ScrollReveal>
 
-          <ScrollReveal>{coupleSection}</ScrollReveal>
-          <ScrollReveal>{countdownSection}</ScrollReveal>
+          <FloralSwirl />
+
+          <ScrollReveal animation="zoom-in">{coupleSection}</ScrollReveal>
+
+          <FloralSwirl />
+
+          <ScrollReveal animation="fade-up">{countdownSection}</ScrollReveal>
+
           {(config?.showAkad !== false || config?.showResepsi !== false) && (
-            <ScrollReveal>{eventDetailsSection}</ScrollReveal>
+            <>
+              <FloralSwirl />
+              <ScrollReveal animation="fade-left">{eventDetailsSection}</ScrollReveal>
+            </>
           )}
-          {config?.showLoveStory !== false && <ScrollReveal>{loveStorySection}</ScrollReveal>}
+
+          {config?.showLoveStory !== false && (
+            <>
+              <FloralSwirl />
+              <ScrollReveal animation="fade-up">{loveStorySection}</ScrollReveal>
+            </>
+          )}
+
           {config?.showGallery !== false && (
-            <ScrollReveal>
-              <GallerySection config={config} />
-            </ScrollReveal>
+            <>
+              <FloralSwirl />
+              <ScrollReveal animation="zoom-in">
+                <GallerySection config={config} />
+              </ScrollReveal>
+            </>
           )}
-          {config?.showGiftInfo !== false && <ScrollReveal>{giftInfoSection}</ScrollReveal>}
-          {config?.showRsvp !== false && <ScrollReveal>{rsvpFormSection}</ScrollReveal>}
+
+          {config?.showGiftInfo !== false && (
+            <>
+              <FloralSwirl />
+              <ScrollReveal animation="fade-right">{giftInfoSection}</ScrollReveal>
+            </>
+          )}
+
+          {config?.showRsvp !== false && (
+            <>
+              <FloralSwirl />
+              <ScrollReveal animation="fade-up">{rsvpFormSection}</ScrollReveal>
+            </>
+          )}
 
           {/* Footer Closing Section */}
-          <ScrollReveal>
+          <ScrollReveal animation="blur-in">
             <section className="invitation-section footer-section">
+              <SectionCorners />
               <p className="footer-text">
                 Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir untuk memberikan doa restu kepada kedua mempelai.
               </p>
               <p className="footer-text">
                 Atas kehadiran dan doa restunya, kami ucapkan terima kasih.
               </p>
+              <GoldSeparator />
               <h3 className="footer-happy-couple">
                 Kami yang berbahagia,
               </h3>

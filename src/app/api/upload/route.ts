@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import { join } from "path";
 
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/gif", "image/webp", "image/svg+xml"];
+const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+
 export async function POST(request: Request) {
   try {
     const data = await request.formData();
@@ -9,6 +12,22 @@ export async function POST(request: Request) {
 
     if (!file) {
       return NextResponse.json({ success: false, error: "No file uploaded" }, { status: 400 });
+    }
+
+    // Validate file type
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      return NextResponse.json(
+        { success: false, error: `Tipe file tidak didukung: ${file.type}. Gunakan JPEG, PNG, GIF, atau WebP.` },
+        { status: 400 }
+      );
+    }
+
+    // Validate file size
+    if (file.size > MAX_SIZE) {
+      return NextResponse.json(
+        { success: false, error: "Ukuran file terlalu besar. Maksimal 5MB." },
+        { status: 400 }
+      );
     }
 
     const bytes = await file.arrayBuffer();
@@ -29,7 +48,8 @@ export async function POST(request: Request) {
 
     await writeFile(filePath, buffer);
 
-    const fileUrl = `/uploads/${uniqueFilename}`;
+    // Serve via API route instead of static — Next.js doesn't serve runtime-created public files
+    const fileUrl = `/api/upload/${uniqueFilename}`;
     return NextResponse.json({ success: true, url: fileUrl });
   } catch (error) {
     console.error("Upload error:", error);

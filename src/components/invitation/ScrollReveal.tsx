@@ -2,16 +2,28 @@
 
 import React, { useEffect, useRef, useState } from "react";
 
+type AnimationType = "fade-up" | "fade-left" | "fade-right" | "zoom-in" | "blur-in";
+
 interface ScrollRevealProps {
   children: React.ReactNode;
   className?: string;
   delay?: number;
+  animation?: AnimationType;
 }
+
+const ANIMATION_CLASS_MAP: Record<AnimationType, string> = {
+  "fade-up": "reveal-item",
+  "fade-left": "reveal-fade-left",
+  "fade-right": "reveal-fade-right",
+  "zoom-in": "reveal-zoom-in",
+  "blur-in": "reveal-blur-in",
+};
 
 export default function ScrollReveal({
   children,
   className = "",
   delay = 0,
+  animation = "fade-up",
 }: ScrollRevealProps) {
   const [isRevealed, setIsRevealed] = useState(false);
   const elementRef = useRef<HTMLDivElement>(null);
@@ -25,8 +37,8 @@ export default function ScrollReveal({
         }
       },
       {
-        threshold: 0.1, // trigger when 10% of element is in viewport
-        rootMargin: "0px 0px -50px 0px", // offset slightly
+        threshold: 0.15,
+        rootMargin: "0px 0px -50px 0px",
       }
     );
 
@@ -42,10 +54,12 @@ export default function ScrollReveal({
     };
   }, []);
 
+  const baseClass = ANIMATION_CLASS_MAP[animation];
+
   return (
     <div
       ref={elementRef}
-      className={`reveal-item ${isRevealed ? "revealed" : ""} ${className}`}
+      className={`${baseClass} ${isRevealed ? "revealed" : ""} ${className}`}
       style={{
         transitionDelay: `${delay}ms`,
         width: "100%",

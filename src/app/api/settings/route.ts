@@ -53,6 +53,8 @@ export async function PUT(request: Request) {
         showGallery: body.showGallery,
         showAkad: body.showAkad,
         showResepsi: body.showResepsi,
+        akadTitle: body.akadTitle,
+        resepsiTitle: body.resepsiTitle,
       },
     });
 

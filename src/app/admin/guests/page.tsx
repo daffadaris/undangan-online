@@ -15,6 +15,14 @@ interface Guest {
   openedAt: string | null;
 }
 
+interface CSVRow {
+  name: string;
+  phone: string;
+  group: string;
+  include: boolean;
+  error?: string;
+}
+
 export default function AdminGuestsPage() {
   const [guests, setGuests] = useState<Guest[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,6 +33,7 @@ export default function AdminGuestsPage() {
   // Modals state
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showCSVModal, setShowCSVModal] = useState(false);
   const [selectedGuest, setSelectedGuest] = useState<Guest | null>(null);
 
   // Form inputs
@@ -38,6 +47,11 @@ export default function AdminGuestsPage() {
   const [editGroup, setEditGroup] = useState("");
   const [editRsvp, setEditRsvp] = useState("");
   const [editPax, setEditPax] = useState(1);
+
+  // CSV Import state
+  const [csvRows, setCsvRows] = useState<CSVRow[]>([]);
+  const [csvImporting, setCsvImporting] = useState(false);
+  const [csvResult, setCsvResult] = useState<{ imported: number; skipped: string[] } | null>(null);
 
   // Origin for links
   const [origin, setOrigin] = useState("");
@@ -193,6 +207,107 @@ Terima kasih.`);
     document.body.removeChild(link);
   };
 
+  // CSV Import — parse CSV file client-side
+  const handleCSVFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const text = event.target?.result as string;
+      if (!text) return;
+
+      const lines = text.split(/\r?\n/).filter(line => line.trim());
+      if (lines.length === 0) return;
+
+      // Detect separator: comma or semicolon
+      const firstLine = lines[0];
+      const separator = firstLine.includes(";") ? ";" : ",";
+
+      // Check if first row is a header
+      const firstCells = firstLine.split(separator).map(c => c.trim().replace(/^"|"$/g, "").toLowerCase());
+      const isHeader = firstCells.some(c => 
+        c === "nama" || c === "name" || c === "no hp" || c === "phone" || c === "grup" || c === "group"
+      );
+
+      const dataLines = isHeader ? lines.slice(1) : lines;
+
+      // Detect column mapping from header
+      let nameIdx = 0, phoneIdx = 1, groupIdx = 2;
+      if (isHeader) {
+        nameIdx = firstCells.findIndex(c => c === "nama" || c === "name");
+        phoneIdx = firstCells.findIndex(c => c === "no hp" || c === "phone" || c === "no. hp" || c === "telepon" || c === "whatsapp" || c === "no whatsapp");
+        groupIdx = firstCells.findIndex(c => c === "grup" || c === "group" || c === "kategori");
+        if (nameIdx === -1) nameIdx = 0;
+        if (phoneIdx === -1) phoneIdx = 1;
+        if (groupIdx === -1) groupIdx = 2;
+      }
+
+      const parsed: CSVRow[] = dataLines.map(line => {
+        const cells = line.split(separator).map(c => c.trim().replace(/^"|"$/g, ""));
+        const rowName = (cells[nameIdx] || "").trim();
+        return {
+          name: rowName,
+          phone: (cells[phoneIdx] || "").trim(),
+          group: (cells[groupIdx] || "").trim(),
+          include: !!rowName,
+          error: !rowName ? "Nama kosong" : undefined,
+        };
+      }).filter(row => row.name || row.phone || row.group); // Remove completely empty rows
+
+      setCsvRows(parsed);
+      setCsvResult(null);
+      setShowCSVModal(true);
+    };
+    reader.readAsText(file);
+
+    // Reset the input so the same file can be selected again
+    e.target.value = "";
+  };
+
+  const toggleCSVRow = (index: number) => {
+    setCsvRows(prev => prev.map((row, i) => 
+      i === index ? { ...row, include: !row.include } : row
+    ));
+  };
+
+  const toggleAllCSVRows = (checked: boolean) => {
+    setCsvRows(prev => prev.map(row => ({ ...row, include: !row.error && checked })));
+  };
+
+  const handleCSVImport = async () => {
+    const toImport = csvRows.filter(r => r.include && !r.error);
+    if (toImport.length === 0) return;
+
+    setCsvImporting(true);
+    try {
+      const res = await fetch("/api/guests/import", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          guests: toImport.map(r => ({
+            name: r.name,
+            phone: r.phone || undefined,
+            group: r.group || undefined,
+          })),
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setCsvResult({ imported: data.imported, skipped: data.skipped || [] });
+        fetchGuests();
+      } else {
+        alert("Gagal mengimpor data tamu.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Terjadi kesalahan saat mengimpor.");
+    } finally {
+      setCsvImporting(false);
+    }
+  };
+
   // Extract unique groups for filters
   const groupsList = Array.from(new Set(guests.map(g => g.group).filter(Boolean))) as string[];
 
@@ -204,15 +319,37 @@ Terima kasih.`);
     return matchesSearch && matchesGroup && matchesRsvp;
   });
 
+  const includedCount = csvRows.filter(r => r.include && !r.error).length;
+
   return (
     <div>
       <div className="admin-header">
         <h1 className="admin-title">Daftar Tamu Undangan</h1>
         
-        <div style={{ display: "flex", gap: "10px" }}>
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
           <button className="admin-btn-outline" onClick={exportToCSV}>
-            Ekspor ke CSV
+            Ekspor CSV
           </button>
+          {/* CSV Import Button */}
+          <input
+            type="file"
+            accept=".csv,.txt"
+            onChange={handleCSVFileSelect}
+            style={{ display: "none" }}
+            id="csv-import-input"
+          />
+          <label
+            htmlFor="csv-import-input"
+            className="admin-btn-outline"
+            style={{ cursor: "pointer", display: "inline-flex", alignItems: "center", gap: "6px" }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="17 8 12 3 7 8" />
+              <line x1="12" y1="3" x2="12" y2="15" />
+            </svg>
+            Impor CSV
+          </label>
           <button className="admin-btn" onClick={() => setShowAddModal(true)}>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: "6px" }}><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             Tambah Tamu
@@ -456,6 +593,116 @@ Terima kasih.`);
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* CSV Import Preview Modal */}
+      {showCSVModal && (
+        <div className="modal-overlay">
+          <div className="modal-content animate-scale-in" style={{ maxWidth: "700px" }}>
+            <button className="modal-close" onClick={() => { setShowCSVModal(false); setCsvRows([]); setCsvResult(null); }}>&times;</button>
+            <h2 className="card-title" style={{ borderBottom: "1px solid var(--admin-border)", paddingBottom: "10px" }}>
+              Impor Tamu dari CSV
+            </h2>
+
+            {csvResult ? (
+              /* Import Result */
+              <div style={{ marginTop: "20px", textAlign: "center" }}>
+                <div style={{
+                  width: "60px", height: "60px", borderRadius: "50%",
+                  background: "var(--admin-primary)", color: "#fff",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  margin: "0 auto 15px", fontSize: "1.8rem"
+                }}>
+                  ✓
+                </div>
+                <p style={{ fontSize: "1.1rem", fontWeight: "600", marginBottom: "8px" }}>
+                  {csvResult.imported} tamu berhasil diimpor!
+                </p>
+                {csvResult.skipped.length > 0 && (
+                  <p style={{ color: "var(--admin-text-sub)", fontSize: "0.85rem" }}>
+                    {csvResult.skipped.length} dilewati: {csvResult.skipped.join(", ")}
+                  </p>
+                )}
+                <button
+                  className="admin-btn"
+                  style={{ marginTop: "20px" }}
+                  onClick={() => { setShowCSVModal(false); setCsvRows([]); setCsvResult(null); }}
+                >
+                  Tutup
+                </button>
+              </div>
+            ) : (
+              /* Preview Table */
+              <div style={{ marginTop: "15px" }}>
+                <p style={{ color: "var(--admin-text-sub)", fontSize: "0.85rem", marginBottom: "12px" }}>
+                  Ditemukan <strong>{csvRows.length}</strong> baris data. Centang tamu yang ingin diimpor.
+                </p>
+
+                <div style={{ maxHeight: "350px", overflowY: "auto", border: "1px solid var(--admin-border)", borderRadius: "8px" }}>
+                  <table className="data-table" style={{ margin: 0 }}>
+                    <thead>
+                      <tr>
+                        <th style={{ width: "40px" }}>
+                          <input
+                            type="checkbox"
+                            checked={csvRows.filter(r => !r.error).every(r => r.include)}
+                            onChange={(e) => toggleAllCSVRows(e.target.checked)}
+                            style={{ width: "16px", height: "16px", cursor: "pointer" }}
+                          />
+                        </th>
+                        <th>Nama</th>
+                        <th>No HP</th>
+                        <th>Grup</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {csvRows.map((row, idx) => (
+                        <tr key={idx} style={{ opacity: row.error ? 0.5 : 1 }}>
+                          <td>
+                            <input
+                              type="checkbox"
+                              checked={row.include}
+                              onChange={() => toggleCSVRow(idx)}
+                              disabled={!!row.error}
+                              style={{ width: "16px", height: "16px", cursor: row.error ? "not-allowed" : "pointer" }}
+                            />
+                          </td>
+                          <td style={{ fontWeight: "500" }}>
+                            {row.name || <span style={{ color: "#EF4444", fontStyle: "italic" }}>Nama kosong</span>}
+                          </td>
+                          <td>{row.phone || "-"}</td>
+                          <td>{row.group || "-"}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "20px" }}>
+                  <span style={{ fontSize: "0.85rem", color: "var(--admin-text-sub)" }}>
+                    {includedCount} tamu akan diimpor
+                  </span>
+                  <div style={{ display: "flex", gap: "10px" }}>
+                    <button
+                      type="button"
+                      className="admin-btn-outline"
+                      onClick={() => { setShowCSVModal(false); setCsvRows([]); setCsvResult(null); }}
+                    >
+                      Batal
+                    </button>
+                    <button
+                      className="admin-btn"
+                      onClick={handleCSVImport}
+                      disabled={csvImporting || includedCount === 0}
+                    >
+                      {csvImporting ? "Mengimpor..." : `Impor ${includedCount} Tamu`}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}

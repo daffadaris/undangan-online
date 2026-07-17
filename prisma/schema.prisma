@@ -58,4 +58,6 @@ model WeddingConfig {
   showGallery    Boolean   @default(true)
   showAkad       Boolean   @default(true)
   showResepsi    Boolean   @default(true)
+  akadTitle      String    @default("Akad Nikah")
+  resepsiTitle   String    @default("Resepsi Pernikahan")
 }

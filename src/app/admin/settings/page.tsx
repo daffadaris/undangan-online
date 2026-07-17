@@ -29,6 +29,7 @@ export default function AdminSettingsPage() {
   const [brideParents, setBrideParents] = useState("");
 
   // Akad
+  const [akadTitle, setAkadTitle] = useState("");
   const [akadDate, setAkadDate] = useState("");
   const [akadTime, setAkadTime] = useState("");
   const [akadVenue, setAkadVenue] = useState("");
@@ -36,6 +37,7 @@ export default function AdminSettingsPage() {
   const [akadMapsUrl, setAkadMapsUrl] = useState("");
 
   // Resepsi
+  const [resepsiTitle, setResepsiTitle] = useState("");
   const [resepsiDate, setResepsiDate] = useState("");
   const [resepsiTime, setResepsiTime] = useState("");
   const [resepsiVenue, setResepsiVenue] = useState("");
@@ -80,11 +82,13 @@ export default function AdminSettingsPage() {
             setBrideName(config.brideName || "");
             setBrideNickname(config.brideNickname || "");
             setBrideParents(config.brideParents || "");
+            setAkadTitle(config.akadTitle || "");
             setAkadDate(config.akadDate || "");
             setAkadTime(config.akadTime || "");
             setAkadVenue(config.akadVenue || "");
             setAkadAddress(config.akadAddress || "");
             setAkadMapsUrl(config.akadMapsUrl || "");
+            setResepsiTitle(config.resepsiTitle || "");
             setResepsiDate(config.resepsiDate || "");
             setResepsiTime(config.resepsiTime || "");
             setResepsiVenue(config.resepsiVenue || "");
@@ -216,11 +220,13 @@ export default function AdminSettingsPage() {
           brideName,
           brideNickname,
           brideParents,
+          akadTitle,
           akadDate,
           akadTime,
           akadVenue,
           akadAddress,
           akadMapsUrl,
+          resepsiTitle,
           resepsiDate,
           resepsiTime,
           resepsiVenue,
@@ -391,6 +397,17 @@ export default function AdminSettingsPage() {
         {/* Acara Akad */}
         <div className="admin-card">
           <h2 className="card-title">Jadwal &amp; Lokasi Akad</h2>
+
+          <div className="admin-input-group">
+            <label className="admin-input-label">Judul Acara Akad</label>
+            <input
+              type="text"
+              className="admin-input"
+              value={akadTitle}
+              onChange={(e) => setAkadTitle(e.target.value)}
+              placeholder="Akad Nikah"
+            />
+          </div>
           
           <div className="admin-grid-2">
             <div className="admin-input-group">
@@ -455,6 +472,17 @@ export default function AdminSettingsPage() {
         {/* Acara Resepsi */}
         <div className="admin-card">
           <h2 className="card-title">Jadwal &amp; Lokasi Resepsi</h2>
+
+          <div className="admin-input-group">
+            <label className="admin-input-label">Judul Acara Resepsi</label>
+            <input
+              type="text"
+              className="admin-input"
+              value={resepsiTitle}
+              onChange={(e) => setResepsiTitle(e.target.value)}
+              placeholder="Resepsi Pernikahan"
+            />
+          </div>
           
           <div className="admin-grid-2">
             <div className="admin-input-group">
