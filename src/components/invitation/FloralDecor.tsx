@@ -323,3 +323,38 @@ export const SectionCorners = () => (
     </div>
   </>
 );
+
+/* Leaf branches extending from the sides of the viewport */
+export const SideLeafDecorLeft = ({ className = "" }: { className?: string }) => (
+  <div className={`side-leaf-decor side-leaf-left ${className}`}>
+    <svg width="80" height="260" viewBox="0 0 80 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M10 -10 Q35 60 15 130 T10 270" stroke="var(--primary-sage)" strokeWidth="1.5" opacity="0.6" fill="none" />
+      <path d="M22 30 C35 30 45 40 40 50 C30 50 25 40 22 30 Z" fill="var(--primary-sage)" opacity="0.3" />
+      <path d="M18 75 C32 70 40 85 35 95 C25 95 20 85 18 75 Z" fill="var(--primary-sage)" opacity="0.35" />
+      <path d="M14 120 C30 115 35 130 30 140 C20 140 15 130 14 120 Z" fill="var(--primary-sage)" opacity="0.3" />
+      <path d="M11 170 C25 165 30 180 25 190 C15 190 12 180 11 170 Z" fill="var(--primary-sage)" opacity="0.35" />
+      <path d="M10 220 C22 215 25 230 20 240 C12 240 10 230 10 220 Z" fill="var(--primary-sage)" opacity="0.3" />
+      <path d="M15 15 C5 15 0 5 5 0 C12 0 15 10 15 15 Z" fill="var(--primary-sage)" opacity="0.25" />
+      <path d="M13 55 C3 55 -2 45 3 40 C10 40 13 50 13 55 Z" fill="var(--primary-sage)" opacity="0.2" />
+      <path d="M11 100 C1 100 -4 90 1 85 C8 85 11 95 11 100 Z" fill="var(--primary-sage)" opacity="0.25" />
+      <path d="M9 145 C-1 145 -6 135 -1 130 C6 130 9 140 9 145 Z" fill="var(--primary-sage)" opacity="0.2" />
+    </svg>
+  </div>
+);
+
+export const SideLeafDecorRight = ({ className = "" }: { className?: string }) => (
+  <div className={`side-leaf-decor side-leaf-right ${className}`}>
+    <svg width="80" height="260" viewBox="0 0 80 260" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ transform: "scaleX(-1)" }}>
+      <path d="M10 -10 Q35 60 15 130 T10 270" stroke="var(--primary-sage)" strokeWidth="1.5" opacity="0.6" fill="none" />
+      <path d="M22 30 C35 30 45 40 40 50 C30 50 25 40 22 30 Z" fill="var(--primary-sage)" opacity="0.3" />
+      <path d="M18 75 C32 70 40 85 35 95 C25 95 20 85 18 75 Z" fill="var(--primary-sage)" opacity="0.35" />
+      <path d="M14 120 C30 115 35 130 30 140 C20 140 15 130 14 120 Z" fill="var(--primary-sage)" opacity="0.3" />
+      <path d="M11 170 C25 165 30 180 25 190 C15 190 12 180 11 170 Z" fill="var(--primary-sage)" opacity="0.35" />
+      <path d="M10 220 C22 215 25 230 20 240 C12 240 10 230 10 220 Z" fill="var(--primary-sage)" opacity="0.3" />
+      <path d="M15 15 C5 15 0 5 5 0 C12 0 15 10 15 15 Z" fill="var(--primary-sage)" opacity="0.25" />
+      <path d="M13 55 C3 55 -2 45 3 40 C10 40 13 50 13 55 Z" fill="var(--primary-sage)" opacity="0.2" />
+      <path d="M11 100 C1 100 -4 90 1 85 C8 85 11 95 11 100 Z" fill="var(--primary-sage)" opacity="0.25" />
+      <path d="M9 145 C-1 145 -6 135 -1 130 C6 130 9 140 9 145 Z" fill="var(--primary-sage)" opacity="0.2" />
+    </svg>
+  </div>
+);

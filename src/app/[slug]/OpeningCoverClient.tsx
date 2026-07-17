@@ -9,6 +9,8 @@ import {
   GoldSeparator,
   FloatingPetals,
   SectionCorners,
+  SideLeafDecorLeft,
+  SideLeafDecorRight,
 } from "@/components/invitation/FloralDecor";
 import ScrollReveal from "@/components/invitation/ScrollReveal";
 import GallerySection from "@/components/invitation/GallerySection";
@@ -64,8 +66,10 @@ export default function OpeningCoverClient({
 
       {isOpened && (
         <div className="animate-fade-in">
-          {/* Global floating petals background */}
+          {/* Global floating petals and side decorations */}
           <FloatingPetals count={15} />
+          <SideLeafDecorLeft />
+          <SideLeafDecorRight />
 
           {/* Hero */}
           {heroSection}
