@@ -68,8 +68,11 @@ export async function POST(request: Request) {
     // Serve via API route instead of static — Next.js doesn't serve runtime-created public files
     const fileUrl = `/api/upload/${uniqueFilename}`;
     return NextResponse.json({ success: true, url: fileUrl });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Upload error:", error);
-    return NextResponse.json({ success: false, error: "Gagal mengunggah berkas" }, { status: 500 });
+    return NextResponse.json({ 
+      success: false, 
+      error: `Gagal mengunggah berkas: ${error?.message || String(error)}`
+    }, { status: 500 });
   }
 }
