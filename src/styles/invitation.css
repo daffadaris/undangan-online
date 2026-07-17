@@ -1224,10 +1224,14 @@
   position: absolute;
   top: -20px;
   animation: petal-fall linear infinite;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
 .petal-svg {
   animation: petal-sway ease-in-out infinite;
+  will-change: transform;
+  backface-visibility: hidden;
 }
 
 /* Section Corner Decorations */

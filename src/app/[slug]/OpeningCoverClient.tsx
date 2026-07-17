@@ -67,7 +67,7 @@ export default function OpeningCoverClient({
       {isOpened && (
         <div className="animate-fade-in">
           {/* Global floating petals and side decorations */}
-          <FloatingPetals count={15} />
+          <FloatingPetals count={8} />
           <SideLeafDecorLeft />
           <SideLeafDecorRight />
 

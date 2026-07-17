@@ -232,8 +232,9 @@ a {
 
 .reveal-blur-in {
   opacity: 0;
-  filter: blur(10px);
-  transition: opacity 0.9s ease, filter 0.9s ease;
+  filter: blur(4px); /* Reduced blur size to save GPU paint overhead */
+  transition: opacity 0.8s ease, filter 0.8s ease;
+  will-change: opacity, filter;
 }
 
 .reveal-blur-in.revealed {
@@ -244,7 +245,7 @@ a {
 /* Floating Petal Animations */
 @keyframes petal-fall {
   0% {
-    transform: translateY(-10%);
+    transform: translateY(-10%) translateZ(0);
     opacity: 0;
   }
   10% {
@@ -254,16 +255,16 @@ a {
     opacity: 1;
   }
   100% {
-    transform: translateY(110vh);
+    transform: translateY(110vh) translateZ(0);
     opacity: 0;
   }
 }
 
 @keyframes petal-sway {
-  0%, 100% { transform: rotate(0deg) translateX(0); }
-  25% { transform: rotate(15deg) translateX(15px); }
-  50% { transform: rotate(-5deg) translateX(-10px); }
-  75% { transform: rotate(10deg) translateX(8px); }
+  0%, 100% { transform: rotate(0deg) translateX(0) translateZ(0); }
+  25% { transform: rotate(12deg) translateX(12px) translateZ(0); }
+  50% { transform: rotate(-4deg) translateX(-8px) translateZ(0); }
+  75% { transform: rotate(8deg) translateX(6px) translateZ(0); }
 }
 
 @keyframes gentle-spin {
