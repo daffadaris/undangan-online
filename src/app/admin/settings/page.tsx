@@ -64,6 +64,7 @@ export default function AdminSettingsPage() {
   const [showGallery, setShowGallery] = useState(true);
   const [showAkad, setShowAkad] = useState(true);
   const [showResepsi, setShowResepsi] = useState(true);
+  const [whatsappTemplate, setWhatsappTemplate] = useState("");
 
   // Upload States
   const [uploadingField, setUploadingField] = useState<string | null>(null);
@@ -106,6 +107,7 @@ export default function AdminSettingsPage() {
             setShowGallery(config.showGallery !== false);
             setShowAkad(config.showAkad !== false);
             setShowResepsi(config.showResepsi !== false);
+            setWhatsappTemplate(config.whatsappTemplate || "");
 
             try {
               const gallery = JSON.parse(config.galleryImages || "[]");
@@ -252,6 +254,7 @@ export default function AdminSettingsPage() {
           showGallery,
           showAkad,
           showResepsi,
+          whatsappTemplate,
         }),
       });
 
@@ -985,6 +988,35 @@ export default function AdminSettingsPage() {
               />
               <label htmlFor="toggle-resepsi" style={{ fontSize: "0.95rem", cursor: "pointer", userSelect: "none" }}>Tampilkan Jadwal Resepsi</label>
             </div>
+          </div>
+        </div>
+
+        {/* Kustomisasi WhatsApp Invitation Message */}
+        <div className="admin-card">
+          <h2 className="card-title">Kustomisasi Pesan Undangan WhatsApp</h2>
+          <p style={{ color: "var(--admin-text-sub)", fontSize: "0.85rem", marginBottom: "15px" }}>
+            Tulis template pesan WhatsApp untuk mengundang tamu. Anda dapat menggunakan variabel-variabel berikut yang akan diganti secara otomatis:
+            <br />
+            <strong>{"{{nama}}"}</strong>: Nama Tamu, <strong>{"{{tautan}}"}</strong>: Tautan Undangan, <strong>{"{{pria}}"}</strong>: Panggilan Mempelai Pria, <strong>{"{{wanita}}"}</strong>: Panggilan Mempelai Wanita
+          </p>
+          <div className="admin-input-group">
+            <label className="admin-input-label">Template Pesan WhatsApp</label>
+            <textarea
+              className="admin-input"
+              rows={8}
+              value={whatsappTemplate}
+              onChange={(e) => setWhatsappTemplate(e.target.value)}
+              placeholder={`Halo Bapak/Ibu/Saudara/i *{{nama}}*,
+
+Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara pernikahan kami, *{{pria}} & {{wanita}}*.
+
+Berikut detail undangan digital dan informasi lengkap mengenai acara kami dapat diakses melalui tautan berikut:
+{{tautan}}
+
+Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kami.
+
+Terima kasih.`}
+            />
           </div>
         </div>
 

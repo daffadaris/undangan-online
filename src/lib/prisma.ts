@@ -6,21 +6,19 @@ function getPrismaInstance(): PrismaClient {
   let adapter: any;
 
   if (process.env.TURSO_DATABASE_URL) {
-    const { PrismaLibSql } = require('@prisma/adapter-libsql/web');
-    // Automatically rewrite libsql:// to https:// for fetch-based web adapter compatibility
-    let url = process.env.TURSO_DATABASE_URL;
-    if (url.startsWith("libsql://")) {
-      url = url.replace("libsql://", "https://");
-    }
-    adapter = new PrismaLibSql({
-      url,
+    const { createClient } = require("@libsql/client");
+    const { PrismaLibSql } = require("@prisma/adapter-libsql");
+    const libsql = createClient({
+      url: process.env.TURSO_DATABASE_URL,
       authToken: process.env.TURSO_AUTH_TOKEN,
     });
+    adapter = new PrismaLibSql(libsql);
   } else {
-    const { PrismaBetterSqlite3 } = require('@prisma/adapter-better-sqlite3');
-    adapter = new PrismaBetterSqlite3({
-      url: process.env.DATABASE_URL || 'file:./dev.db',
-    });
+    const Database = require("better-sqlite3");
+    const { PrismaBetterSqlite3 } = require("@prisma/adapter-better-sqlite3");
+    const dbPath = (process.env.DATABASE_URL || "file:./dev.db").replace(/^file:/, "");
+    const db = new Database(dbPath);
+    adapter = new PrismaBetterSqlite3(db);
   }
 
   return new PrismaClient({ adapter });

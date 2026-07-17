@@ -60,4 +60,5 @@ model WeddingConfig {
   showResepsi    Boolean   @default(true)
   akadTitle      String    @default("Akad Nikah")
   resepsiTitle   String    @default("Resepsi Pernikahan")
+  whatsappTemplate String?
 }

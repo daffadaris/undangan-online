@@ -57,6 +57,8 @@ export default function AdminGuestsPage() {
 
   // Origin for links
   const [origin, setOrigin] = useState("");
+  const [weddingConfig, setWeddingConfig] = useState<any>(null);
+  const [whatsappTemplate, setWhatsappTemplate] = useState("");
 
   const fetchGuests = async () => {
     try {
@@ -77,6 +79,20 @@ export default function AdminGuestsPage() {
     if (typeof window !== "undefined") {
       setOrigin(window.location.origin);
     }
+
+    const fetchConfig = async () => {
+      try {
+        const res = await fetch("/api/settings");
+        if (res.ok) {
+          const data = await res.json();
+          setWeddingConfig(data.config || null);
+          setWhatsappTemplate(data.config?.whatsappTemplate || "");
+        }
+      } catch (e) {
+        console.error("Failed to fetch settings config in guests page:", e);
+      }
+    };
+    fetchConfig();
   }, []);
 
   const handleAddGuest = async (e: React.FormEvent) => {
@@ -149,19 +165,34 @@ export default function AdminGuestsPage() {
   };
 
   const getWhatsAppLink = (guest: Guest) => {
-    const groom = "Daffa";
-    const bride = "Regina";
+    const groom = weddingConfig?.groomNickname || "Daffa";
+    const bride = weddingConfig?.brideNickname || "Regina";
     const link = `${origin}/${guest.slug}`;
-    const text = encodeURIComponent(`Halo Bapak/Ibu/Saudara/i *${guest.name}*,
+    
+    const defaultTemplate = `Halo Bapak/Ibu/Saudara/i *{{nama}}*,
 
-Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara pernikahan kami, *${groom} & ${bride}*.
+Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara pernikahan kami, *{{pria}} & {{wanita}}*.
 
 Berikut detail undangan digital dan informasi lengkap mengenai acara kami dapat diakses melalui tautan berikut:
-${link}
+{{tautan}}
 
 Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu kepada kami.
 
-Terima kasih.`);
+Terima kasih.`;
+
+    const template = whatsappTemplate || defaultTemplate;
+    
+    let message = template
+      .replace(/{{nama}}/g, guest.name)
+      .replace(/{{name}}/g, guest.name)
+      .replace(/{{pria}}/g, groom)
+      .replace(/{{groom}}/g, groom)
+      .replace(/{{wanita}}/g, bride)
+      .replace(/{{bride}}/g, bride)
+      .replace(/{{link}}/g, link)
+      .replace(/{{tautan}}/g, link);
+
+    const text = encodeURIComponent(message);
 
     // Clean up phone number (replace space/dash and format with 62)
     let formattedPhone = guest.phone || "";

@@ -55,6 +55,7 @@ export async function PUT(request: Request) {
         showResepsi: body.showResepsi,
         akadTitle: body.akadTitle,
         resepsiTitle: body.resepsiTitle,
+        whatsappTemplate: body.whatsappTemplate,
       },
     });
 
