@@ -22,7 +22,7 @@ export default function HeroSection({ config }: HeroSectionProps) {
   return (
     <section 
       className="invitation-section hero-sec"
-      style={{ backgroundImage: `url(${heroBg})` }}
+      style={{ backgroundImage: `url("${heroBg}")` }}
     >
       <div className="animate-fade-in hero-wrapper">
         <p className="cover-subtitle">Walimatul 'Ursy</p>

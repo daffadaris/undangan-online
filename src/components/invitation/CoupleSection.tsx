@@ -22,7 +22,7 @@ export default function CoupleSection({ config }: CoupleSectionProps) {
             <div
               className="couple-photo-inner"
               style={{
-                backgroundImage: `url(${config?.groomImage || "https://images.unsplash.com/photo-1594744803329-e58b31de215f?q=80&w=600"})`,
+                backgroundImage: `url("${config?.groomImage || "https://images.unsplash.com/photo-1594744803329-e58b31de215f?q=80&w=600"}")`,
               }}
             />
           </div>
@@ -41,7 +41,7 @@ export default function CoupleSection({ config }: CoupleSectionProps) {
             <div
               className="couple-photo-inner"
               style={{
-                backgroundImage: `url(${config?.brideImage || "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=600"})`,
+                backgroundImage: `url("${config?.brideImage || "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=600"}")`,
               }}
             />
           </div>
