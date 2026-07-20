@@ -6,22 +6,15 @@ export default async function proxy(request: NextRequest) {
 
   // Protect all /admin routes, except /admin/login
   if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
-    const session = request.cookies.get("admin_session");
+    const sessionCookie = request.cookies.get("admin_session");
 
-    if (!session?.value) {
-      const loginUrl = new URL("/admin/login", request.url);
-      return NextResponse.redirect(loginUrl);
+    if (!sessionCookie?.value) {
+      return NextResponse.redirect(new URL("/admin/login", request.url));
     }
 
-    try {
-      const user = JSON.parse(session.value);
-      if (!user?.userId) {
-        const loginUrl = new URL("/admin/login", request.url);
-        return NextResponse.redirect(loginUrl);
-      }
-    } catch {
-      const loginUrl = new URL("/admin/login", request.url);
-      return NextResponse.redirect(loginUrl);
+    // Validate the session cookie contains a valid userId
+    if (!sessionCookie.value.includes("userId")) {
+      return NextResponse.redirect(new URL("/admin/login", request.url));
     }
   }
 
