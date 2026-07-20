@@ -162,7 +162,8 @@ export default function AdminUsersPage() {
                         /{u.username}/[nama-tamu]
                       </code>
                     </td>
-                    <td>                    <td>                      <span className={`badge ${u.role === "super_admin" ? "badge-confirmed" : "badge-pending"}`}>
+                    <td>
+                      <span className={`badge ${u.role === "super_admin" ? "badge-confirmed" : "badge-pending"}`}>
                         {u.role === "super_admin" ? "Super Admin" : "Owner"}
                       </span>
                     </td>
