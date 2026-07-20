@@ -88,7 +88,7 @@ export default function RsvpForm({
   };
 
   return (
-    <section className="invitation-section">
+    <section id="rsvp-section" className="invitation-section">
       <SectionCorners />
       <FloralHeaderDecor />
       <h2 className="section-title">Konfirmasi Kehadiran</h2>
