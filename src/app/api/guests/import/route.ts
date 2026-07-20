@@ -1,11 +1,17 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { slugify } from "@/lib/utils";
+import { getCurrentUser } from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
+    const user = await getCurrentUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json();
-    const { guests } = body;
+    const { guests, userId } = body;
 
     if (!Array.isArray(guests) || guests.length === 0) {
       return NextResponse.json(
@@ -13,6 +19,8 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    const targetUserId = user.role === "super_admin" && userId ? userId : user.userId;
 
     const imported: string[] = [];
     const skipped: string[] = [];
@@ -29,11 +37,8 @@ export async function POST(request: Request) {
         let slug = baseSlug;
         let counter = 1;
 
-        // Resolve slug collisions
         while (true) {
-          const existing = await prisma.guest.findUnique({
-            where: { slug },
-          });
+          const existing = await prisma.guest.findUnique({ where: { slug } });
           if (!existing) break;
           slug = `${baseSlug}-${counter}`;
           counter++;
@@ -45,6 +50,7 @@ export async function POST(request: Request) {
             slug,
             phone: (guest.phone || "").trim() || null,
             group: (guest.group || "").trim() || null,
+            userId: targetUserId,
           },
         });
 

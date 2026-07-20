@@ -1,30 +1,46 @@
 import { NextResponse } from "next/server";
-import { loginAdmin, logoutAdmin } from "@/lib/auth";
+import { loginUser, logoutUser, getCurrentUser } from "@/lib/auth";
+
+export async function GET() {
+  try {
+    const user = await getCurrentUser();
+    if (!user) {
+      return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
+    }
+    return NextResponse.json({ user });
+  } catch (error) {
+    console.error("Auth GET error:", error);
+    return NextResponse.json({ error: "Failed to get session" }, { status: 500 });
+  }
+}
 
 export async function POST(request: Request) {
   try {
-    const { password } = await request.json();
-    console.log("[Auth API] Received login request");
-    const success = await loginAdmin(password);
-    console.log("[Auth API] Password validation result:", success);
+    const { username, password } = await request.json();
 
-    if (success) {
-      return NextResponse.json({ success: true });
+    if (!username || !password) {
+      return NextResponse.json({ error: "Username dan password wajib diisi" }, { status: 400 });
+    }
+
+    const user = await loginUser(username, password);
+
+    if (user) {
+      return NextResponse.json({ success: true, role: user.role });
     } else {
-      return NextResponse.json({ error: "Password salah" }, { status: 401 });
+      return NextResponse.json({ error: "Username atau password salah" }, { status: 401 });
     }
   } catch (error) {
     console.error("Auth POST error:", error);
-    return NextResponse.json({ error: "Failed to authenticate" }, { status: 500 });
+    return NextResponse.json({ error: "Gagal autentikasi" }, { status: 500 });
   }
 }
 
 export async function DELETE() {
   try {
-    await logoutAdmin();
+    await logoutUser();
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Auth DELETE error:", error);
-    return NextResponse.json({ error: "Failed to logout" }, { status: 500 });
+    return NextResponse.json({ error: "Gagal logout" }, { status: 500 });
   }
 }

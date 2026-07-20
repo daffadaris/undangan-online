@@ -1,14 +1,13 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import "@/styles/admin.css";
 
 export default function AdminLoginPage() {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -19,14 +18,14 @@ export default function AdminLoginPage() {
       const res = await fetch("/api/auth", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
+        body: JSON.stringify({ username, password }),
       });
 
       if (res.ok) {
         window.location.href = "/admin";
       } else {
         const data = await res.json();
-        setError(data.error || "Password salah");
+        setError(data.error || "Username atau password salah");
       }
     } catch (e) {
       console.error(e);
@@ -48,8 +47,23 @@ export default function AdminLoginPage() {
 
         <form onSubmit={handleLogin}>
           <div className="admin-input-group">
+            <label className="admin-input-label" htmlFor="username">
+              Username
+            </label>
+            <input
+              type="text"
+              id="username"
+              className="admin-input"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Masukkan username..."
+              required
+            />
+          </div>
+
+          <div className="admin-input-group">
             <label className="admin-input-label" htmlFor="password">
-              Password Admin
+              Password
             </label>
             <input
               type="password"
@@ -57,7 +71,7 @@ export default function AdminLoginPage() {
               className="admin-input"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Masukkan password admin..."
+              placeholder="Masukkan password..."
               required
             />
           </div>
@@ -77,7 +91,7 @@ export default function AdminLoginPage() {
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
-        
+
         <p style={{
           textAlign: "center",
           fontSize: "0.75rem",

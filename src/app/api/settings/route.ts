@@ -1,12 +1,22 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { getCurrentUser } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const user = await getCurrentUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const filterUserId = searchParams.get("userId");
+    const targetUserId = user.role === "super_admin" && filterUserId ? filterUserId : user.userId;
+
     const config = await prisma.weddingConfig.findUnique({
-      where: { id: "config" },
+      where: { userId: targetUserId },
     });
     return NextResponse.json({ config });
   } catch (error) {
@@ -17,7 +27,13 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
+    const user = await getCurrentUser();
+    if (!user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
     const body = await request.json();
+    const targetUserId = body.userId && user.role === "super_admin" ? body.userId : user.userId;
     const updateData = {
       groomName: body.groomName,
       groomNickname: body.groomNickname,
@@ -59,9 +75,9 @@ export async function PUT(request: Request) {
     };
 
     const config = await prisma.weddingConfig.upsert({
-      where: { id: "config" },
+      where: { userId: targetUserId },
       create: {
-        id: "config",
+        userId: targetUserId,
         ...updateData,
       },
       update: updateData,

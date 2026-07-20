@@ -9,40 +9,52 @@ datasource db {
   provider = "sqlite"
 }
 
+model User {
+  id           String         @id @default(uuid())
+  username     String         @unique
+  passwordHash String
+  role         String         @default("owner") // "super_admin" | "owner"
+  createdAt    DateTime       @default(now())
+  guests       Guest[]
+  weddingConfig WeddingConfig?
+}
 
 model Guest {
-  id             String    @id @default(uuid())
+  id             String        @id @default(uuid())
   name           String
-  slug           String    @unique
+  slug           String        @unique
   phone          String?
-  group          String?   // e.g. "Keluarga", "Teman", "Kantor"
-  rsvpStatus     String    @default("pending") // pending | confirmed | declined
-  numberOfGuests Int       @default(1)
+  group          String?       // e.g. "Keluarga", "Teman", "Kantor"
+  rsvpStatus     String        @default("pending") // pending | confirmed | declined
+  numberOfGuests Int           @default(1)
   wishes         String?
   wishSentAt     DateTime?
   openedAt       DateTime?
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  userId         String?
+  owner          User?         @relation(fields: [userId], references: [id])
+  @@index([userId])
 }
 
 model WeddingConfig {
-  id             String    @id @default("config")
-  groomName      String    @default("Daffa' Daris Mahendra Ansori")
-  groomNickname  String    @default("Daffa")
-  groomParents   String    @default("Putra dari Bpk. Ansori & Ibu Ansori")
-  brideName      String    @default("Regina Pingkan Sayyidhina Arif")
-  brideNickname  String    @default("Regina")
-  brideParents   String    @default("Putri dari Bpk. Arif & Ibu Arif")
-  akadDate       String    @default("2026-08-08")
-  akadTime       String    @default("08:00 - 10:00 WIB")
-  akadVenue      String    @default("Masjid Agung")
-  akadAddress    String    @default("Jl. Raya No. 1")
-  akadMapsUrl    String    @default("https://maps.google.com")
-  resepsiDate    String    @default("2026-08-08")
-  resepsiTime    String    @default("11:00 - 14:00 WIB")
-  resepsiVenue   String    @default("Gedung Serbaguna")
-  resepsiAddress String    @default("Jl. Raya No. 2")
-  resepsiMapsUrl String    @default("https://maps.google.com")
+  id             String    @id @default(uuid())
+  groomName      String    @default("")
+  groomNickname  String    @default("")
+  groomParents   String    @default("")
+  brideName      String    @default("")
+  brideNickname  String    @default("")
+  brideParents   String    @default("")
+  akadDate       String    @default("")
+  akadTime       String    @default("")
+  akadVenue      String    @default("")
+  akadAddress    String    @default("")
+  akadMapsUrl    String    @default("")
+  resepsiDate    String    @default("")
+  resepsiTime    String    @default("")
+  resepsiVenue   String    @default("")
+  resepsiAddress String    @default("")
+  resepsiMapsUrl String    @default("")
   loveStory      String    @default("[]") // JSON array
   giftInfo       String    @default("[]") // JSON array
   heroImage      String?
@@ -64,4 +76,6 @@ model WeddingConfig {
   groomImagePosition String?   @default("center")
   brideImagePosition String?   @default("center")
   heroImagePosition  String?   @default("center")
+  userId         String?   @unique
+  owner          User?     @relation(fields: [userId], references: [id])
 }

@@ -18,6 +18,7 @@ interface RsvpFormProps {
   initialRsvpStatus: string;
   initialNumberOfGuests: number;
   initialWishes: string | null;
+  ownerId?: string;
 }
 
 export default function RsvpForm({
@@ -27,6 +28,7 @@ export default function RsvpForm({
   initialRsvpStatus,
   initialNumberOfGuests,
   initialWishes,
+  ownerId,
 }: RsvpFormProps) {
   const [rsvpStatus, setRsvpStatus] = useState(initialRsvpStatus);
   const [numberOfGuests, setNumberOfGuests] = useState(initialNumberOfGuests);
@@ -40,7 +42,8 @@ export default function RsvpForm({
   // Fetch recent wishes
   const fetchWishes = async () => {
     try {
-      const res = await fetch("/api/wishes");
+      const url = ownerId ? `/api/wishes?userId=${ownerId}` : "/api/wishes";
+      const res = await fetch(url);
       if (res.ok) {
         const data = await res.json();
         setWishesList(data.wishes || []);

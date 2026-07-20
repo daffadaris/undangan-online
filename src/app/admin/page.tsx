@@ -1,28 +1,37 @@
 import React from "react";
 import { prisma } from "@/lib/prisma";
+import { getCurrentUser } from "@/lib/auth";
 import "@/styles/admin.css";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboard() {
+  const user = await getCurrentUser();
+
+  // Build where clause: owner sees own data, super admin sees all
+  const where: any = {};
+  if (user && user.role !== "super_admin") {
+    where.userId = user.userId;
+  }
+
   // 1. Query stats
-  const totalGuests = await prisma.guest.count();
+  const totalGuests = await prisma.guest.count({ where });
   const confirmedCount = await prisma.guest.count({
-    where: { rsvpStatus: "confirmed" },
+    where: { ...where, rsvpStatus: "confirmed" },
   });
   const declinedCount = await prisma.guest.count({
-    where: { rsvpStatus: "declined" },
+    where: { ...where, rsvpStatus: "declined" },
   });
   const pendingCount = await prisma.guest.count({
-    where: { rsvpStatus: "pending" },
+    where: { ...where, rsvpStatus: "pending" },
   });
   const openedCount = await prisma.guest.count({
-    where: { openedAt: { not: null } },
+    where: { ...where, openedAt: { not: null } },
   });
 
   // Calculate total expected attendance size
   const sumConfirmedGuests = await prisma.guest.aggregate({
-    where: { rsvpStatus: "confirmed" },
+    where: { ...where, rsvpStatus: "confirmed" },
     _sum: { numberOfGuests: true },
   });
   const totalAttendees = sumConfirmedGuests._sum.numberOfGuests || 0;
@@ -30,6 +39,7 @@ export default async function AdminDashboard() {
   // Fetch recent rsvp logs (last 5 updates)
   const recentRsvps = await prisma.guest.findMany({
     where: {
+      ...where,
       rsvpStatus: { not: "pending" },
     },
     orderBy: {
