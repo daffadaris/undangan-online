@@ -13,6 +13,8 @@
   --text-medium: #555E53;
   --text-light: #7D887B;
   --border-color: #E2E8DF;
+  --pill-shadow-rgb: 78, 92, 71;
+  --pill-glow-rgb: 168, 187, 160;
 }
 
 .invitation-body.theme-blue {
@@ -28,6 +30,8 @@
   --text-medium: #455268;
   --text-light: #7B8CA3;
   --border-color: #D3E0EA;
+  --pill-shadow-rgb: 29, 53, 87;
+  --pill-glow-rgb: 141, 169, 196;
 }
 
 .invitation-body.theme-pink {
@@ -43,6 +47,8 @@
   --text-medium: #6E5353;
   --text-light: #9E7D7D;
   --border-color: #F8D8D8;
+  --pill-shadow-rgb: 109, 61, 61;
+  --pill-glow-rgb: 232, 165, 152;
 }
 
 .invitation-body.theme-gold {
@@ -58,6 +64,8 @@
   --text-medium: #6B5C30;
   --text-light: #9B864A;
   --border-color: #F0E6BD;
+  --pill-shadow-rgb: 107, 91, 46;
+  --pill-glow-rgb: 212, 175, 55;
 }
 
 .invitation-body.theme-purple {
@@ -73,6 +81,8 @@
   --text-medium: #5B21B6;
   --text-light: #7C3AED;
   --border-color: #E9D5FF;
+  --pill-shadow-rgb: 76, 29, 149;
+  --pill-glow-rgb: 167, 139, 250;
 }
 
 .invitation-body.theme-emerald {
@@ -88,6 +98,8 @@
   --text-medium: #065F46;
   --text-light: #047857;
   --border-color: #A7F3D0;
+  --pill-shadow-rgb: 6, 78, 59;
+  --pill-glow-rgb: 52, 211, 153;
 }
 
 .invitation-body.theme-burgundy {
@@ -103,6 +115,8 @@
   --text-medium: #540010;
   --text-light: #88001B;
   --border-color: #F5D6D6;
+  --pill-shadow-rgb: 120, 0, 22;
+  --pill-glow-rgb: 217, 119, 6;
 }
 
 .invitation-body.theme-dark {
@@ -118,6 +132,8 @@
   --text-medium: #E2E8F0;
   --text-light: #CBD5E1;
   --border-color: #3A3F44;
+  --pill-shadow-rgb: 252, 250, 242;
+  --pill-glow-rgb: 78, 92, 71;
 }
 
 .invitation-body.theme-green-pink {
@@ -133,6 +149,8 @@
   --text-medium: #6E5353;
   --text-light: #8F7575;
   --border-color: #E2E8DF;
+  --pill-shadow-rgb: 78, 92, 71;
+  --pill-glow-rgb: 168, 187, 160;
 }
 
 .invitation-body {
@@ -1402,6 +1420,96 @@
   .rsvp-floating-btn svg {
     width: 15px;
     height: 15px;
+  }
+}
+
+/* ── Floating RSVP Pill (Top-Right Corner) ── */
+.rsvp-floating-pill {
+  position: fixed;
+  top: clamp(12px, 3vw, 20px);
+  right: clamp(12px, 3vw, 24px);
+  z-index: 95;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.45rem 1rem;
+  background: var(--primary-sage);
+  color: #fff;
+  border: none;
+  border-radius: 9999px;
+  font-family: var(--font-body);
+  font-size: clamp(0.7rem, 2.2vw, 0.78rem);
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 3px 14px rgba(var(--pill-shadow-rgb), 0.28);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translateY(-12px);
+  animation: pill-fade-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.rsvp-floating-pill .pill-arrow {
+  opacity: 0.7;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.rsvp-floating-pill:hover {
+  background: var(--primary-sage-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgba(var(--pill-shadow-rgb), 0.4);
+}
+
+.rsvp-floating-pill:hover .pill-arrow {
+  transform: translateX(2px);
+  opacity: 1;
+}
+
+.rsvp-floating-pill:active {
+  transform: scale(0.96);
+}
+
+/* Entrance animation — runs once */
+.rsvp-floating-pill.rsvp-pill-enter {
+  animation: pill-fade-in 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+             pill-ring-glow 2s ease-out 0.6s 1;
+}
+
+@keyframes pill-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pill-ring-glow {
+  0% {
+    box-shadow: 0 3px 14px rgba(var(--pill-shadow-rgb), 0.28), 0 0 0 0 rgba(var(--pill-glow-rgb), 0.5);
+  }
+  60% {
+    box-shadow: 0 3px 14px rgba(var(--pill-shadow-rgb), 0.28), 0 0 0 10px rgba(var(--pill-glow-rgb), 0);
+  }
+  100% {
+    box-shadow: 0 3px 14px rgba(var(--pill-shadow-rgb), 0.28), 0 0 0 0 rgba(var(--pill-glow-rgb), 0);
+  }
+}
+
+@media (max-width: 480px) {
+  .rsvp-floating-pill {
+    top: 8px;
+    right: 8px;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.68rem;
+    gap: 0.3rem;
+  }
+
+  .rsvp-floating-pill svg {
+    width: 13px;
+    height: 13px;
   }
 }
 

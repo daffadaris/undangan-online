@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import OpeningCover from "@/components/invitation/OpeningCover";
 import MusicPlayer from "@/components/invitation/MusicPlayer";
 import RsvpFloatingButton from "@/components/invitation/RsvpFloatingButton";
+import RsvpFloatingPill from "@/components/invitation/RsvpFloatingPill";
 import {
   FloralHeaderDecor,
   FloralSwirl,
@@ -147,6 +148,8 @@ export default function OpeningCoverClient({
               </p>
             </section>
           </ScrollReveal>
+
+          <RsvpFloatingPill visible={config?.showRsvp !== false} />
 
           <RsvpFloatingButton visible={config?.showRsvp !== false} />
           <MusicPlayer playTrigger={isOpened} musicUrl={config?.musicUrl} />
