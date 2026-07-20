@@ -17,6 +17,10 @@ const lora = Lora({
 export const metadata: Metadata = {
   title: "Undangan Pernikahan Daffa & Regina",
   description: "Undangan pernikahan online resmi Daffa' Daris Mahendra Ansori & Regina Pingkan Sayyidhina Arif",
+  icons: {
+    icon: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export const viewport = {
@@ -34,6 +38,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className={`${playfair.variable} ${lora.variable}`}>
+      <head>
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="apple-touch-icon" href="/icon.svg" />
+      </head>
       <body>{children}</body>
     </html>
   );

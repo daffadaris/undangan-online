@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- 4 thin petals in cardinal directions -->
+
+  <!-- North -->
+  <path d="M 240 252 Q 180 160, 256 92 Q 332 160, 272 252 Z" fill="#A8BBA0"/>
+  <!-- South -->
+  <path d="M 240 260 Q 180 352, 256 420 Q 332 352, 272 260 Z" fill="#A8BBA0"/>
+  <!-- East -->
+  <path d="M 260 240 Q 352 180, 420 256 Q 352 332, 260 272 Z" fill="#A8BBA0"/>
+  <!-- West -->
+  <path d="M 252 240 Q 160 180, 92 256 Q 160 332, 252 272 Z" fill="#A8BBA0"/>
+
+  <!-- Inner gold ring -->
+  <circle cx="256" cy="256" r="22" fill="none" stroke="#C9A96E" stroke-width="3"/>
+  <!-- Center dot -->
+  <circle cx="256" cy="256" r="8" fill="#C9A96E"/>
+
+  <!-- Cardinal direction dots -->
+  <circle cx="256" cy="80" r="4" fill="#C9A96E" opacity="0.6"/>
+  <circle cx="256" cy="432" r="4" fill="#C9A96E" opacity="0.6"/>
+  <circle cx="80" cy="256" r="4" fill="#C9A96E" opacity="0.6"/>
+  <circle cx="432" cy="256" r="4" fill="#C9A96E" opacity="0.6"/>
+</svg>
+
