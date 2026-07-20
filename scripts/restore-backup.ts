@@ -1,6 +1,10 @@
 import 'dotenv/config';
 import { prisma } from '../src/lib/prisma';
-import backup from '../turso-backup.json';
+import fs from 'fs';
+import path from 'path';
+
+const backupPath = path.join(__dirname, '..', 'turso-backup.json');
+const backup = JSON.parse(fs.readFileSync(backupPath, 'utf-8'));
 
 async function restore() {
   const owner = await prisma.user.findUnique({
