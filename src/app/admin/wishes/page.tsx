@@ -14,10 +14,14 @@ interface Wish {
 export default function AdminWishesPage() {
   const [wishes, setWishes] = useState<Wish[]>([]);
   const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [ownerUsers, setOwnerUsers] = useState<{ id: string; username: string; _count: { guests: number } }[]>([]);
+  const [selectedUserId, setSelectedUserId] = useState("");
 
   const fetchWishes = async () => {
     try {
-      const res = await fetch("/api/wishes");
+      const params = selectedUserId ? `?userId=${selectedUserId}` : "";
+      const res = await fetch(`/api/wishes${params}`);
       if (res.ok) {
         const data = await res.json();
         setWishes(data.wishes || []);
@@ -30,8 +34,19 @@ export default function AdminWishesPage() {
   };
 
   useEffect(() => {
-    fetchWishes();
+    fetch("/api/auth").then(r => r.ok ? r.json() : null).then(d => {
+      if (d?.user) {
+        setCurrentUser(d.user);
+        if (d.user.role === "super_admin") {
+          fetch("/api/users").then(r => r.json()).then(d => setOwnerUsers(d.users || []));
+        }
+      }
+    });
   }, []);
+
+  useEffect(() => {
+    fetchWishes();
+  }, [selectedUserId]);
 
   const handleDeleteWish = async (id: string) => {
     if (!confirm("Apakah Anda yakin ingin menghapus ucapan ini? (Tamu tetap ada, hanya ucapannya yang dihapus)")) return;
@@ -56,6 +71,22 @@ export default function AdminWishesPage() {
     <div>
       <div className="admin-header">
         <h1 className="admin-title">Ucapan &amp; Doa Restu</h1>
+        {currentUser?.role === "super_admin" && ownerUsers.length > 0 && (
+          <div style={{ marginTop: "12px", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+            <label style={{ fontWeight: 600, fontSize: "0.9rem", color: "var(--admin-text)" }}>Filter Pemilik:</label>
+            <select
+              className="admin-input"
+              style={{ maxWidth: "280px", padding: "6px 12px" }}
+              value={selectedUserId}
+              onChange={(e) => { setSelectedUserId(e.target.value); setLoading(true); }}
+            >
+              <option value="">Semua Pemilik</option>
+              {ownerUsers.map(u => (
+                <option key={u.id} value={u.id}>{u.username} ({u._count.guests} tamu)</option>
+              ))}
+            </select>
+          </div>
+        )}
         <p style={{ color: "var(--admin-text-sub)", fontSize: "0.95rem" }}>
           Berikut adalah ucapan dan doa restu yang dikirimkan oleh tamu undangan.
         </p>

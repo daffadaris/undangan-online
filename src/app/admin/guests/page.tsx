@@ -60,9 +60,15 @@ export default function AdminGuestsPage() {
   const [weddingConfig, setWeddingConfig] = useState<any>(null);
   const [whatsappTemplate, setWhatsappTemplate] = useState("");
 
+  // Super admin: user filter
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [ownerUsers, setOwnerUsers] = useState<{ id: string; username: string; _count: { guests: number } }[]>([]);
+  const [selectedUserId, setSelectedUserId] = useState("");
+
   const fetchGuests = async () => {
     try {
-      const res = await fetch("/api/guests");
+      const params = selectedUserId ? `?userId=${selectedUserId}` : "";
+      const res = await fetch(`/api/guests${params}`);
       if (res.ok) {
         const data = await res.json();
         setGuests(data.guests || []);
@@ -73,6 +79,18 @@ export default function AdminGuestsPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // Fetch current user info
+    fetch("/api/auth").then(r => r.ok ? r.json() : null).then(d => {
+      if (d?.user) {
+        setCurrentUser(d.user);
+        if (d.user.role === "super_admin") {
+          fetch("/api/users").then(r => r.json()).then(d => setOwnerUsers(d.users || []));
+        }
+      }
+    });
+  }, []);
 
   useEffect(() => {
     fetchGuests();
@@ -397,8 +415,26 @@ Terima kasih.`;
     <div>
       <div className="admin-header">
         <h1 className="admin-title">Daftar Tamu Undangan</h1>
-        
-        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+
+        {/* User filter for super admin */}
+        {currentUser?.role === "super_admin" && ownerUsers.length > 0 && (
+          <div style={{ marginTop: "12px", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+            <label style={{ fontWeight: 600, fontSize: "0.9rem", color: "var(--admin-text)" }}>Filter Pemilik:</label>
+            <select
+              className="admin-input"
+              style={{ maxWidth: "280px", padding: "6px 12px" }}
+              value={selectedUserId}
+              onChange={(e) => { setSelectedUserId(e.target.value); setLoading(true); }}
+            >
+              <option value="">Semua Pemilik</option>
+              {ownerUsers.map(u => (
+                <option key={u.id} value={u.id}>{u.username} ({u._count.guests} tamu)</option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "10px" }}>
           <button className="admin-btn-outline" onClick={exportToCSV}>
             Ekspor CSV
           </button>

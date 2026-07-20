@@ -83,6 +83,64 @@ export async function POST(request: Request) {
   }
 }
 
+// PUT /api/users — update user's username or password (super admin only)
+export async function PUT(request: Request) {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser || currentUser.role !== "super_admin") {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const body = await request.json();
+    const { id, username, password } = body;
+
+    if (!id) {
+      return NextResponse.json({ error: "User ID wajib diisi" }, { status: 400 });
+    }
+
+    const target = await prisma.user.findUnique({ where: { id } });
+    if (!target) {
+      return NextResponse.json({ error: "Pengguna tidak ditemukan" }, { status: 404 });
+    }
+
+    const data: any = {};
+
+    if (username) {
+      // Check for duplicate
+      const existing = await prisma.user.findUnique({ where: { username } });
+      if (existing && existing.id !== id) {
+        return NextResponse.json({ error: "Username sudah digunakan" }, { status: 409 });
+      }
+      data.username = username;
+    }
+
+    if (password) {
+      data.passwordHash = await bcrypt.hash(password, 10);
+    }
+
+    if (Object.keys(data).length === 0) {
+      return NextResponse.json({ error: "Tidak ada data yang diubah" }, { status: 400 });
+    }
+
+    const updated = await prisma.user.update({
+      where: { id },
+      data,
+      select: {
+        id: true,
+        username: true,
+        role: true,
+        createdAt: true,
+        _count: { select: { guests: true } },
+      },
+    });
+
+    return NextResponse.json({ success: true, user: updated });
+  } catch (error) {
+    console.error("PUT users error:", error);
+    return NextResponse.json({ error: "Gagal mengupdate pengguna" }, { status: 500 });
+  }
+}
+
 // DELETE /api/users — delete owner (super admin only)
 export async function DELETE(request: Request) {
   try {

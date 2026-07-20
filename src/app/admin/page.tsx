@@ -5,14 +5,26 @@ import "@/styles/admin.css";
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminDashboard() {
-  const user = await getCurrentUser();
+interface Props {
+  searchParams: Promise<{ userId?: string }>;
+}
 
-  // Build where clause: owner sees own data, super admin sees all
+export default async function AdminDashboard({ searchParams }: Props) {
+  const user = await getCurrentUser();
+  const { userId: filterUserId } = await searchParams;
+
+  // Build where clause: owner sees own data, super admin can filter
   const where: any = {};
   if (user && user.role !== "super_admin") {
     where.userId = user.userId;
+  } else if (user?.role === "super_admin" && filterUserId) {
+    where.userId = filterUserId;
   }
+
+  // Fetch all users for super admin dropdown
+  const allUsers = user?.role === "super_admin"
+    ? await prisma.user.findMany({ orderBy: { username: "asc" }, select: { id: true, username: true, _count: { select: { guests: true } } } })
+    : [];
 
   // 1. Query stats
   const totalGuests = await prisma.guest.count({ where });
@@ -56,6 +68,28 @@ export default async function AdminDashboard() {
           Informasi ringkas statistik undangan pernikahan Anda.
         </p>
       </div>
+
+      {/* User filter for super admin */}
+      {user?.role === "super_admin" && allUsers.length > 0 && (
+        <form method="GET" action="/admin" style={{ marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+          <label style={{ fontWeight: 600, fontSize: "0.9rem", color: "var(--admin-text)", whiteSpace: "nowrap" }}>Filter Pemilik:</label>
+          <select
+            name="userId"
+            className="admin-input"
+            style={{ maxWidth: "280px", padding: "6px 12px" }}
+            defaultValue={filterUserId || ""}
+          >
+            <option value="">Semua Pemilik</option>
+            {allUsers.map(u => (
+              <option key={u.id} value={u.id}>{u.username} ({u._count.guests} tamu)</option>
+            ))}
+          </select>
+          <button type="submit" className="admin-btn" style={{ padding: "6px 16px", fontSize: "0.85rem" }}>Filter</button>
+          {filterUserId && (
+            <a href="/admin" className="admin-btn" style={{ padding: "6px 16px", fontSize: "0.85rem", background: "#E5E7EB", color: "#374151", textDecoration: "none" }}>Reset</a>
+          )}
+        </form>
+      )}
 
       {/* Stats Grid */}
       <div className="stats-grid">

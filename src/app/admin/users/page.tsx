@@ -26,6 +26,14 @@ export default function AdminUsersPage() {
   // Delete confirmation
   const [deleteTarget, setDeleteTarget] = useState<UserRow | null>(null);
 
+  // Edit form
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editTarget, setEditTarget] = useState<UserRow | null>(null);
+  const [editUsername, setEditUsername] = useState("");
+  const [editPassword, setEditPassword] = useState("");
+  const [editing, setEditing] = useState(false);
+  const [editError, setEditError] = useState<string | null>(null);
+
   const fetchUsers = async () => {
     setLoading(true);
     try {
@@ -94,6 +102,46 @@ export default function AdminUsersPage() {
       }
     } catch (e) {
       alert("Terjadi kesalahan.");
+    }
+  };
+
+  const openEditModal = (u: UserRow) => {
+    setEditTarget(u);
+    setEditUsername(u.username);
+    setEditPassword("");
+    setEditError(null);
+    setShowEditModal(true);
+  };
+
+  const handleEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editTarget) return;
+    setEditError(null);
+    setEditing(true);
+
+    try {
+      const res = await fetch("/api/users", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: editTarget.id,
+          username: editUsername,
+          password: editPassword || undefined,
+        }),
+      });
+
+      if (res.ok) {
+        setShowEditModal(false);
+        setEditTarget(null);
+        fetchUsers();
+      } else {
+        const data = await res.json();
+        setEditError(data.error || "Gagal mengupdate pengguna.");
+      }
+    } catch (e) {
+      setEditError("Terjadi kesalahan.");
+    } finally {
+      setEditing(false);
     }
   };
 
@@ -176,21 +224,36 @@ export default function AdminUsersPage() {
                       })}
                     </td>
                     <td>
-                      {u.role !== "super_admin" && (
+                      <div style={{ display: "flex", gap: "6px" }}>
                         <button
                           className="admin-btn"
                           style={{
-                            background: "#FEE2E2",
-                            color: "#DC2626",
-                            border: "1px solid #FECACA",
+                            background: "var(--primary-sage-light)",
+                            color: "var(--secondary-olive)",
+                            border: "1px solid var(--primary-sage)",
                             padding: "4px 12px",
                             fontSize: "0.8rem",
                           }}
-                          onClick={() => setDeleteTarget(u)}
+                          onClick={() => openEditModal(u)}
                         >
-                          Hapus
+                          Edit
                         </button>
-                      )}
+                        {u.role !== "super_admin" && (
+                          <button
+                            className="admin-btn"
+                            style={{
+                              background: "#FEE2E2",
+                              color: "#DC2626",
+                              border: "1px solid #FECACA",
+                              padding: "4px 12px",
+                              fontSize: "0.8rem",
+                            }}
+                            onClick={() => setDeleteTarget(u)}
+                          >
+                            Hapus
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -268,6 +331,55 @@ export default function AdminUsersPage() {
                 Hapus
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Modal */}
+      {showEditModal && editTarget && (
+        <div className="modal-overlay" onClick={() => setShowEditModal(false)}>
+          <div className="modal-card" onClick={(e) => e.stopPropagation()}>
+            <h2 style={{ marginBottom: "20px", fontFamily: "var(--font-serif)", color: "var(--admin-text)" }}>
+              Edit Pengguna
+            </h2>
+            <form onSubmit={handleEdit}>
+              <div className="admin-input-group">
+                <label className="admin-input-label">Username</label>
+                <input
+                  type="text"
+                  className="admin-input"
+                  value={editUsername}
+                  onChange={(e) => setEditUsername(e.target.value)}
+                  placeholder="Username baru"
+                  required
+                />
+                <p style={{ fontSize: "0.75rem", color: "var(--admin-text-sub)", marginTop: "4px" }}>
+                  URL undangan: /<strong>{editUsername || "username"}</strong>/nama-tamu
+                </p>
+              </div>
+              <div className="admin-input-group">
+                <label className="admin-input-label">Password Baru (kosongkan jika tidak ingin mengubah)</label>
+                <input
+                  type="password"
+                  className="admin-input"
+                  value={editPassword}
+                  onChange={(e) => setEditPassword(e.target.value)}
+                  placeholder="Minimal 6 karakter"
+                  minLength={6}
+                />
+              </div>
+              {editError && (
+                <p style={{ color: "#EF4444", fontSize: "0.85rem", marginBottom: "12px" }}>{editError}</p>
+              )}
+              <div style={{ display: "flex", gap: "10px", justifyContent: "flex-end" }}>
+                <button type="button" className="admin-btn" style={{ background: "#E5E7EB", color: "#374151" }} onClick={() => setShowEditModal(false)}>
+                  Batal
+                </button>
+                <button type="submit" className="admin-btn" disabled={editing}>
+                  {editing ? "Menyimpan..." : "Simpan"}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
