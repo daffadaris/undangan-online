@@ -35,6 +35,7 @@ export async function GET(request: Request) {
         wishes: true,
         rsvpStatus: true,
         wishSentAt: true,
+        owner: { select: { username: true } },
       },
       orderBy: {
         wishSentAt: "desc",

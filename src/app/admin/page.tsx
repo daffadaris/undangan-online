@@ -58,6 +58,7 @@ export default async function AdminDashboard({ searchParams }: Props) {
       updatedAt: "desc",
     },
     take: 5,
+    include: { owner: { select: { username: true } } },
   });
 
   return (
@@ -133,6 +134,7 @@ export default async function AdminDashboard({ searchParams }: Props) {
               <thead>
                 <tr>
                   <th>Nama Tamu</th>
+                  {user?.role === "super_admin" && <th>Pemilik</th>}
                   <th>Status RSVP</th>
                   <th>Pax</th>
                   <th>Waktu Update</th>
@@ -142,6 +144,9 @@ export default async function AdminDashboard({ searchParams }: Props) {
                 {recentRsvps.map((guest: any) => (
                   <tr key={guest.id}>
                     <td style={{ fontWeight: "600" }}>{guest.name}</td>
+                    {user?.role === "super_admin" && (
+                      <td style={{ color: "var(--accent-gold)", fontWeight: 500 }}>{guest.owner?.username || "-"}</td>
+                    )}
                     <td>
                       <span className={`badge badge-${guest.rsvpStatus}`}>
                         {guest.rsvpStatus === "confirmed" ? "Hadir" : "Berhalangan"}

@@ -13,6 +13,7 @@ interface Guest {
   numberOfGuests: number;
   wishes: string | null;
   openedAt: string | null;
+  owner?: { username: string };
 }
 
 interface CSVRow {
@@ -519,6 +520,7 @@ Terima kasih.`;
               <thead>
                 <tr>
                   <th>Nama Tamu</th>
+                  {currentUser?.role === "super_admin" && <th>Pemilik</th>}
                   <th>Grup</th>
                   <th>No HP</th>
                   <th>Link Undangan</th>
@@ -532,6 +534,9 @@ Terima kasih.`;
                 {filteredGuests.map((guest) => (
                   <tr key={guest.id}>
                     <td style={{ fontWeight: "600" }}>{guest.name}</td>
+                    {currentUser?.role === "super_admin" && (
+                      <td style={{ color: "var(--accent-gold)", fontWeight: 500 }}>{guest.owner?.username || "-"}</td>
+                    )}
                     <td>{guest.group || "-"}</td>
                     <td>{guest.phone || "-"}</td>
                     <td>

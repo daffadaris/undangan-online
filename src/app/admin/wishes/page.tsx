@@ -9,6 +9,7 @@ interface Wish {
   wishes: string;
   rsvpStatus: string;
   wishSentAt: string;
+  owner?: { username: string };
 }
 
 export default function AdminWishesPage() {
@@ -105,6 +106,7 @@ export default function AdminWishesPage() {
               <thead>
                 <tr>
                   <th>Nama Pengirim</th>
+                  {currentUser?.role === "super_admin" && <th>Pemilik</th>}
                   <th>RSVP</th>
                   <th>Isi Ucapan</th>
                   <th>Waktu Pengiriman</th>
@@ -115,6 +117,9 @@ export default function AdminWishesPage() {
                 {wishes.map((wish) => (
                   <tr key={wish.id}>
                     <td style={{ fontWeight: "600", width: "20%" }}>{wish.name}</td>
+                    {currentUser?.role === "super_admin" && (
+                      <td style={{ color: "var(--accent-gold)", fontWeight: 500, whiteSpace: "nowrap" }}>{wish.owner?.username || "-"}</td>
+                    )}
                     <td style={{ width: "15%" }}>
                       <span className={`badge badge-${wish.rsvpStatus}`}>
                         {wish.rsvpStatus === "confirmed" ? "Hadir" : wish.rsvpStatus === "declined" ? "Berhalangan" : "Pending"}

@@ -26,6 +26,7 @@ export async function GET(request: Request) {
     const guests = await prisma.guest.findMany({
       where,
       orderBy: { createdAt: "desc" },
+      include: { owner: { select: { username: true } } },
     });
     return NextResponse.json({ guests });
   } catch (error) {
