@@ -72,12 +72,11 @@ export default async function AdminDashboard({ searchParams }: Props) {
 
       {/* User filter for super admin */}
       {user?.role === "super_admin" && allUsers.length > 0 && (
-        <form method="GET" action="/admin" style={{ marginBottom: "20px", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-          <label style={{ fontWeight: 600, fontSize: "0.9rem", color: "var(--admin-text)", whiteSpace: "nowrap" }}>Filter Pemilik:</label>
+        <form method="GET" action="/admin" className="user-filter-bar">
+          <label className="user-filter-label">Filter Pemilik:</label>
           <select
             name="userId"
-            className="admin-input"
-            style={{ maxWidth: "280px", padding: "6px 12px" }}
+            className="admin-input user-filter-select"
             defaultValue={filterUserId || ""}
           >
             <option value="">Semua Pemilik</option>
@@ -85,9 +84,9 @@ export default async function AdminDashboard({ searchParams }: Props) {
               <option key={u.id} value={u.id}>{u.username} ({u._count.guests} tamu)</option>
             ))}
           </select>
-          <button type="submit" className="admin-btn" style={{ padding: "6px 16px", fontSize: "0.85rem" }}>Filter</button>
+          <button type="submit" className="admin-btn user-filter-btn">Filter</button>
           {filterUserId && (
-            <a href="/admin" className="admin-btn" style={{ padding: "6px 16px", fontSize: "0.85rem", background: "#E5E7EB", color: "#374151", textDecoration: "none" }}>Reset</a>
+            <a href="/admin" className="admin-btn user-filter-reset">Reset</a>
           )}
         </form>
       )}

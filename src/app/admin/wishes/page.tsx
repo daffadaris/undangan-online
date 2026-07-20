@@ -73,11 +73,10 @@ export default function AdminWishesPage() {
       <div className="admin-header">
         <h1 className="admin-title">Ucapan &amp; Doa Restu</h1>
         {currentUser?.role === "super_admin" && ownerUsers.length > 0 && (
-          <div style={{ marginTop: "12px", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-            <label style={{ fontWeight: 600, fontSize: "0.9rem", color: "var(--admin-text)" }}>Filter Pemilik:</label>
+          <div className="user-filter-bar" style={{ marginTop: "12px" }}>
+            <label className="user-filter-label">Filter Pemilik:</label>
             <select
-              className="admin-input"
-              style={{ maxWidth: "280px", padding: "6px 12px" }}
+              className="admin-input user-filter-select"
               value={selectedUserId}
               onChange={(e) => { setSelectedUserId(e.target.value); setLoading(true); }}
             >

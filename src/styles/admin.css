@@ -604,4 +604,66 @@
   }
 }
 
+/* ── User Filter Bar (Super Admin) ── */
+.user-filter-bar {
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.user-filter-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--admin-text);
+  white-space: nowrap;
+}
+
+.user-filter-select {
+  max-width: 280px;
+  width: 100%;
+  padding: 6px 12px;
+}
+
+.user-filter-btn {
+  padding: 6px 16px;
+  font-size: 0.85rem;
+}
+
+.user-filter-reset {
+  padding: 6px 16px;
+  font-size: 0.85rem;
+  background: #E5E7EB;
+  color: #374151;
+  text-decoration: none;
+  border-radius: var(--radius-sm);
+  border: 1px solid #D1D5DB;
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  cursor: pointer;
+}
+
+.user-filter-reset:hover {
+  background: #D1D5DB;
+}
+
+@media (max-width: 600px) {
+  .user-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .user-filter-select {
+    max-width: 100%;
+  }
+
+  .user-filter-btn,
+  .user-filter-reset {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 

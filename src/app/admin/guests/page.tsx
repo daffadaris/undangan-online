@@ -208,7 +208,9 @@ export default function AdminGuestsPage() {
   const getWhatsAppLink = (guest: Guest) => {
     const groom = weddingConfig?.groomNickname || "Daffa";
     const bride = weddingConfig?.brideNickname || "Regina";
-    const link = `${origin}/pingkan-daffa/${guest.slug}`;
+    // Build link using owner username from guest data
+    const ownerUsername = guest.owner?.username || "daffa-regina";
+    const link = `${origin}/${ownerUsername}/${guest.slug}`;
     
     const defaultTemplate = `Halo Bapak/Ibu/Saudara/i *{{nama}}*,
 
@@ -419,11 +421,10 @@ Terima kasih.`;
 
         {/* User filter for super admin */}
         {currentUser?.role === "super_admin" && ownerUsers.length > 0 && (
-          <div style={{ marginTop: "12px", display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
-            <label style={{ fontWeight: 600, fontSize: "0.9rem", color: "var(--admin-text)" }}>Filter Pemilik:</label>
+          <div className="user-filter-bar" style={{ marginTop: "12px" }}>
+            <label className="user-filter-label">Filter Pemilik:</label>
             <select
-              className="admin-input"
-              style={{ maxWidth: "280px", padding: "6px 12px" }}
+              className="admin-input user-filter-select"
               value={selectedUserId}
               onChange={(e) => { setSelectedUserId(e.target.value); setLoading(true); }}
             >
@@ -541,7 +542,7 @@ Terima kasih.`;
                     <td>{guest.phone || "-"}</td>
                     <td>
                       <button
-                        onClick={() => copyToClipboard(`${origin}/pingkan-daffa/${guest.slug}`)}
+                        onClick={() => copyToClipboard(`${origin}/${guest.owner?.username || "daffa-regina"}/${guest.slug}`)}
                         className="admin-btn-outline"
                         style={{ padding: "4px 8px", fontSize: "0.75rem" }}
                       >
