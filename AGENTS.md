@@ -6,6 +6,11 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # Undangan Online — Project Rules
 
+## Knowledge Base
+Full documentation lives in [docs/](docs/README.md) — architecture, data model, API reference,
+admin panel, invitation pipeline, styling, operations, and known gotchas. Read the relevant page
+before changing code in that area.
+
 ## Critical Conventions
 - Use `src/proxy.ts` (NOT `middleware.ts`) for route protection — Next.js 16 deprecated middleware
 - Route params are `Promise`-based: always `const { slug } = await params;`
@@ -24,4 +29,5 @@ This version has breaking changes — APIs, conventions, and file structure may 
 ## Database Rules
 - Always import `prisma` from `@/lib/prisma` (singleton with adapter)
 - JSON arrays (love story, gifts, gallery) stored as `String`, parsed with `JSON.parse()` and fallback
-- WeddingConfig is a singleton row with `id = "config"`
+- WeddingConfig is one row **per owner**, keyed by unique `userId` (upserted via `PUT /api/settings`)
+- Guest queries must be owner-scoped: owners see `userId === session.userId`, super admin may pass `?userId=`
