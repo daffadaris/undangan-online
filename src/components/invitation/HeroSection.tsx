@@ -17,13 +17,11 @@ export default function HeroSection({ config }: HeroSectionProps) {
     return new Date(dateStr).toLocaleDateString("id-ID", options);
   };
 
-  const heroBg = config?.heroImage || "https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=1200";
-
   return (
-    <section 
+    <section
       className="invitation-section hero-sec"
-      style={{ 
-        backgroundImage: `url("${heroBg}")`,
+      style={{
+        backgroundImage: config?.heroImage ? `url("${config.heroImage}")` : undefined,
         backgroundPosition: config?.heroImagePosition || "center",
       }}
     >
@@ -31,9 +29,9 @@ export default function HeroSection({ config }: HeroSectionProps) {
       <div className="animate-fade-in hero-wrapper">
         <p className="cover-subtitle">Walimatul 'Ursy</p>
         <h1 className="hero-names">
-          {config?.groomNickname || "Daffa"}<br />
+          {config?.groomNickname || "Mempelai Pria"}<br />
           <span className="hero-ampersand">&amp;</span><br />
-          {config?.brideNickname || "Regina"}
+          {config?.brideNickname || "Mempelai Wanita"}
         </h1>
         <FloralDivider />
         <p className="hero-date">{formatDate(config?.akadDate || "2026-08-08")}</p>

@@ -31,9 +31,12 @@ export async function PUT(request: Request) {
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    if (user.role === "super_admin") {
+      return NextResponse.json({ error: "Super admin tidak dapat mengubah undangan pemilik" }, { status: 403 });
+    }
 
     const body = await request.json();
-    const targetUserId = body.userId && user.role === "super_admin" ? body.userId : user.userId;
+    const targetUserId = user.userId;
     const updateData = {
       groomName: body.groomName,
       groomNickname: body.groomNickname,

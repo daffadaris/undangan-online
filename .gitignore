@@ -48,3 +48,6 @@ next-env.d.ts
 
 # local uploads
 /public/uploads/
+
+# DB backups (contain guest PII)
+turso-backup.json

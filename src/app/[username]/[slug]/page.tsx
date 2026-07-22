@@ -17,6 +17,20 @@ interface InvitationPageProps {
   params: Promise<{ username: string; slug: string }>;
 }
 
+export async function generateMetadata({ params }: InvitationPageProps) {
+  const { username } = await params;
+  const owner = await prisma.user.findUnique({ where: { username } });
+  const config = owner ? await prisma.weddingConfig.findUnique({ where: { userId: owner.id } }) : null;
+
+  const groom = config?.groomNickname || "Mempelai Pria";
+  const bride = config?.brideNickname || "Mempelai Wanita";
+
+  return {
+    title: `Undangan Pernikahan ${groom} & ${bride}`,
+    description: `Undangan pernikahan online ${config?.groomName || groom} & ${config?.brideName || bride}`,
+  };
+}
+
 export default async function InvitationPage({ params }: InvitationPageProps) {
   const { username, slug } = await params;
 

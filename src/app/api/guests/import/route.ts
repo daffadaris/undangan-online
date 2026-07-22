@@ -9,9 +9,12 @@ export async function POST(request: Request) {
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    if (user.role === "super_admin") {
+      return NextResponse.json({ error: "Super admin tidak dapat mengimpor tamu pemilik" }, { status: 403 });
+    }
 
     const body = await request.json();
-    const { guests, userId } = body;
+    const { guests } = body;
 
     if (!Array.isArray(guests) || guests.length === 0) {
       return NextResponse.json(
@@ -20,7 +23,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const targetUserId = user.role === "super_admin" && userId ? userId : user.userId;
+    const targetUserId = user.userId;
 
     const imported: string[] = [];
     const skipped: string[] = [];

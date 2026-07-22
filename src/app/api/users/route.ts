@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { validateUsername } from "@/lib/username";
 import bcrypt from "bcryptjs";
 
 export const dynamic = "force-dynamic";
@@ -42,13 +43,19 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { username, password } = body;
+    const { password } = body;
+    const username = (body.username || "").toLowerCase().trim();
 
     if (!username || !password) {
       return NextResponse.json(
         { error: "Username dan password wajib diisi" },
         { status: 400 }
       );
+    }
+
+    const usernameError = validateUsername(username);
+    if (usernameError) {
+      return NextResponse.json({ error: usernameError }, { status: 400 });
     }
 
     // Check for duplicate username
@@ -106,12 +113,17 @@ export async function PUT(request: Request) {
     const data: any = {};
 
     if (username) {
+      const normalizedUsername = username.toLowerCase().trim();
+      const usernameError = validateUsername(normalizedUsername);
+      if (usernameError) {
+        return NextResponse.json({ error: usernameError }, { status: 400 });
+      }
       // Check for duplicate
-      const existing = await prisma.user.findUnique({ where: { username } });
+      const existing = await prisma.user.findUnique({ where: { username: normalizedUsername } });
       if (existing && existing.id !== id) {
         return NextResponse.json({ error: "Username sudah digunakan" }, { status: 409 });
       }
-      data.username = username;
+      data.username = normalizedUsername;
     }
 
     if (password) {

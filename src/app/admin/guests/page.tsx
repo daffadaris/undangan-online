@@ -206,11 +206,11 @@ export default function AdminGuestsPage() {
   };
 
   const getWhatsAppLink = (guest: Guest) => {
-    const groom = weddingConfig?.groomNickname || "Daffa";
-    const bride = weddingConfig?.brideNickname || "Regina";
+    const groom = weddingConfig?.groomNickname || "Mempelai Pria";
+    const bride = weddingConfig?.brideNickname || "Mempelai Wanita";
     // Build link using owner username from guest data
-    const ownerUsername = guest.owner?.username || "daffa-regina";
-    const link = `${origin}/${ownerUsername}/${guest.slug}`;
+    const ownerUsername = guest.owner?.username || currentUser?.username || "";
+    const link = ownerUsername ? `${origin}/${ownerUsername}/${guest.slug}` : "";
     
     const defaultTemplate = `Halo Bapak/Ibu/Saudara/i *{{nama}}*,
 
@@ -417,11 +417,16 @@ Terima kasih.`;
   return (
     <div>
       <div className="admin-header">
-        <h1 className="admin-title">Daftar Tamu Undangan</h1>
+        <div className="admin-header-main">
+          <h1 className="admin-title">Daftar Tamu Undangan</h1>
+          {currentUser?.role === "super_admin" && (
+            <span className="admin-readonly-badge">Mode Baca-Saja</span>
+          )}
+        </div>
 
         {/* User filter for super admin */}
         {currentUser?.role === "super_admin" && ownerUsers.length > 0 && (
-          <div className="user-filter-bar" style={{ marginTop: "12px" }}>
+          <div className="user-filter-bar">
             <label className="user-filter-label">Filter Pemilik:</label>
             <div className="admin-select-wrap" style={{ maxWidth: "280px", width: "100%" }}>
               <select
@@ -438,41 +443,45 @@ Terima kasih.`;
           </div>
         )}
 
-        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap", marginTop: "10px" }}>
+        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
           <button className="admin-btn-outline" onClick={exportToCSV}>
             Ekspor CSV
           </button>
-          {/* CSV Import Trigger */}
-          <button 
-            className="admin-btn-outline" 
-            onClick={() => {
-              setCsvRows([]);
-              setCsvResult(null);
-              setPastedText("");
-              setDefaultImportGroup("");
-              setShowCSVModal(true);
-            }}
-            style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
-          >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="17 8 12 3 7 8" />
-              <line x1="12" y1="3" x2="12" y2="15" />
-            </svg>
-            Impor Massal / CSV
-          </button>
-          
-          <input
-            type="file"
-            accept=".csv,.txt"
-            onChange={handleCSVFileSelect}
-            style={{ display: "none" }}
-            id="csv-import-input"
-          />
-          <button className="admin-btn" onClick={() => setShowAddModal(true)}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: "6px" }}><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            Tambah Tamu
-          </button>
+          {currentUser?.role !== "super_admin" && (
+            <>
+              {/* CSV Import Trigger */}
+              <button
+                className="admin-btn-outline"
+                onClick={() => {
+                  setCsvRows([]);
+                  setCsvResult(null);
+                  setPastedText("");
+                  setDefaultImportGroup("");
+                  setShowCSVModal(true);
+                }}
+                style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                  <polyline points="17 8 12 3 7 8" />
+                  <line x1="12" y1="3" x2="12" y2="15" />
+                </svg>
+                Impor Massal / CSV
+              </button>
+
+              <input
+                type="file"
+                accept=".csv,.txt"
+                onChange={handleCSVFileSelect}
+                style={{ display: "none" }}
+                id="csv-import-input"
+              />
+              <button className="admin-btn" onClick={() => setShowAddModal(true)}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: "6px" }}><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Tambah Tamu
+              </button>
+            </>
+          )}
         </div>
       </div>
 
@@ -547,13 +556,20 @@ Terima kasih.`;
                     <td>{guest.group || "-"}</td>
                     <td>{guest.phone || "-"}</td>
                     <td>
-                      <button
-                        onClick={() => copyToClipboard(`${origin}/${guest.owner?.username || "daffa-regina"}/${guest.slug}`)}
-                        className="admin-btn-outline"
-                        style={{ padding: "4px 8px", fontSize: "0.75rem" }}
-                      >
-                        Salin Link
-                      </button>
+                      {(() => {
+                        const ownerUsername = guest.owner?.username || currentUser?.username || "";
+                        return (
+                          <button
+                            onClick={() => ownerUsername && copyToClipboard(`${origin}/${ownerUsername}/${guest.slug}`)}
+                            className="admin-btn-outline"
+                            style={{ padding: "4px 8px", fontSize: "0.75rem" }}
+                            disabled={!ownerUsername}
+                            title={ownerUsername ? undefined : "Pemilik tidak diketahui"}
+                          >
+                            Salin Link
+                          </button>
+                        );
+                      })()}
                     </td>
                     <td>
                       <span className={`badge badge-${guest.rsvpStatus}`}>
@@ -564,7 +580,7 @@ Terima kasih.`;
                     <td>{guest.openedAt ? "Ya" : "Belum"}</td>
                     <td>
                       <div className="table-actions">
-                        {guest.phone && (
+                        {guest.phone && (guest.owner?.username || currentUser?.username) && (
                           <a
                             href={getWhatsAppLink(guest)}
                             target="_blank"
@@ -575,12 +591,16 @@ Terima kasih.`;
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                           </a>
                         )}
-                        <button className="action-btn" title="Edit Tamu" onClick={() => openEditModal(guest)}>
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
-                        </button>
-                        <button className="action-btn" title="Hapus Tamu" style={{ color: "#EF4444" }} onClick={() => handleDeleteGuest(guest.id)}>
-                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
-                        </button>
+                        {currentUser?.role !== "super_admin" && (
+                          <>
+                            <button className="action-btn" title="Edit Tamu" onClick={() => openEditModal(guest)}>
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+                            </button>
+                            <button className="action-btn" title="Hapus Tamu" style={{ color: "#EF4444" }} onClick={() => handleDeleteGuest(guest.id)}>
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                            </button>
+                          </>
+                        )}
                       </div>
                     </td>
                   </tr>

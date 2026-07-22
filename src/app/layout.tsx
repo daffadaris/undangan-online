@@ -15,8 +15,8 @@ const lora = Lora({
 });
 
 export const metadata: Metadata = {
-  title: "Undangan Pernikahan Daffa & Regina",
-  description: "Undangan pernikahan online resmi Daffa' Daris Mahendra Ansori & Regina Pingkan Sayyidhina Arif",
+  title: "Undangan Pernikahan Online",
+  description: "Buat dan bagikan undangan pernikahan online Anda.",
   icons: {
     icon: "/icon.svg",
     apple: "/icon.svg",

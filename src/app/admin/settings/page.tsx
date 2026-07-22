@@ -20,6 +20,8 @@ export default function AdminSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
+  const [checkingRole, setCheckingRole] = useState(true);
 
   // Form states
   const [groomName, setGroomName] = useState("");
@@ -72,6 +74,16 @@ export default function AdminSettingsPage() {
 
   // Upload States
   const [uploadingField, setUploadingField] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetch("/api/auth")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.user?.role === "super_admin") setIsSuperAdmin(true);
+      })
+      .catch(() => {})
+      .finally(() => setCheckingRole(false));
+  }, []);
 
   useEffect(() => {
     const fetchConfig = async () => {
@@ -311,8 +323,25 @@ export default function AdminSettingsPage() {
     setGiftInfo(updated);
   };
 
-  if (loading) {
+  if (loading || checkingRole) {
     return <p style={{ color: "var(--admin-text-sub)" }}>Memuat pengaturan...</p>;
+  }
+
+  if (isSuperAdmin) {
+    return (
+      <div>
+        <div className="admin-header">
+          <h1 className="admin-title">Pengaturan Acara</h1>
+        </div>
+        <div className="admin-card">
+          <p style={{ color: "var(--admin-text-sub)" }}>
+            Super admin tidak memiliki undangan sendiri dan tidak dapat mengubah undangan pemilik.
+            Gunakan menu <strong>Pengguna</strong> untuk mengelola akun pemilik, atau filter
+            <strong> Daftar Tamu</strong> / <strong>Ucapan</strong> untuk melihat data pemilik secara baca-saja.
+          </p>
+        </div>
+      </div>
+    );
   }
 
   return (

@@ -71,9 +71,14 @@ export default function AdminWishesPage() {
   return (
     <div>
       <div className="admin-header">
-        <h1 className="admin-title">Ucapan &amp; Doa Restu</h1>
+        <div className="admin-header-main">
+          <h1 className="admin-title">Ucapan &amp; Doa Restu</h1>
+          {currentUser?.role === "super_admin" && (
+            <span className="admin-readonly-badge">Mode Baca-Saja</span>
+          )}
+        </div>
         {currentUser?.role === "super_admin" && ownerUsers.length > 0 && (
-          <div className="user-filter-bar" style={{ marginTop: "12px" }}>
+          <div className="user-filter-bar">
             <label className="user-filter-label">Filter Pemilik:</label>
             <div className="admin-select-wrap" style={{ maxWidth: "280px", width: "100%" }}>
               <select
@@ -111,7 +116,7 @@ export default function AdminWishesPage() {
                   <th>RSVP</th>
                   <th>Isi Ucapan</th>
                   <th>Waktu Pengiriman</th>
-                  <th>Aksi</th>
+                  {currentUser?.role !== "super_admin" && <th>Aksi</th>}
                 </tr>
               </thead>
               <tbody>
@@ -139,15 +144,17 @@ export default function AdminWishesPage() {
                         timeZone: "Asia/Jakarta",
                       })}
                     </td>
-                    <td style={{ width: "10%" }}>
-                      <button
-                        className="admin-btn-danger"
-                        style={{ padding: "6px 12px", fontSize: "0.75rem" }}
-                        onClick={() => handleDeleteWish(wish.id)}
-                      >
-                        Hapus
-                      </button>
-                    </td>
+                    {currentUser?.role !== "super_admin" && (
+                      <td style={{ width: "10%" }}>
+                        <button
+                          className="admin-btn-danger"
+                          style={{ padding: "6px 12px", fontSize: "0.75rem" }}
+                          onClick={() => handleDeleteWish(wish.id)}
+                        >
+                          Hapus
+                        </button>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>

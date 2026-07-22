@@ -25,21 +25,6 @@ export default function GiftInfo({ config }: GiftInfoProps) {
     console.error("Failed to parse gift config", e);
   }
 
-  if (giftItems.length === 0) {
-    giftItems = [
-      {
-        bankName: "Bank BCA",
-        accountName: "Daffa' Daris M A",
-        accountNumber: "1234567890",
-      },
-      {
-        bankName: "Bank Mandiri",
-        accountName: "Regina Pingkan S A",
-        accountNumber: "0987654321",
-      },
-    ];
-  }
-
   const handleCopy = async (number: string, idx: number) => {
     try {
       if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -66,6 +51,10 @@ export default function GiftInfo({ config }: GiftInfoProps) {
       console.error("Gagal menyalin: ", err);
     }
   };
+
+  if (giftItems.length === 0) {
+    return null;
+  }
 
   return (
     <section className="invitation-section">

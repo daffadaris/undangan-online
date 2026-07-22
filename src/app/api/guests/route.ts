@@ -41,16 +41,18 @@ export async function POST(request: Request) {
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    if (user.role === "super_admin") {
+      return NextResponse.json({ error: "Super admin tidak dapat menambah tamu pemilik" }, { status: 403 });
+    }
 
     const body = await request.json();
-    const { name, phone, group, userId } = body;
+    const { name, phone, group } = body;
 
     if (!name) {
       return NextResponse.json({ error: "Nama tamu wajib diisi" }, { status: 400 });
     }
 
-    // Determine which user this guest belongs to
-    const targetUserId = user.role === "super_admin" && userId ? userId : user.userId;
+    const targetUserId = user.userId;
 
     let baseSlug = slugify(name);
     let slug = baseSlug;

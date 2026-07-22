@@ -67,17 +67,40 @@
 
 .admin-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  gap: 12px;
   margin-bottom: 30px;
   border-bottom: 1px solid var(--admin-border);
   padding-bottom: 20px;
 }
 
+.admin-header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .admin-title {
   font-family: var(--font-serif);
-  font-size: 2rem;
+  font-size: clamp(1.4rem, 2vw, 2rem);
   color: var(--admin-primary);
+  min-width: 0;
+}
+
+.admin-readonly-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  background: var(--admin-bg);
+  border: 1px solid var(--admin-border);
+  color: var(--admin-text-sub);
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 /* Stats Cards Grid */

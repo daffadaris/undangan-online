@@ -11,17 +11,20 @@ export async function PUT(
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    if (user.role === "super_admin") {
+      return NextResponse.json({ error: "Super admin tidak dapat mengubah tamu pemilik" }, { status: 403 });
+    }
 
     const { id } = await params;
     const body = await request.json();
     const { name, phone, group, rsvpStatus, numberOfGuests, wishes } = body;
 
-    // Verify ownership (super admin can edit any)
+    // Verify ownership
     const existing = await prisma.guest.findUnique({ where: { id } });
     if (!existing) {
       return NextResponse.json({ error: "Guest not found" }, { status: 404 });
     }
-    if (user.role !== "super_admin" && existing.userId !== user.userId) {
+    if (existing.userId !== user.userId) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
@@ -59,6 +62,9 @@ export async function DELETE(
     if (!user) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
+    if (user.role === "super_admin") {
+      return NextResponse.json({ error: "Super admin tidak dapat menghapus tamu pemilik" }, { status: 403 });
+    }
 
     const { id } = await params;
 
@@ -66,7 +72,7 @@ export async function DELETE(
     if (!existing) {
       return NextResponse.json({ error: "Guest not found" }, { status: 404 });
     }
-    if (user.role !== "super_admin" && existing.userId !== user.userId) {
+    if (existing.userId !== user.userId) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 

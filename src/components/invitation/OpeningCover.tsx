@@ -23,7 +23,7 @@ export default function OpeningCover({
         <p className="cover-subtitle">The Wedding of</p>
         
         <h1 className="cover-title">
-          {config?.groomNickname || "Daffa"} &amp; {config?.brideNickname || "Regina"}
+          {config?.groomNickname || "Mempelai Pria"} &amp; {config?.brideNickname || "Mempelai Wanita"}
         </h1>
         
         <div className="cover-recipient-card">

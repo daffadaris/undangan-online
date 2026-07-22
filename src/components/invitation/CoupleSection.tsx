@@ -25,14 +25,14 @@ export default function CoupleSection({ config }: CoupleSectionProps) {
               <div
                 className="couple-photo-inner"
                 style={{
-                  backgroundImage: `url("${config?.groomImage || "https://images.unsplash.com/photo-1594744803329-e58b31de215f?q=80&w=600"}")`,
+                  backgroundImage: config?.groomImage ? `url("${config.groomImage}")` : undefined,
                   backgroundPosition: config?.groomImagePosition || "center",
                 }}
               />
             </div>
           </div>
-          <h3 className="couple-name">{config?.groomName || "Daffa' Daris Mahendra Ansori"}</h3>
-          <p className="couple-parents">{config?.groomParents || "Putra Pertama dari Bpk. Ansori & Ibu Ansori"}</p>
+          <h3 className="couple-name">{config?.groomName || "Mempelai Pria"}</h3>
+          {config?.groomParents && <p className="couple-parents">{config.groomParents}</p>}
         </div>
 
         {/* Separator / Ampersand */}
@@ -48,14 +48,14 @@ export default function CoupleSection({ config }: CoupleSectionProps) {
               <div
                 className="couple-photo-inner"
                 style={{
-                  backgroundImage: `url("${config?.brideImage || "https://images.unsplash.com/photo-1583939003579-730e3918a45a?q=80&w=600"}")`,
+                  backgroundImage: config?.brideImage ? `url("${config.brideImage}")` : undefined,
                   backgroundPosition: config?.brideImagePosition || "center",
                 }}
               />
             </div>
           </div>
-          <h3 className="couple-name">{config?.brideName || "Regina Pingkan Sayyidhina Arif"}</h3>
-          <p className="couple-parents">{config?.brideParents || "Putri Kedua dari Bpk. Arif & Ibu Arif"}</p>
+          <h3 className="couple-name">{config?.brideName || "Mempelai Wanita"}</h3>
+          {config?.brideParents && <p className="couple-parents">{config.brideParents}</p>}
         </div>
 
       </div>
