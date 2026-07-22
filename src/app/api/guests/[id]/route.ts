@@ -25,15 +25,21 @@ export async function PUT(
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
+    // Fields left out of the payload keep their current value — otherwise a partial
+    // update would reset the guest's pax (and phone/group) behind the admin's back.
+    const nextStatus = rsvpStatus === undefined ? existing.rsvpStatus : rsvpStatus;
+    const requestedPax = numberOfGuests === undefined ? existing.numberOfGuests : numberOfGuests;
+    const pax = Math.min(5, Math.max(1, Math.round(Number(requestedPax)) || 1));
+
     const guest = await prisma.guest.update({
       where: { id },
       data: {
-        name,
-        phone: phone || null,
-        group: group || null,
-        rsvpStatus,
-        numberOfGuests: rsvpStatus === "confirmed" ? numberOfGuests : 0,
-        wishes: wishes || null,
+        name: name === undefined ? existing.name : name,
+        phone: phone === undefined ? existing.phone : phone || null,
+        group: group === undefined ? existing.group : group || null,
+        rsvpStatus: nextStatus,
+        numberOfGuests: nextStatus === "confirmed" ? pax : 0,
+        wishes: wishes === undefined ? existing.wishes : wishes || null,
       },
     });
 

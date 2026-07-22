@@ -10,9 +10,13 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Missing guest ID" }, { status: 400 });
     }
 
+    // Confirmed guests are always 1-5 pax; anything else (missing, 0, out of range)
+    // would silently drop them out of the "Total Pax Kehadiran" stat.
+    const pax = Math.min(5, Math.max(1, Math.round(Number(numberOfGuests)) || 1));
+
     const updateData: any = {
       rsvpStatus,
-      numberOfGuests: rsvpStatus === "confirmed" ? numberOfGuests : 0,
+      numberOfGuests: rsvpStatus === "confirmed" ? pax : 0,
     };
 
     if (wishes !== undefined) {

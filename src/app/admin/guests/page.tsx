@@ -253,7 +253,7 @@ Terima kasih.`;
     setEditPhone(guest.phone || "");
     setEditGroup(guest.group || "");
     setEditRsvp(guest.rsvpStatus);
-    setEditPax(guest.numberOfGuests);
+    setEditPax(guest.numberOfGuests >= 1 ? guest.numberOfGuests : 1);
     setShowEditModal(true);
   };
 

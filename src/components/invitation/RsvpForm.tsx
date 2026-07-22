@@ -31,7 +31,11 @@ export default function RsvpForm({
   ownerId,
 }: RsvpFormProps) {
   const [rsvpStatus, setRsvpStatus] = useState(initialRsvpStatus);
-  const [numberOfGuests, setNumberOfGuests] = useState(initialNumberOfGuests);
+  // A declined/pending guest is stored with 0 pax, which matches no option in the
+  // picker — fall back to 1 so the form never submits a confirmed guest with 0 pax.
+  const [numberOfGuests, setNumberOfGuests] = useState(
+    initialNumberOfGuests >= 1 ? initialNumberOfGuests : 1
+  );
   const [wishes, setWishes] = useState(initialWishes || "");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
@@ -131,17 +135,23 @@ export default function RsvpForm({
           {rsvpStatus === "confirmed" && (
             <div className="form-group animate-fade-in">
               <label className="form-label">Jumlah Orang</label>
-              <select
-                className="form-select"
-                value={numberOfGuests}
-                onChange={(e) => setNumberOfGuests(Number(e.target.value))}
-              >
-                <option value="1">1 Orang</option>
-                <option value="2">2 Orang</option>
-                <option value="3">3 Orang</option>
-                <option value="4">4 Orang</option>
-                <option value="5">5 Orang</option>
-              </select>
+              <div className="rsvp-pax-selector">
+                {[1, 2, 3, 4, 5].map((pax) => (
+                  <button
+                    key={pax}
+                    type="button"
+                    className={`rsvp-pax-btn ${numberOfGuests === pax ? "active" : ""}`}
+                    onClick={() => setNumberOfGuests(pax)}
+                  >
+                    <span className="rsvp-pax-btn-num">{pax}</span>
+                    <span className="rsvp-pax-btn-unit">Orang</span>
+                  </button>
+                ))}
+              </div>
+              <p className="rsvp-pax-hint">
+                Jumlah sudah termasuk Anda — Anda hadir{" "}
+                {numberOfGuests === 1 ? "sendiri" : `bersama ${numberOfGuests - 1} pendamping`}.
+              </p>
             </div>
           )}
 
