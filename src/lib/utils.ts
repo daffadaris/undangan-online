@@ -15,9 +15,10 @@ export function buildWhatsappMessage(
   guestSlug: string,
   groomNickname: string,
   brideNickname: string,
+  ownerUsername: string,
   hostUrl: string
 ): string {
-  const link = `${hostUrl}/pingkan-daffa/${guestSlug}`;
+  const link = `${hostUrl}/${ownerUsername}/${guestSlug}`;
   return `Halo Bapak/Ibu/Saudara/i *${guestName}*,
 
 Tanpa mengurangi rasa hormat, perkenankan kami mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara pernikahan kami, *${groomNickname} & ${brideNickname}*.

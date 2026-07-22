@@ -74,16 +74,18 @@ export default async function AdminDashboard({ searchParams }: Props) {
       {user?.role === "super_admin" && allUsers.length > 0 && (
         <form method="GET" action="/admin" className="user-filter-bar">
           <label className="user-filter-label">Filter Pemilik:</label>
-          <select
-            name="userId"
-            className="admin-input user-filter-select"
-            defaultValue={filterUserId || ""}
-          >
-            <option value="">Semua Pemilik</option>
-            {allUsers.map(u => (
-              <option key={u.id} value={u.id}>{u.username} ({u._count.guests} tamu)</option>
-            ))}
-          </select>
+          <div className="admin-select-wrap" style={{ maxWidth: "280px", width: "100%" }}>
+            <select
+              name="userId"
+              className="admin-input user-filter-select"
+              defaultValue={filterUserId || ""}
+            >
+              <option value="">Semua Pemilik</option>
+              {allUsers.map(u => (
+                <option key={u.id} value={u.id}>{u.username} ({u._count.guests} tamu)</option>
+              ))}
+            </select>
+          </div>
           <button type="submit" className="admin-btn user-filter-btn">Filter</button>
           {filterUserId && (
             <a href="/admin" className="admin-btn user-filter-reset">Reset</a>
@@ -158,6 +160,7 @@ export default async function AdminDashboard({ searchParams }: Props) {
                         month: "short",
                         hour: "2-digit",
                         minute: "2-digit",
+                        timeZone: "Asia/Jakarta",
                       })}
                     </td>
                   </tr>

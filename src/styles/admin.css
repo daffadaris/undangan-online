@@ -202,7 +202,7 @@
   backdrop-filter: blur(4px);
 }
 
-.modal-content {
+.modal-content, .modal-card {
   background: white;
   border-radius: var(--radius-md);
   max-width: 500px;
@@ -237,6 +237,13 @@
   color: var(--admin-text);
 }
 
+/* ── Theme-Aware Form Controls ── */
+.admin-input, .admin-check, .admin-toggle-track {
+  --field-accent: var(--primary-sage, #A8BBA0);
+  --field-accent-strong: var(--secondary-olive, #4E5C47);
+  --field-accent-soft: var(--primary-sage-light, #E8EFE5);
+}
+
 .admin-input {
   width: 100%;
   padding: 10px 14px;
@@ -245,12 +252,192 @@
   font-size: 0.95rem;
   color: var(--admin-text);
   background-color: white;
-  transition: border-color 0.3s;
+  font-family: inherit;
+  line-height: 1.4;
+  min-height: 42px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.admin-input:hover {
+  border-color: var(--field-accent);
 }
 
 .admin-input:focus {
   outline: none;
-  border-color: var(--admin-primary);
+  border-color: var(--field-accent);
+  box-shadow: 0 0 0 3px var(--field-accent-soft);
+}
+
+.admin-input::placeholder {
+  color: var(--admin-text-sub);
+  opacity: 0.7;
+}
+
+.admin-input:disabled {
+  background: var(--admin-bg);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* ── Select wrapper for custom chevron ── */
+.admin-select-wrap {
+  position: relative;
+  display: block;
+  width: 100%;
+}
+
+.admin-select-wrap::after {
+  content: "";
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  background-color: var(--field-accent);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+}
+
+select.admin-input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  padding-right: 38px;
+  background-color: white;
+}
+
+select.admin-input option {
+  color: var(--admin-text);
+}
+
+/* ── Size modifier ── */
+.admin-input-sm {
+  padding: 6px 10px !important;
+  font-size: 0.8rem !important;
+  min-height: auto !important;
+}
+
+/* ── Textarea ── */
+textarea.admin-input {
+  resize: vertical;
+  min-height: 90px;
+  line-height: 1.5;
+}
+
+/* ── Date picker indicator ── */
+input[type="date"].admin-input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+input[type="date"].admin-input:hover::-webkit-calendar-picker-indicator {
+  opacity: 1;
+}
+
+/* ── Toggle Switch ── */
+.admin-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.admin-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.admin-toggle-track {
+  width: 42px;
+  height: 24px;
+  border-radius: var(--radius-full);
+  background: var(--admin-border);
+  transition: background 0.25s;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.admin-toggle-track::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: transform 0.25s;
+}
+
+.admin-toggle input:checked + .admin-toggle-track {
+  background: var(--field-accent);
+}
+
+.admin-toggle input:checked + .admin-toggle-track::before {
+  transform: translateX(18px);
+}
+
+.admin-toggle input:focus-visible + .admin-toggle-track {
+  box-shadow: 0 0 0 3px var(--field-accent-soft);
+}
+
+/* ── Compact Checkbox for data tables ── */
+.admin-check {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--admin-border);
+  cursor: pointer;
+  position: relative;
+  background: white;
+  flex-shrink: 0;
+  transition: border-color 0.25s;
+}
+
+.admin-check:hover {
+  border-color: var(--field-accent);
+}
+
+.admin-check:checked {
+  background: var(--field-accent);
+  border-color: var(--field-accent);
+}
+
+.admin-check:checked::after {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.admin-check:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--field-accent-soft);
+}
+
+.admin-check:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .admin-btn {
@@ -623,7 +810,7 @@
 .user-filter-select {
   max-width: 280px;
   width: 100%;
-  padding: 6px 12px;
+  padding: 6px 32px 6px 12px;
 }
 
 .user-filter-btn {

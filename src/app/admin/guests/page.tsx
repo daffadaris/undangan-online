@@ -423,16 +423,18 @@ Terima kasih.`;
         {currentUser?.role === "super_admin" && ownerUsers.length > 0 && (
           <div className="user-filter-bar" style={{ marginTop: "12px" }}>
             <label className="user-filter-label">Filter Pemilik:</label>
-            <select
-              className="admin-input user-filter-select"
-              value={selectedUserId}
-              onChange={(e) => { setSelectedUserId(e.target.value); setLoading(true); }}
-            >
-              <option value="">Semua Pemilik</option>
-              {ownerUsers.map(u => (
-                <option key={u.id} value={u.id}>{u.username} ({u._count.guests} tamu)</option>
-              ))}
-            </select>
+            <div className="admin-select-wrap" style={{ maxWidth: "280px", width: "100%" }}>
+              <select
+                className="admin-input user-filter-select"
+                value={selectedUserId}
+                onChange={(e) => { setSelectedUserId(e.target.value); setLoading(true); }}
+              >
+                <option value="">Semua Pemilik</option>
+                {ownerUsers.map(u => (
+                  <option key={u.id} value={u.id}>{u.username} ({u._count.guests} tamu)</option>
+                ))}
+              </select>
+            </div>
           </div>
         )}
 
@@ -488,21 +490,25 @@ Terima kasih.`;
           </div>
           
           <div style={{ minWidth: "150px" }}>
-            <select className="admin-input" value={filterGroup} onChange={(e) => setFilterGroup(e.target.value)}>
-              <option value="">Semua Grup</option>
-              {groupsList.map(grp => (
-                <option key={grp} value={grp}>{grp}</option>
-              ))}
-            </select>
+            <div className="admin-select-wrap">
+              <select className="admin-input" value={filterGroup} onChange={(e) => setFilterGroup(e.target.value)}>
+                <option value="">Semua Grup</option>
+                {groupsList.map(grp => (
+                  <option key={grp} value={grp}>{grp}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           <div style={{ minWidth: "150px" }}>
-            <select className="admin-input" value={filterRsvp} onChange={(e) => setFilterRsvp(e.target.value)}>
-              <option value="">Semua RSVP</option>
-              <option value="pending">Pending</option>
-              <option value="confirmed">Hadir</option>
-              <option value="declined">Berhalangan</option>
-            </select>
+            <div className="admin-select-wrap">
+              <select className="admin-input" value={filterRsvp} onChange={(e) => setFilterRsvp(e.target.value)}>
+                <option value="">Semua RSVP</option>
+                <option value="pending">Pending</option>
+                <option value="confirmed">Hadir</option>
+                <option value="declined">Berhalangan</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -685,23 +691,27 @@ Terima kasih.`;
 
               <div className="admin-input-group">
                 <label className="admin-input-label">Status RSVP</label>
-                <select className="admin-input" value={editRsvp} onChange={(e) => setEditRsvp(e.target.value)}>
-                  <option value="pending">Pending</option>
-                  <option value="confirmed">Hadir</option>
-                  <option value="declined">Berhalangan</option>
-                </select>
+                <div className="admin-select-wrap">
+                  <select className="admin-input" value={editRsvp} onChange={(e) => setEditRsvp(e.target.value)}>
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Hadir</option>
+                    <option value="declined">Berhalangan</option>
+                  </select>
+                </div>
               </div>
 
               {editRsvp === "confirmed" && (
                 <div className="admin-input-group">
                   <label className="admin-input-label">Jumlah Pax Kehadiran</label>
-                  <select className="admin-input" value={editPax} onChange={(e) => setEditPax(Number(e.target.value))}>
-                    <option value="1">1 Orang</option>
-                    <option value="2">2 Orang</option>
-                    <option value="3">3 Orang</option>
-                    <option value="4">4 Orang</option>
-                    <option value="5">5 Orang</option>
-                  </select>
+                  <div className="admin-select-wrap">
+                    <select className="admin-input" value={editPax} onChange={(e) => setEditPax(Number(e.target.value))}>
+                      <option value="1">1 Orang</option>
+                      <option value="2">2 Orang</option>
+                      <option value="3">3 Orang</option>
+                      <option value="4">4 Orang</option>
+                      <option value="5">5 Orang</option>
+                    </select>
+                  </div>
                 </div>
               )}
 

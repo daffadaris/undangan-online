@@ -75,16 +75,18 @@ export default function AdminWishesPage() {
         {currentUser?.role === "super_admin" && ownerUsers.length > 0 && (
           <div className="user-filter-bar" style={{ marginTop: "12px" }}>
             <label className="user-filter-label">Filter Pemilik:</label>
-            <select
-              className="admin-input user-filter-select"
-              value={selectedUserId}
-              onChange={(e) => { setSelectedUserId(e.target.value); setLoading(true); }}
-            >
-              <option value="">Semua Pemilik</option>
-              {ownerUsers.map(u => (
-                <option key={u.id} value={u.id}>{u.username} ({u._count.guests} tamu)</option>
-              ))}
-            </select>
+            <div className="admin-select-wrap" style={{ maxWidth: "280px", width: "100%" }}>
+              <select
+                className="admin-input user-filter-select"
+                value={selectedUserId}
+                onChange={(e) => { setSelectedUserId(e.target.value); setLoading(true); }}
+              >
+                <option value="">Semua Pemilik</option>
+                {ownerUsers.map(u => (
+                  <option key={u.id} value={u.id}>{u.username} ({u._count.guests} tamu)</option>
+                ))}
+              </select>
+            </div>
           </div>
         )}
         <p style={{ color: "var(--admin-text-sub)", fontSize: "0.95rem" }}>
@@ -134,6 +136,7 @@ export default function AdminWishesPage() {
                         year: "numeric",
                         hour: "2-digit",
                         minute: "2-digit",
+                        timeZone: "Asia/Jakarta",
                       })}
                     </td>
                     <td style={{ width: "10%" }}>

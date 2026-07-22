@@ -24,7 +24,6 @@ interface RsvpFormProps {
 export default function RsvpForm({
   guestId,
   guestName,
-  guestSlug,
   initialRsvpStatus,
   initialNumberOfGuests,
   initialWishes,
@@ -61,7 +60,8 @@ export default function RsvpForm({
 
   useEffect(() => {
     fetchWishes();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ownerId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

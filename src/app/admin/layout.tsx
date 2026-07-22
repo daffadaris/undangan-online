@@ -1,9 +1,23 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext, useContext } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import "@/styles/admin.css";
+
+interface AdminThemeContextValue {
+  theme: string;
+  setTheme: (t: string) => void;
+}
+
+export const AdminThemeContext = createContext<AdminThemeContextValue>({
+  theme: "sage",
+  setTheme: () => {},
+});
+
+export function useAdminTheme() {
+  return useContext(AdminThemeContext);
+}
 
 export default function AdminLayout({
   children,
@@ -14,6 +28,7 @@ export default function AdminLayout({
   const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
+  const [theme, setTheme] = useState("sage");
 
   useEffect(() => {
     // Fetch current user info for sidebar
@@ -21,6 +36,16 @@ export default function AdminLayout({
       .then((res) => res.ok ? res.json() : null)
       .then((data) => {
         if (data?.user) setCurrentUser(data.user);
+      })
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    // Fetch theme from settings
+    fetch("/api/settings")
+      .then((res) => res.ok ? res.json() : null)
+      .then((data) => {
+        if (data?.config?.theme) setTheme(data.config.theme);
       })
       .catch(() => {});
   }, []);
@@ -54,7 +79,7 @@ export default function AdminLayout({
   };
 
   return (
-    <div className="admin-body">
+    <div className={`admin-body theme-${theme}`}>
       {/* Mobile Top Bar */}
       <div className="mobile-admin-header">
         <button className="sidebar-toggle-btn" onClick={toggleSidebar} aria-label="Toggle Sidebar">
@@ -116,7 +141,9 @@ export default function AdminLayout({
 
       {/* Main Content Area */}
       <main className="admin-main">
-        {children}
+        <AdminThemeContext.Provider value={{ theme, setTheme }}>
+          {children}
+        </AdminThemeContext.Provider>
       </main>
     </div>
   );

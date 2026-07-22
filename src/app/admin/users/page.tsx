@@ -221,6 +221,7 @@ export default function AdminUsersPage() {
                         day: "numeric",
                         month: "short",
                         year: "numeric",
+                        timeZone: "Asia/Jakarta",
                       })}
                     </td>
                     <td>
@@ -272,7 +273,7 @@ export default function AdminUsersPage() {
             </h2>
             <form onSubmit={handleCreate}>
               <div className="admin-input-group">
-                <label className="admin-input-label">Username</label>
+                <label className="admin-input-label">Username (URL Undangan)</label>
                 <input
                   type="text"
                   className="admin-input"
@@ -281,9 +282,20 @@ export default function AdminUsersPage() {
                   placeholder="contoh: budi-sari"
                   required
                 />
-                <p style={{ fontSize: "0.75rem", color: "var(--admin-text-sub)", marginTop: "4px" }}>
-                  URL undangan: /<strong>{newUsername || "username"}</strong>/nama-tamu
-                </p>
+                <div style={{
+                  background: "var(--admin-bg)",
+                  borderRadius: "var(--radius-sm)",
+                  padding: "10px 14px",
+                  marginTop: "8px",
+                  fontSize: "0.82rem",
+                  color: "var(--admin-text-sub)",
+                  wordBreak: "break-all",
+                }}>
+                  <span style={{ color: "var(--admin-text)", fontWeight: 600 }}>🔗 Tautan undangan:</span><br />
+                  <code style={{ color: "var(--admin-primary)", fontSize: "0.88rem" }}>
+                    /<strong>{newUsername || "username"}</strong>/nama-tamu
+                  </code>
+                </div>
               </div>
               <div className="admin-input-group">
                 <label className="admin-input-label">Password</label>

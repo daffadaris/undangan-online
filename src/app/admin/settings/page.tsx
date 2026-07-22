@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import "@/styles/admin.css";
+import { useAdminTheme } from "../layout";
 
 interface LoveStoryItem {
   year: string;
@@ -690,21 +691,23 @@ export default function AdminSettingsPage() {
           
           <div className="admin-input-group">
             <label className="admin-input-label">Pilih Warna Tema</label>
-            <select
-              className="admin-input"
-              value={theme}
-              onChange={(e) => setTheme(e.target.value)}
-            >
-              <option value="sage">Sage Green &amp; Cream (Elegant &amp; Natural)</option>
-              <option value="blue">Royal Blue &amp; Ice Blue (Cool &amp; Royal)</option>
-              <option value="pink">Rose Pink &amp; Blush (Romantic &amp; Warm)</option>
-              <option value="gold">Luxury Gold &amp; Ivory (Glamorous &amp; Premium)</option>
-              <option value="purple">Lavender &amp; Violet (Elegant &amp; Romantic)</option>
-              <option value="emerald">Emerald Green &amp; Gold (Premium &amp; Natural)</option>
-              <option value="burgundy">Burgundy &amp; Rose Gold (Classic &amp; Deep)</option>
-              <option value="dark">Charcoal &amp; Gold (Modern &amp; Luxury)</option>
-              <option value="green-pink">Green &amp; Rose Pink (Organic &amp; Romance)</option>
-            </select>
+            <div className="admin-select-wrap">
+              <select
+                className="admin-input"
+                value={theme}
+                onChange={(e) => setTheme(e.target.value)}
+              >
+                <option value="sage">Sage Green &amp; Cream (Elegant &amp; Natural)</option>
+                <option value="blue">Royal Blue &amp; Ice Blue (Cool &amp; Royal)</option>
+                <option value="pink">Rose Pink &amp; Blush (Romantic &amp; Warm)</option>
+                <option value="gold">Luxury Gold &amp; Ivory (Glamorous &amp; Premium)</option>
+                <option value="purple">Lavender &amp; Violet (Elegant &amp; Romantic)</option>
+                <option value="emerald">Emerald Green &amp; Gold (Premium &amp; Natural)</option>
+                <option value="burgundy">Burgundy &amp; Rose Gold (Classic &amp; Deep)</option>
+                <option value="dark">Charcoal &amp; Gold (Modern &amp; Luxury)</option>
+                <option value="green-pink">Green &amp; Rose Pink (Organic &amp; Romance)</option>
+              </select>
+            </div>
           </div>
 
           <div style={{ marginTop: "15px" }}>
@@ -800,20 +803,21 @@ export default function AdminSettingsPage() {
                 <label style={{ fontSize: "0.75rem", color: "var(--admin-text-sub)", display: "block", marginBottom: "4px" }}>
                   Fokus Potong Gambar (Crop Alignment)
                 </label>
-                <select 
-                  className="admin-input" 
-                  value={heroImagePosition} 
-                  onChange={(e) => setHeroImagePosition(e.target.value)}
-                  style={{ padding: "6px 10px", fontSize: "0.8rem", height: "auto" }}
-                >
-                  <option value="center">Tengah (Center)</option>
-                  <option value="top">Atas (Top)</option>
-                  <option value="bottom">Bawah (Bottom)</option>
-                  <option value="left">Kiri (Left)</option>
-                  <option value="right">Kanan (Right)</option>
-                  <option value="center top">Tengah Atas</option>
-                  <option value="center bottom">Tengah Bawah</option>
-                </select>
+                <div className="admin-select-wrap">
+                  <select 
+                    className="admin-input admin-input-sm" 
+                    value={heroImagePosition} 
+                    onChange={(e) => setHeroImagePosition(e.target.value)}
+                  >
+                    <option value="center">Tengah (Center)</option>
+                    <option value="top">Atas (Top)</option>
+                    <option value="bottom">Bawah (Bottom)</option>
+                    <option value="left">Kiri (Left)</option>
+                    <option value="right">Kanan (Right)</option>
+                    <option value="center top">Tengah Atas</option>
+                    <option value="center bottom">Tengah Bawah</option>
+                  </select>
+                </div>
               </div>
             </div>
             
@@ -883,20 +887,21 @@ export default function AdminSettingsPage() {
                 <label style={{ fontSize: "0.75rem", color: "var(--admin-text-sub)", display: "block", marginBottom: "4px" }}>
                   Fokus Potong Gambar (Crop Alignment)
                 </label>
-                <select 
-                  className="admin-input" 
-                  value={groomImagePosition} 
-                  onChange={(e) => setGroomImagePosition(e.target.value)}
-                  style={{ padding: "6px 10px", fontSize: "0.8rem", height: "auto" }}
-                >
-                  <option value="center">Tengah (Center)</option>
-                  <option value="top">Atas (Top)</option>
-                  <option value="bottom">Bawah (Bottom)</option>
-                  <option value="left">Kiri (Left)</option>
-                  <option value="right">Kanan (Right)</option>
-                  <option value="center top">Tengah Atas</option>
-                  <option value="center bottom">Tengah Bawah</option>
-                </select>
+                <div className="admin-select-wrap">
+                  <select 
+                    className="admin-input admin-input-sm" 
+                    value={groomImagePosition} 
+                    onChange={(e) => setGroomImagePosition(e.target.value)}
+                  >
+                    <option value="center">Tengah (Center)</option>
+                    <option value="top">Atas (Top)</option>
+                    <option value="bottom">Bawah (Bottom)</option>
+                    <option value="left">Kiri (Left)</option>
+                    <option value="right">Kanan (Right)</option>
+                    <option value="center top">Tengah Atas</option>
+                    <option value="center bottom">Tengah Bawah</option>
+                  </select>
+                </div>
               </div>
             </div>
 
@@ -933,20 +938,21 @@ export default function AdminSettingsPage() {
                 <label style={{ fontSize: "0.75rem", color: "var(--admin-text-sub)", display: "block", marginBottom: "4px" }}>
                   Fokus Potong Gambar (Crop Alignment)
                 </label>
-                <select 
-                  className="admin-input" 
-                  value={brideImagePosition} 
-                  onChange={(e) => setBrideImagePosition(e.target.value)}
-                  style={{ padding: "6px 10px", fontSize: "0.8rem", height: "auto" }}
-                >
-                  <option value="center">Tengah (Center)</option>
-                  <option value="top">Atas (Top)</option>
-                  <option value="bottom">Bawah (Bottom)</option>
-                  <option value="left">Kiri (Left)</option>
-                  <option value="right">Kanan (Right)</option>
-                  <option value="center top">Tengah Atas</option>
-                  <option value="center bottom">Tengah Bawah</option>
-                </select>
+                <div className="admin-select-wrap">
+                  <select 
+                    className="admin-input admin-input-sm" 
+                    value={brideImagePosition} 
+                    onChange={(e) => setBrideImagePosition(e.target.value)}
+                  >
+                    <option value="center">Tengah (Center)</option>
+                    <option value="top">Atas (Top)</option>
+                    <option value="bottom">Bawah (Bottom)</option>
+                    <option value="left">Kiri (Left)</option>
+                    <option value="right">Kanan (Right)</option>
+                    <option value="center top">Tengah Atas</option>
+                    <option value="center bottom">Tengah Bawah</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -989,71 +995,71 @@ export default function AdminSettingsPage() {
           </p>
 
           <div className="admin-grid-2" style={{ gap: "15px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <label className="admin-toggle">
               <input
                 type="checkbox"
                 id="toggle-story"
                 checked={showLoveStory}
                 onChange={(e) => setShowLoveStory(e.target.checked)}
-                style={{ width: "20px", height: "20px", cursor: "pointer" }}
               />
-              <label htmlFor="toggle-story" style={{ fontSize: "0.95rem", cursor: "pointer", userSelect: "none" }}>Tampilkan Kisah Cinta (Timeline)</label>
-            </div>
+              <span className="admin-toggle-track"></span>
+              Tampilkan Kisah Cinta (Timeline)
+            </label>
             
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <label className="admin-toggle">
               <input
                 type="checkbox"
                 id="toggle-gallery"
                 checked={showGallery}
                 onChange={(e) => setShowGallery(e.target.checked)}
-                style={{ width: "20px", height: "20px", cursor: "pointer" }}
               />
-              <label htmlFor="toggle-gallery" style={{ fontSize: "0.95rem", cursor: "pointer", userSelect: "none" }}>Tampilkan Galeri Foto</label>
-            </div>
+              <span className="admin-toggle-track"></span>
+              Tampilkan Galeri Foto
+            </label>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <label className="admin-toggle">
               <input
                 type="checkbox"
                 id="toggle-gift"
                 checked={showGiftInfo}
                 onChange={(e) => setShowGiftInfo(e.target.checked)}
-                style={{ width: "20px", height: "20px", cursor: "pointer" }}
               />
-              <label htmlFor="toggle-gift" style={{ fontSize: "0.95rem", cursor: "pointer", userSelect: "none" }}>Tampilkan Rekening Kado Digital</label>
-            </div>
+              <span className="admin-toggle-track"></span>
+              Tampilkan Rekening Kado Digital
+            </label>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <label className="admin-toggle">
               <input
                 type="checkbox"
                 id="toggle-rsvp"
                 checked={showRsvp}
                 onChange={(e) => setShowRsvp(e.target.checked)}
-                style={{ width: "20px", height: "20px", cursor: "pointer" }}
               />
-              <label htmlFor="toggle-rsvp" style={{ fontSize: "0.95rem", cursor: "pointer", userSelect: "none" }}>Tampilkan Form RSVP Konfirmasi Kehadiran</label>
-            </div>
+              <span className="admin-toggle-track"></span>
+              Tampilkan Form RSVP Konfirmasi Kehadiran
+            </label>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <label className="admin-toggle">
               <input
                 type="checkbox"
                 id="toggle-akad"
                 checked={showAkad}
                 onChange={(e) => setShowAkad(e.target.checked)}
-                style={{ width: "20px", height: "20px", cursor: "pointer" }}
               />
-              <label htmlFor="toggle-akad" style={{ fontSize: "0.95rem", cursor: "pointer", userSelect: "none" }}>Tampilkan Jadwal Akad</label>
-            </div>
+              <span className="admin-toggle-track"></span>
+              Tampilkan Jadwal Akad
+            </label>
 
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+            <label className="admin-toggle">
               <input
                 type="checkbox"
                 id="toggle-resepsi"
                 checked={showResepsi}
                 onChange={(e) => setShowResepsi(e.target.checked)}
-                style={{ width: "20px", height: "20px", cursor: "pointer" }}
               />
-              <label htmlFor="toggle-resepsi" style={{ fontSize: "0.95rem", cursor: "pointer", userSelect: "none" }}>Tampilkan Jadwal Resepsi</label>
-            </div>
+              <span className="admin-toggle-track"></span>
+              Tampilkan Jadwal Resepsi
+            </label>
           </div>
         </div>
 
