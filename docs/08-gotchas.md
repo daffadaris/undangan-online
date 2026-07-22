@@ -1,6 +1,7 @@
 # Gotchas & Known Issues
 
-Verified against the code on 2026-07-22. Nothing here is fixed yet — these are traps to know about.
+Verified against the code on 2026-07-22. Entries marked **fixed** are kept for history; the rest are
+live traps to know about.
 
 ## Pax ("Jumlah Orang") behaviour
 
@@ -10,38 +11,27 @@ Verified against the code on 2026-07-22. Nothing here is fixed yet — these are
 are bringing a companion. The dashboard's **Total Pax Kehadiran** sums those values, so it exceeds
 **Konfirmasi Hadir** whenever anyone brings a plus-one (2 confirmed guests × 2 pax → 4).
 
-### Pax silently becomes 0
+### Pax silently becomes 0 — **fixed 2026-07-22**
 
-Two write paths force `numberOfGuests: rsvpStatus === "confirmed" ? numberOfGuests : 0`
-([rsvp/route.ts:15](../src/app/api/rsvp/route.ts#L15),
-[guests/[id]/route.ts:35](../src/app/api/guests/[id]/route.ts#L35)). Consequences:
+Both write paths still force pax to `0` when the status is not `confirmed`, but a confirmed guest
+is now clamped to `1–5` server-side ([rsvp/route.ts](../src/app/api/rsvp/route.ts),
+[guests/[id]/route.ts](../src/app/api/guests/[id]/route.ts)), and the client seeds its picker with
+`initialNumberOfGuests >= 1 ? … : 1` ([RsvpForm.tsx](../src/components/invitation/RsvpForm.tsx),
+[admin/guests/page.tsx](../src/app/admin/guests/page.tsx)). A guest who declines and later
+re-confirms can no longer land on `confirmed` + `0 pax`.
 
-1. A guest who declines gets pax `0` — correct. But if they later reopen the invitation and switch
-   to "Saya Akan Hadir", `numberOfGuests` state is still `0`, which matches **no** `<option>`
-   (the list is 1–5). The `<select>` renders with nothing selected, and submitting without touching
-   it stores a `confirmed` guest with **0 pax** — invisible in the "Total Pax" stat.
-   The same applies to the admin edit modal's `editPax`.
-   *Fix direction*: clamp on read (`initialNumberOfGuests || 1`) or add a `0` option/normalise
-   server-side.
-2. See the wish-delete bug below for the other route to `confirmed` + `0`.
+Rows written before the fix may still hold `confirmed` + `0` and need a manual data cleanup —
+they are invisible in "Total Pax Kehadiran".
 
-## Deleting a wish wipes phone, group, and pax
+## Deleting a wish wipes phone, group, and pax — **fixed 2026-07-22**
 
 [admin/wishes/page.tsx:57](../src/app/admin/wishes/page.tsx#L57) sends
-`PUT /api/guests/{id}` with only `{ wishes: null }`. The handler destructures the full field set,
-so for that request:
+`PUT /api/guests/{id}` with only `{ wishes: null }`. The handler used to destructure the full field
+set and write `undefined` values straight through, so that one request erased the guest's phone,
+group, and pax while leaving `rsvpStatus: "confirmed"`.
 
-```ts
-phone: phone || null            // undefined → null   → phone number erased
-group: group || null            // undefined → null   → group erased
-rsvpStatus                      // undefined          → unchanged (stays "confirmed")
-numberOfGuests: rsvpStatus === "confirmed" ? … : 0   // rsvpStatus is undefined → 0
-```
-
-Result: the guest keeps `rsvpStatus: "confirmed"` but loses their phone, group, and pax count —
-despite the confirm dialog promising *"Tamu tetap ada, hanya ucapannya yang dihapus"*.
-*Fix direction*: build the `data` object from defined keys only, or add a dedicated
-`PATCH`/clear-wish endpoint.
+The handler now falls back to the stored row for every key the payload omits, so a partial `PUT`
+only changes the fields it actually sends.
 
 ## Public guestbook leaks across owners
 

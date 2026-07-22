@@ -29,7 +29,7 @@ All handlers live under [src/app/api](../src/app/api). Conventions:
 
 | Method | Auth | Behaviour |
 |---|---|---|
-| `PUT` | owner of the row, or super admin | Body `{ name, phone, group, rsvpStatus, numberOfGuests, wishes }`. Writes `numberOfGuests: rsvpStatus === "confirmed" ? numberOfGuests : 0`. Empty strings are normalised to `null` |
+| `PUT` | owner of the row, or super admin | Body `{ name, phone, group, rsvpStatus, numberOfGuests, wishes }`, all optional — omitted keys keep their stored value. Writes `numberOfGuests: status === "confirmed" ? clamp(pax, 1, 5) : 0`. Empty strings are normalised to `null` |
 | `DELETE` | owner of the row, or super admin | Hard delete |
 
 ## `/api/guests/import`

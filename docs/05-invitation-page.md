@@ -60,9 +60,10 @@ page.tsx (server)
 
 [RsvpForm.tsx](../src/components/invitation/RsvpForm.tsx):
 
-1. Local state seeds from the DB row: `rsvpStatus`, `numberOfGuests`, `wishes`.
-2. Two big buttons set `confirmed` / `declined`. The "Jumlah Orang" `<select>` (1–5) renders only
-   when `confirmed`.
+1. Local state seeds from the DB row: `rsvpStatus`, `numberOfGuests` (clamped to ≥ 1), `wishes`.
+2. Two big buttons set `confirmed` / `declined`. The "Jumlah Orang" picker — five `.rsvp-pax-btn`
+   pills sharing the attendance selector's styling, plus a hint line — renders only when
+   `confirmed`.
 3. The wish `<textarea>` is `required` — a guest cannot submit without writing something.
 4. Submit → `POST /api/rsvp` → success message in Bahasa Indonesia, then `fetchWishes()` refreshes
    the guestbook.

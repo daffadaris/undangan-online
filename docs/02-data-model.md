@@ -36,13 +36,14 @@ Source of truth: [prisma/schema.prisma](../prisma/schema.prisma). Provider `sqli
 ### `numberOfGuests` semantics (pax)
 
 - Default is **1**, from the schema — nothing in the codebase ever defaults it to 2 or above.
-- The guest picks 1–5 from the "Jumlah Orang" dropdown in
-  [RsvpForm.tsx](../src/components/invitation/RsvpForm.tsx#L134-L144); whatever appears in the
-  admin "Pax" column is exactly what the guest (or an admin) selected.
-- Both [/api/rsvp](../src/app/api/rsvp/route.ts#L15) and
-  [/api/guests/[id]](../src/app/api/guests/[id]/route.ts#L35) write
-  `numberOfGuests: rsvpStatus === "confirmed" ? numberOfGuests : 0` — declining or reverting to
-  pending zeroes the pax. See [08-gotchas.md](08-gotchas.md) for the 0-vs-dropdown mismatch this causes.
+- The guest picks 1–5 from the "Jumlah Orang" picker in
+  [RsvpForm.tsx](../src/components/invitation/RsvpForm.tsx); the picker always shows an explicitly
+  highlighted value, so whatever appears in the admin "Pax" column is exactly what the guest
+  (or an admin) selected.
+- Both [/api/rsvp](../src/app/api/rsvp/route.ts) and
+  [/api/guests/[id]](../src/app/api/guests/[id]/route.ts) write
+  `numberOfGuests: status === "confirmed" ? clamp(pax, 1, 5) : 0` — declining or reverting to
+  pending zeroes the pax, and a confirmed guest can never be stored below 1.
 - Dashboard "Total Pax Kehadiran" is `SUM(numberOfGuests) WHERE rsvpStatus = 'confirmed'`, so it is
   ≥ "Konfirmasi Hadir" whenever any guest brings a companion.
 
