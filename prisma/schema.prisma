@@ -64,6 +64,7 @@ model WeddingConfig {
   galleryImages  String    @default("[]") // JSON array
   musicUrl       String?
   theme          String    @default("sage")
+  design         String    @default("classic")
   showLoveStory  Boolean   @default(true)
   showGiftInfo   Boolean   @default(true)
   showRsvp       Boolean   @default(true)

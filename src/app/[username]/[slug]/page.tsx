@@ -66,7 +66,7 @@ export default async function InvitationPage({ params }: InvitationPageProps) {
   });
 
   return (
-    <div className={`invitation-body theme-${config?.theme || "sage"}`}>
+    <div className={`invitation-body theme-${config?.theme || "sage"} design-${config?.design || "classic"}`}>
       <OpeningCoverClient
         ownerId={owner.id}
         guest={guest}

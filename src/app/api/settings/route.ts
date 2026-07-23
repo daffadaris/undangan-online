@@ -58,6 +58,7 @@ export async function PUT(request: Request) {
       giftInfo: body.giftInfo,
       musicUrl: body.musicUrl,
       theme: body.theme,
+      design: body.design,
       heroImage: body.heroImage,
       groomImage: body.groomImage,
       brideImage: body.brideImage,

@@ -54,6 +54,7 @@ export default function AdminSettingsPage() {
   
   // Customization (Themes & Images)
   const [theme, setTheme] = useState("sage");
+  const [design, setDesign] = useState("classic");
   const [heroImage, setHeroImage] = useState("");
   const [groomImage, setGroomImage] = useState("");
   const [brideImage, setBrideImage] = useState("");
@@ -113,6 +114,7 @@ export default function AdminSettingsPage() {
             setResepsiMapsUrl(config.resepsiMapsUrl || "");
             setMusicUrl(config.musicUrl || "");
             setTheme(config.theme || "sage");
+            setDesign(config.design || "classic");
             setHeroImage(config.heroImage || "");
             setGroomImage(config.groomImage || "");
             setBrideImage(config.brideImage || "");
@@ -255,6 +257,7 @@ export default function AdminSettingsPage() {
           resepsiMapsUrl,
           musicUrl,
           theme,
+          design,
           heroImage,
           groomImage,
           brideImage,
@@ -714,80 +717,98 @@ export default function AdminSettingsPage() {
           )}
         </div>
 
-        {/* Pilihan Tema Desain */}
+        {/* Pilihan Desain Undangan */}
         <div className="admin-card">
-          <h2 className="card-title">Kustomisasi Tema Desain</h2>
-          
-          <div className="admin-input-group">
-            <label className="admin-input-label">Pilih Warna Tema</label>
-            <div className="admin-select-wrap">
-              <select
-                className="admin-input"
-                value={theme}
-                onChange={(e) => setTheme(e.target.value)}
-              >
-                <option value="sage">Sage Green &amp; Cream (Elegant &amp; Natural)</option>
-                <option value="blue">Royal Blue &amp; Ice Blue (Cool &amp; Royal)</option>
-                <option value="pink">Rose Pink &amp; Blush (Romantic &amp; Warm)</option>
-                <option value="gold">Luxury Gold &amp; Ivory (Glamorous &amp; Premium)</option>
-                <option value="purple">Lavender &amp; Violet (Elegant &amp; Romantic)</option>
-                <option value="emerald">Emerald Green &amp; Gold (Premium &amp; Natural)</option>
-                <option value="burgundy">Burgundy &amp; Rose Gold (Classic &amp; Deep)</option>
-                <option value="dark">Charcoal &amp; Gold (Modern &amp; Luxury)</option>
-                <option value="green-pink">Green &amp; Rose Pink (Organic &amp; Romance)</option>
-              </select>
-            </div>
-          </div>
+          <h2 className="card-title">Pilih Desain Undangan</h2>
+          <p style={{ color: "var(--admin-text-sub)", fontSize: "0.85rem", marginBottom: "18px" }}>
+            Setiap desain memiliki gaya, palet warna, dan huruf tersendiri. Pilih salah satu di
+            bawah ini — perubahan langsung diterapkan pada undangan Anda setelah disimpan.
+          </p>
 
-          <div style={{ marginTop: "15px" }}>
-            <p className="admin-input-label" style={{ marginBottom: "8px" }}>Pratinjau Palet Warna:</p>
-            <div className="admin-flex-row">
-              <div className="admin-color-preview-item">
-                <span className="admin-color-dot" style={{ backgroundColor: "#A8BBA0" }}></span>
-                <span className="admin-color-dot" style={{ backgroundColor: "#FFFBF5" }}></span>
-                <span style={{ fontSize: "0.85rem", color: "var(--admin-text)" }}>Sage Green</span>
-              </div>
-              <div className="admin-color-preview-item">
-                <span className="admin-color-dot" style={{ backgroundColor: "#8DA9C4" }}></span>
-                <span className="admin-color-dot" style={{ backgroundColor: "#F4F8FA" }}></span>
-                <span style={{ fontSize: "0.85rem", color: "var(--admin-text)" }}>Royal Blue</span>
-              </div>
-              <div className="admin-color-preview-item">
-                <span className="admin-color-dot" style={{ backgroundColor: "#E8A598" }}></span>
-                <span className="admin-color-dot" style={{ backgroundColor: "#FFF5F6" }}></span>
-                <span style={{ fontSize: "0.85rem", color: "var(--admin-text)" }}>Rose Pink</span>
-              </div>
-              <div className="admin-color-preview-item">
-                <span className="admin-color-dot" style={{ backgroundColor: "#D4AF37" }}></span>
-                <span className="admin-color-dot" style={{ backgroundColor: "#FCFAF2" }}></span>
-                <span style={{ fontSize: "0.85rem", color: "var(--admin-text)" }}>Luxury Gold</span>
-              </div>
-              <div className="admin-color-preview-item">
-                <span className="admin-color-dot" style={{ backgroundColor: "#A78BFA" }}></span>
-                <span className="admin-color-dot" style={{ backgroundColor: "#FAF8FC" }}></span>
-                <span style={{ fontSize: "0.85rem", color: "var(--admin-text)" }}>Lavender Purple</span>
-              </div>
-              <div className="admin-color-preview-item">
-                <span className="admin-color-dot" style={{ backgroundColor: "#34D399" }}></span>
-                <span className="admin-color-dot" style={{ backgroundColor: "#F7FAF7" }}></span>
-                <span style={{ fontSize: "0.85rem", color: "var(--admin-text)" }}>Emerald Green</span>
-              </div>
-              <div className="admin-color-preview-item">
-                <span className="admin-color-dot" style={{ backgroundColor: "#D97706" }}></span>
-                <span className="admin-color-dot" style={{ backgroundColor: "#FAF5F5" }}></span>
-                <span style={{ fontSize: "0.85rem", color: "var(--admin-text)" }}>Burgundy</span>
-              </div>
-              <div className="admin-color-preview-item">
-                <span className="admin-color-dot" style={{ backgroundColor: "#4E5C47" }}></span>
-                <span className="admin-color-dot" style={{ backgroundColor: "#1A1D20" }}></span>
-                <span style={{ fontSize: "0.85rem", color: "var(--admin-text)" }}>Charcoal Dark</span>
-              </div>
-              <div className="admin-color-preview-item">
-                <span className="admin-color-dot" style={{ backgroundColor: "#A8BBA0" }}></span>
-                <span className="admin-color-dot" style={{ backgroundColor: "#E8A598" }}></span>
-                <span style={{ fontSize: "0.85rem", color: "var(--admin-text)" }}>Green &amp; Pink</span>
-              </div>
-            </div>
+          <div className="design-picker">
+            {[
+              {
+                key: "classic",
+                name: "Klasik Sage",
+                note: "Sage & krem dengan sentuhan floral (tampilan saat ini).",
+                bg: "#FFFBF5",
+                titleFont: "var(--font-playfair), Georgia, serif",
+                titleColor: "#2F362E",
+                accent: "#C9A96E",
+                radius: "12px",
+                titleSize: "1.35rem",
+              },
+              {
+                key: "romantic",
+                name: "Romantis Rose",
+                note: "Rose lembut, judul dengan huruf tulisan tangan, sudut membulat.",
+                bg: "#FFF6F7",
+                titleFont: "var(--font-great-vibes), cursive",
+                titleColor: "#4A2A34",
+                accent: "#E39BAE",
+                radius: "20px",
+                titleSize: "1.9rem",
+              },
+              {
+                key: "luxury",
+                name: "Mewah Emas",
+                note: "Ivory & emas, serif elegan, sudut tegas dan mewah.",
+                bg: "#FCFAF3",
+                titleFont: "var(--font-cormorant), Georgia, serif",
+                titleColor: "#3A3116",
+                accent: "#B8912E",
+                radius: "2px",
+                titleSize: "1.5rem",
+              },
+              {
+                key: "minimalist",
+                name: "Minimalis",
+                note: "Netral bersih, tanpa ornamen, huruf sans-serif modern.",
+                bg: "#FAFAFA",
+                titleFont: "var(--font-poppins), system-ui, sans-serif",
+                titleColor: "#1F2937",
+                accent: "#9CA3AF",
+                radius: "4px",
+                titleSize: "1.2rem",
+              },
+            ].map((d) => (
+              <button
+                type="button"
+                key={d.key}
+                className={`design-card ${design === d.key ? "active" : ""}`}
+                onClick={() => setDesign(d.key)}
+                aria-pressed={design === d.key}
+              >
+                <span
+                  className="design-card-preview"
+                  style={{ backgroundColor: d.bg, borderRadius: d.radius }}
+                >
+                  <span
+                    className="design-card-preview-title"
+                    style={{
+                      fontFamily: d.titleFont,
+                      color: d.titleColor,
+                      fontSize: d.titleSize,
+                    }}
+                  >
+                    {(groomNickname || "Andi")} &amp; {(brideNickname || "Sari")}
+                  </span>
+                  <span
+                    className="design-card-preview-rule"
+                    style={{ backgroundColor: d.accent }}
+                  ></span>
+                  <span
+                    className="design-card-preview-sub"
+                    style={{ fontFamily: d.titleFont, color: d.titleColor }}
+                  >
+                    Save the Date
+                  </span>
+                </span>
+                <span className="design-card-name">{d.name}</span>
+                <span className="design-card-note">{d.note}</span>
+                {design === d.key && <span className="design-card-check">✓ Dipilih</span>}
+              </button>
+            ))}
           </div>
         </div>
 

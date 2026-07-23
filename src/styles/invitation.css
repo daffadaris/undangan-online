@@ -153,11 +153,126 @@
   --pill-glow-rgb: 168, 187, 160;
 }
 
+/* ============================================================
+   DESIGN STYLE PACKS
+   Each design bundles a color palette + fonts + decoration
+   tuning. Declared AFTER the theme-* blocks so a design's
+   bundled palette overrides any stored theme color (equal
+   specificity → source order wins). "classic" is the baseline
+   and intentionally has no rule (keeps today's look + theme).
+   ============================================================ */
+
+/* --- Romantis Rose: soft rose palette, script headings, rounder --- */
+.invitation-body.design-romantic {
+  --bg-cream-light: #FFF6F7;
+  --bg-cream-dark: #FCE7EA;
+  --primary-sage: #E39BAE;
+  --primary-sage-hover: #D6889D;
+  --primary-sage-light: #FBE4EA;
+  --secondary-olive: #8A4E60;
+  --accent-gold: #D9A566;
+  --accent-gold-light: #F7E9D2;
+  --text-dark: #4A2A34;
+  --text-medium: #74505C;
+  --text-light: #A07C88;
+  --border-color: #F5D8DF;
+  --pill-shadow-rgb: 138, 78, 96;
+  --pill-glow-rgb: 227, 155, 174;
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 32px;
+}
+.invitation-body.design-romantic .section-title,
+.invitation-body.design-romantic .hero-names {
+  font-family: var(--font-great-vibes), cursive;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+.invitation-body.design-romantic .hero-names {
+  font-size: clamp(3.4rem, 13vw, 6.2rem);
+  line-height: 1.05;
+}
+.invitation-body.design-romantic .section-title {
+  font-size: clamp(2.3rem, 8vw, 3.4rem);
+}
+
+/* --- Mewah Emas: ivory & gold, refined serif, sharp corners --- */
+.invitation-body.design-luxury {
+  --bg-cream-light: #FCFAF3;
+  --bg-cream-dark: #F3ECD9;
+  --primary-sage: #C4A24C;
+  --primary-sage-hover: #B08F3A;
+  --primary-sage-light: #F5EDD5;
+  --secondary-olive: #7A6320;
+  --accent-gold: #B8912E;
+  --accent-gold-light: #F7EFD5;
+  --text-dark: #3A3116;
+  --text-medium: #6A5C33;
+  --text-light: #97854E;
+  --border-color: #E7D9AE;
+  --pill-shadow-rgb: 122, 99, 32;
+  --pill-glow-rgb: 196, 162, 76;
+  --font-serif: var(--font-cormorant), Georgia, serif;
+  --radius-sm: 0px;
+  --radius-md: 2px;
+  --radius-lg: 4px;
+}
+.invitation-body.design-luxury .section-title,
+.invitation-body.design-luxury .hero-names {
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+.invitation-body.design-luxury .gold-separator {
+  opacity: 1;
+  margin: 40px 0;
+}
+
+/* --- Minimalis: neutral palette, clean sans, no florals --- */
+.invitation-body.design-minimalist {
+  --bg-cream-light: #FAFAFA;
+  --bg-cream-dark: #F0F1F2;
+  --primary-sage: #4B5563;
+  --primary-sage-hover: #374151;
+  --primary-sage-light: #EEF0F2;
+  --secondary-olive: #1F2937;
+  --accent-gold: #9CA3AF;
+  --accent-gold-light: #F3F4F6;
+  --text-dark: #1F2937;
+  --text-medium: #4B5563;
+  --text-light: #9CA3AF;
+  --border-color: #E5E7EB;
+  --pill-shadow-rgb: 31, 41, 55;
+  --pill-glow-rgb: 156, 163, 175;
+  --font-serif: var(--font-poppins), system-ui, sans-serif;
+  --font-body: var(--font-poppins), system-ui, sans-serif;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+}
+.invitation-body.design-minimalist .section-corner,
+.invitation-body.design-minimalist .side-leaf-decor,
+.invitation-body.design-minimalist .floral-swirl,
+.invitation-body.design-minimalist .floating-petals-container,
+.invitation-body.design-minimalist .gold-separator,
+.invitation-body.design-minimalist .floral-divider,
+.invitation-body.design-minimalist .floral-header-decor {
+  display: none;
+}
+.invitation-body.design-minimalist .section-title {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
 .invitation-body {
   background-color: var(--bg-cream-light);
   color: var(--text-dark);
   font-family: var(--font-body);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80' fill='none'%3E%3Cpath d='M10 10c15 0 25 10 25 25c-15 0-25-10-25-25z' fill='%23A8BBA0' fill-opacity='0.035'/%3E%3Cpath d='M50 50c15 0 25 10 25 25c-15 0-25-10-25-25z' fill='%23A8BBA0' fill-opacity='0.035'/%3E%3C/svg%3E");
+}
+
+/* Minimalist drops the background floral texture */
+.invitation-body.design-minimalist {
+  background-image: none;
 }
 
 

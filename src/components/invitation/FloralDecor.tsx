@@ -115,7 +115,7 @@ export const FloralCornerBottomLeft = ({ className = "" }: { className?: string 
 );
 
 export const FloralDivider = ({ className = "" }: { className?: string }) => (
-  <div className={`flex-center ${className}`} style={{ gap: "12px", margin: "20px 0" }}>
+  <div className={`flex-center floral-divider ${className}`} style={{ gap: "12px", margin: "20px 0" }}>
     <svg width="60" height="2" viewBox="0 0 60 2" fill="none" xmlns="http://www.w3.org/2000/svg">
       <line x1="0" y1="1" x2="60" y2="1" stroke="var(--primary-sage)" strokeWidth="1" strokeDasharray="3 3" />
     </svg>
@@ -143,7 +143,7 @@ export const FloralHeaderDecor = ({ className = "" }: { className?: string }) =>
     viewBox="0 0 120 60"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
-    className={className}
+    className={`floral-header-decor ${className}`}
     style={{ opacity: 0.8 }}
   >
     <path
