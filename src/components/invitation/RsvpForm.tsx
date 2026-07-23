@@ -136,7 +136,7 @@ export default function RsvpForm({
             <div className="form-group animate-fade-in">
               <label className="form-label">Jumlah Orang</label>
               <div className="rsvp-pax-selector">
-                {[1, 2, 3, 4, 5].map((pax) => (
+                {[1, 2].map((pax) => (
                   <button
                     key={pax}
                     type="button"
