@@ -16,6 +16,82 @@ interface GiftAccountItem {
   accountNumber: string;
 }
 
+/**
+ * Visual tokens mirroring each design style pack in src/styles/invitation.css.
+ * Kept in sync manually so the admin can preview a design without importing
+ * the invitation stylesheet (its rules are scoped to .invitation-body).
+ */
+const DESIGNS = [
+  {
+    key: "classic",
+    name: "Klasik Sage",
+    note: "Sage & krem dengan sentuhan floral (tampilan saat ini).",
+    bg: "#FFFBF5",
+    surface: "#F7EFE5",
+    titleFont: "var(--font-playfair), Georgia, serif",
+    bodyFont: "var(--font-lora), Georgia, serif",
+    titleColor: "#2F362E",
+    textColor: "#555E53",
+    accent: "#C9A96E",
+    primary: "#A8BBA0",
+    radius: "12px",
+    pill: "9999px",
+    ornament: "floral",
+    titleScale: 1,
+  },
+  {
+    key: "romantic",
+    name: "Romantis Rose",
+    note: "Rose lembut, judul dengan huruf tulisan tangan, sudut membulat.",
+    bg: "#FFF6F7",
+    surface: "#FCE7EA",
+    titleFont: "var(--font-great-vibes), cursive",
+    bodyFont: "var(--font-lora), Georgia, serif",
+    titleColor: "#4A2A34",
+    textColor: "#74505C",
+    accent: "#E39BAE",
+    primary: "#E39BAE",
+    radius: "20px",
+    pill: "9999px",
+    ornament: "floral",
+    titleScale: 1.45,
+  },
+  {
+    key: "luxury",
+    name: "Mewah Emas",
+    note: "Ivory & emas, serif elegan, sudut tegas dan mewah.",
+    bg: "#FCFAF3",
+    surface: "#F3ECD9",
+    titleFont: "var(--font-cormorant), Georgia, serif",
+    bodyFont: "var(--font-lora), Georgia, serif",
+    titleColor: "#3A3116",
+    textColor: "#6A5C33",
+    accent: "#B8912E",
+    primary: "#C4A24C",
+    radius: "2px",
+    pill: "2px",
+    ornament: "gold",
+    titleScale: 1.12,
+  },
+  {
+    key: "minimalist",
+    name: "Minimalis",
+    note: "Netral bersih, tanpa ornamen, huruf sans-serif modern.",
+    bg: "#FAFAFA",
+    surface: "#F0F1F2",
+    titleFont: "var(--font-poppins), system-ui, sans-serif",
+    bodyFont: "var(--font-poppins), system-ui, sans-serif",
+    titleColor: "#1F2937",
+    textColor: "#4B5563",
+    accent: "#9CA3AF",
+    primary: "#4B5563",
+    radius: "4px",
+    pill: "4px",
+    ornament: "none",
+    titleScale: 0.88,
+  },
+] as const;
+
 export default function AdminSettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -726,52 +802,7 @@ export default function AdminSettingsPage() {
           </p>
 
           <div className="design-picker">
-            {[
-              {
-                key: "classic",
-                name: "Klasik Sage",
-                note: "Sage & krem dengan sentuhan floral (tampilan saat ini).",
-                bg: "#FFFBF5",
-                titleFont: "var(--font-playfair), Georgia, serif",
-                titleColor: "#2F362E",
-                accent: "#C9A96E",
-                radius: "12px",
-                titleSize: "1.35rem",
-              },
-              {
-                key: "romantic",
-                name: "Romantis Rose",
-                note: "Rose lembut, judul dengan huruf tulisan tangan, sudut membulat.",
-                bg: "#FFF6F7",
-                titleFont: "var(--font-great-vibes), cursive",
-                titleColor: "#4A2A34",
-                accent: "#E39BAE",
-                radius: "20px",
-                titleSize: "1.9rem",
-              },
-              {
-                key: "luxury",
-                name: "Mewah Emas",
-                note: "Ivory & emas, serif elegan, sudut tegas dan mewah.",
-                bg: "#FCFAF3",
-                titleFont: "var(--font-cormorant), Georgia, serif",
-                titleColor: "#3A3116",
-                accent: "#B8912E",
-                radius: "2px",
-                titleSize: "1.5rem",
-              },
-              {
-                key: "minimalist",
-                name: "Minimalis",
-                note: "Netral bersih, tanpa ornamen, huruf sans-serif modern.",
-                bg: "#FAFAFA",
-                titleFont: "var(--font-poppins), system-ui, sans-serif",
-                titleColor: "#1F2937",
-                accent: "#9CA3AF",
-                radius: "4px",
-                titleSize: "1.2rem",
-              },
-            ].map((d) => (
+            {DESIGNS.map((d) => (
               <button
                 type="button"
                 key={d.key}
@@ -780,36 +811,140 @@ export default function AdminSettingsPage() {
                 aria-pressed={design === d.key}
               >
                 <span
-                  className="design-card-preview"
+                  className="design-card-chip"
                   style={{ backgroundColor: d.bg, borderRadius: d.radius }}
                 >
                   <span
-                    className="design-card-preview-title"
+                    className="design-card-chip-title"
                     style={{
                       fontFamily: d.titleFont,
                       color: d.titleColor,
-                      fontSize: d.titleSize,
+                      fontSize: `${1.15 * d.titleScale}rem`,
                     }}
                   >
-                    {(groomNickname || "Andi")} &amp; {(brideNickname || "Sari")}
+                    Aa
                   </span>
-                  <span
-                    className="design-card-preview-rule"
-                    style={{ backgroundColor: d.accent }}
-                  ></span>
-                  <span
-                    className="design-card-preview-sub"
-                    style={{ fontFamily: d.titleFont, color: d.titleColor }}
-                  >
-                    Save the Date
+                  <span className="design-card-chip-dots">
+                    <span style={{ backgroundColor: d.primary }} />
+                    <span style={{ backgroundColor: d.accent }} />
+                    <span style={{ backgroundColor: d.surface }} />
                   </span>
                 </span>
                 <span className="design-card-name">{d.name}</span>
-                <span className="design-card-note">{d.note}</span>
                 {design === d.key && <span className="design-card-check">✓ Dipilih</span>}
               </button>
             ))}
           </div>
+
+          {/* Live preview of the currently selected design */}
+          {(() => {
+            const d = DESIGNS.find((x) => x.key === design) || DESIGNS[0];
+            const groom = groomNickname || "Andi";
+            const bride = brideNickname || "Sari";
+            return (
+              <div className="design-preview-wrap">
+                <div className="design-preview-head">
+                  <span className="admin-input-label">Pratinjau Desain: {d.name}</span>
+                  <span className="design-preview-hint">{d.note}</span>
+                </div>
+
+                <div
+                  className="design-preview-stage"
+                  style={{
+                    backgroundColor: d.bg,
+                    borderRadius: d.radius,
+                    fontFamily: d.bodyFont,
+                    color: d.textColor,
+                  }}
+                >
+                  {d.ornament === "floral" && (
+                    <>
+                      <svg className="design-preview-corner tl" viewBox="0 0 100 100" aria-hidden="true">
+                        <path
+                          d="M0 0C30 5 60 25 70 50C75 60 70 75 60 80C50 85 35 75 30 60C20 40 5 20 0 0Z"
+                          fill={d.primary}
+                          opacity="0.25"
+                        />
+                        <path
+                          d="M0 10C15 25 30 40 32 55C33 60 30 65 25 66C20 67 15 62 13 55C10 45 2 25 0 10Z"
+                          fill={d.accent}
+                          opacity="0.3"
+                        />
+                      </svg>
+                      <svg className="design-preview-corner br" viewBox="0 0 100 100" aria-hidden="true">
+                        <path
+                          d="M0 0C30 5 60 25 70 50C75 60 70 75 60 80C50 85 35 75 30 60C20 40 5 20 0 0Z"
+                          fill={d.primary}
+                          opacity="0.25"
+                        />
+                      </svg>
+                    </>
+                  )}
+                  {d.ornament === "gold" && (
+                    <span
+                      className="design-preview-frame"
+                      style={{ borderColor: d.accent, borderRadius: d.radius }}
+                    />
+                  )}
+
+                  <span className="design-preview-eyebrow" style={{ color: d.textColor }}>
+                    The Wedding Of
+                  </span>
+
+                  <span
+                    className="design-preview-names"
+                    style={{
+                      fontFamily: d.titleFont,
+                      color: d.titleColor,
+                      fontSize: `${2.6 * d.titleScale}rem`,
+                    }}
+                  >
+                    {groom} &amp; {bride}
+                  </span>
+
+                  <span className="design-preview-divider">
+                    <span style={{ backgroundColor: d.accent }} />
+                    {d.ornament !== "none" && (
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                          d="M12 2C12 2 15 6 15 9C15 12 12 13 12 13C12 13 9 12 9 9C9 6 12 2 12 2Z"
+                          fill={d.primary}
+                        />
+                        <circle cx="12" cy="15" r="2.5" fill={d.accent} />
+                      </svg>
+                    )}
+                    <span style={{ backgroundColor: d.accent }} />
+                  </span>
+
+                  <span className="design-preview-date" style={{ color: d.textColor }}>
+                    08 Agustus 2026
+                  </span>
+
+                  <span
+                    className="design-preview-card"
+                    style={{ backgroundColor: d.surface, borderRadius: d.radius }}
+                  >
+                    <span
+                      className="design-preview-card-title"
+                      style={{ fontFamily: d.titleFont, color: d.titleColor }}
+                    >
+                      Akad Nikah
+                    </span>
+                    <span className="design-preview-card-text">
+                      Masjid Agung — 09.00 WIB
+                    </span>
+                  </span>
+
+                  <span
+                    className="design-preview-btn"
+                    style={{ backgroundColor: d.primary, borderRadius: d.pill, color: "#FFFFFF" }}
+                  >
+                    Buka Undangan
+                  </span>
+                </div>
+              </div>
+            );
+          })()}
         </div>
 
         {/* Kustomisasi Foto & Galeri */}
