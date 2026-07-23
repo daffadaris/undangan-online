@@ -1,5 +1,271 @@
 /* Invitation Page styles */
 
+/* ============================================================
+   DESIGN STYLE PACKS
+   A design controls form: fonts, corner radius, ornaments, and
+   a default ("bundled") palette.
+
+   These are declared BEFORE the theme-* blocks on purpose. Both
+   layers have equal specificity, so source order decides: when an
+   owner explicitly picks a colour theme, that theme wins over the
+   design's bundled palette. Picking "auto" omits the theme class
+   entirely, letting the design's own palette show through.
+
+   Themes only set colour variables, so a design's fonts, radii and
+   ornament rules survive regardless of the chosen colour.
+
+   "classic" is the baseline and intentionally has no rule.
+   ============================================================ */
+
+/* --- Romantis Rose: soft rose palette, script headings, rounder --- */
+.invitation-body.design-romantic {
+  --bg-cream-light: #FFF6F7;
+  --bg-cream-dark: #FCE7EA;
+  --primary-sage: #E39BAE;
+  --primary-sage-hover: #D6889D;
+  --primary-sage-light: #FBE4EA;
+  --secondary-olive: #8A4E60;
+  --accent-gold: #D9A566;
+  --accent-gold-light: #F7E9D2;
+  --text-dark: #4A2A34;
+  --text-medium: #74505C;
+  --text-light: #A07C88;
+  --border-color: #F5D8DF;
+  --pill-shadow-rgb: 138, 78, 96;
+  --pill-glow-rgb: 227, 155, 174;
+  --radius-sm: 10px;
+  --radius-md: 18px;
+  --radius-lg: 32px;
+}
+
+/* --- Mewah Emas: ivory & gold, refined serif, sharp corners --- */
+.invitation-body.design-luxury {
+  --bg-cream-light: #FCFAF3;
+  --bg-cream-dark: #F3ECD9;
+  --primary-sage: #C4A24C;
+  --primary-sage-hover: #B08F3A;
+  --primary-sage-light: #F5EDD5;
+  --secondary-olive: #7A6320;
+  --accent-gold: #B8912E;
+  --accent-gold-light: #F7EFD5;
+  --text-dark: #3A3116;
+  --text-medium: #6A5C33;
+  --text-light: #97854E;
+  --border-color: #E7D9AE;
+  --pill-shadow-rgb: 122, 99, 32;
+  --pill-glow-rgb: 196, 162, 76;
+  --font-serif: var(--font-cormorant), Georgia, serif;
+  --radius-sm: 0px;
+  --radius-md: 2px;
+  --radius-lg: 4px;
+}
+
+/* --- Minimalis: neutral palette, clean sans, no florals --- */
+.invitation-body.design-minimalist {
+  --bg-cream-light: #FAFAFA;
+  --bg-cream-dark: #F0F1F2;
+  --primary-sage: #4B5563;
+  --primary-sage-hover: #374151;
+  --primary-sage-light: #EEF0F2;
+  --secondary-olive: #1F2937;
+  --accent-gold: #9CA3AF;
+  --accent-gold-light: #F3F4F6;
+  --text-dark: #1F2937;
+  --text-medium: #4B5563;
+  --text-light: #9CA3AF;
+  --border-color: #E5E7EB;
+  --pill-shadow-rgb: 31, 41, 55;
+  --pill-glow-rgb: 156, 163, 175;
+  --font-serif: var(--font-poppins), system-ui, sans-serif;
+  --font-body: var(--font-poppins), system-ui, sans-serif;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+}
+
+/* --- Royal Navy: deep navy & gold, Roman caps, formal --- */
+.invitation-body.design-royal {
+  --bg-cream-light: #F6F7FA;
+  --bg-cream-dark: #E7EAF2;
+  --primary-sage: #1E3A5F;
+  --primary-sage-hover: #16304F;
+  --primary-sage-light: #DCE3EE;
+  --secondary-olive: #12294A;
+  --accent-gold: #C9A227;
+  --accent-gold-light: #F7EFD0;
+  --text-dark: #101F35;
+  --text-medium: #33465F;
+  --text-light: #6B7C93;
+  --border-color: #D3DAE6;
+  --pill-shadow-rgb: 18, 41, 74;
+  --pill-glow-rgb: 201, 162, 39;
+  --font-serif: var(--font-cinzel), Georgia, serif;
+  --radius-sm: 0px;
+  --radius-md: 2px;
+  --radius-lg: 4px;
+}
+
+/* --- Rustic Terracotta: warm earth tones, kraft paper feel --- */
+.invitation-body.design-rustic {
+  --bg-cream-light: #FBF6EE;
+  --bg-cream-dark: #F0E4D3;
+  --primary-sage: #B5714A;
+  --primary-sage-hover: #9C5D39;
+  --primary-sage-light: #F3E3D5;
+  --secondary-olive: #6E4B2F;
+  --accent-gold: #C98A3F;
+  --accent-gold-light: #F7E7CD;
+  --text-dark: #3D2A1B;
+  --text-medium: #6A5340;
+  --text-light: #9A8368;
+  --border-color: #E3D2BC;
+  --pill-shadow-rgb: 110, 75, 47;
+  --pill-glow-rgb: 181, 113, 74;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+}
+
+/* --- Modern Editorial: monochrome, bold uppercase sans --- */
+.invitation-body.design-modern {
+  --bg-cream-light: #FFFFFF;
+  --bg-cream-dark: #F2F2F2;
+  --primary-sage: #111111;
+  --primary-sage-hover: #000000;
+  --primary-sage-light: #EDEDED;
+  --secondary-olive: #111111;
+  --accent-gold: #C05621;
+  --accent-gold-light: #FBE8DC;
+  --text-dark: #111111;
+  --text-medium: #444444;
+  --text-light: #8A8A8A;
+  --border-color: #E0E0E0;
+  --pill-shadow-rgb: 17, 17, 17;
+  --pill-glow-rgb: 192, 86, 33;
+  --font-serif: var(--font-montserrat), system-ui, sans-serif;
+  --font-body: var(--font-montserrat), system-ui, sans-serif;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+}
+
+/* --- Tropis: teal & palm green, fresh and airy --- */
+.invitation-body.design-tropical {
+  --bg-cream-light: #F4FBF8;
+  --bg-cream-dark: #E1F1EA;
+  --primary-sage: #2E9C86;
+  --primary-sage-hover: #24806E;
+  --primary-sage-light: #D5EFE7;
+  --secondary-olive: #14503F;
+  --accent-gold: #E0A458;
+  --accent-gold-light: #FBEDD8;
+  --text-dark: #0F3B2E;
+  --text-medium: #3B6357;
+  --text-light: #6F9287;
+  --border-color: #C9E5DA;
+  --pill-shadow-rgb: 20, 80, 63;
+  --pill-glow-rgb: 46, 156, 134;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 28px;
+}
+
+/* -- Design typography & ornament treatments (colour-independent) -- */
+.invitation-body.design-romantic .section-title,
+.invitation-body.design-romantic .hero-names {
+  font-family: var(--font-great-vibes), cursive;
+  font-weight: 400;
+  letter-spacing: 0.5px;
+}
+.invitation-body.design-romantic .hero-names {
+  font-size: clamp(3.4rem, 13vw, 6.2rem);
+  line-height: 1.05;
+}
+.invitation-body.design-romantic .section-title {
+  font-size: clamp(2.3rem, 8vw, 3.4rem);
+}
+
+.invitation-body.design-luxury .section-title,
+.invitation-body.design-luxury .hero-names {
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+.invitation-body.design-luxury .gold-separator {
+  opacity: 1;
+  margin: 40px 0;
+}
+
+.invitation-body.design-minimalist .section-corner,
+.invitation-body.design-minimalist .side-leaf-decor,
+.invitation-body.design-minimalist .floral-swirl,
+.invitation-body.design-minimalist .floating-petals-container,
+.invitation-body.design-minimalist .gold-separator,
+.invitation-body.design-minimalist .floral-divider,
+.invitation-body.design-minimalist .floral-header-decor {
+  display: none;
+}
+.invitation-body.design-minimalist .section-title {
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Royal: engraved Roman capitals */
+.invitation-body.design-royal .section-title,
+.invitation-body.design-royal .hero-names {
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 600;
+}
+.invitation-body.design-royal .hero-names {
+  font-size: clamp(2rem, 8vw, 3.6rem);
+  line-height: 1.25;
+}
+.invitation-body.design-royal .section-title {
+  font-size: clamp(1.5rem, 5vw, 2.2rem);
+}
+.invitation-body.design-royal .floral-swirl,
+.invitation-body.design-royal .side-leaf-decor {
+  display: none;
+}
+
+/* Rustic: softer ornaments, relaxed tracking */
+.invitation-body.design-rustic .section-title,
+.invitation-body.design-rustic .hero-names {
+  letter-spacing: 1px;
+}
+.invitation-body.design-rustic .section-corner {
+  opacity: 0.55;
+}
+
+/* Modern: editorial slabs of uppercase type, no ornament */
+.invitation-body.design-modern .section-corner,
+.invitation-body.design-modern .side-leaf-decor,
+.invitation-body.design-modern .floral-swirl,
+.invitation-body.design-modern .floating-petals-container,
+.invitation-body.design-modern .gold-separator,
+.invitation-body.design-modern .floral-divider,
+.invitation-body.design-modern .floral-header-decor {
+  display: none;
+}
+.invitation-body.design-modern .section-title,
+.invitation-body.design-modern .hero-names {
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}
+.invitation-body.design-modern .hero-names {
+  font-size: clamp(2.6rem, 11vw, 5rem);
+  line-height: 1;
+}
+
+/* Tropical: keep the leafy decor, drop the gold filigree */
+.invitation-body.design-tropical .gold-separator {
+  opacity: 0.6;
+}
+.invitation-body.design-tropical .side-leaf-decor {
+  opacity: 1;
+}
+
 .invitation-body.theme-sage, .admin-body.theme-sage {
   --bg-cream-light: #FFFBF5;
   --bg-cream-dark: #F7EFE5;
@@ -153,114 +419,40 @@
   --pill-glow-rgb: 168, 187, 160;
 }
 
-/* ============================================================
-   DESIGN STYLE PACKS
-   Each design bundles a color palette + fonts + decoration
-   tuning. Declared AFTER the theme-* blocks so a design's
-   bundled palette overrides any stored theme color (equal
-   specificity → source order wins). "classic" is the baseline
-   and intentionally has no rule (keeps today's look + theme).
-   ============================================================ */
-
-/* --- Romantis Rose: soft rose palette, script headings, rounder --- */
-.invitation-body.design-romantic {
-  --bg-cream-light: #FFF6F7;
-  --bg-cream-dark: #FCE7EA;
-  --primary-sage: #E39BAE;
-  --primary-sage-hover: #D6889D;
-  --primary-sage-light: #FBE4EA;
-  --secondary-olive: #8A4E60;
-  --accent-gold: #D9A566;
-  --accent-gold-light: #F7E9D2;
-  --text-dark: #4A2A34;
-  --text-medium: #74505C;
-  --text-light: #A07C88;
-  --border-color: #F5D8DF;
-  --pill-shadow-rgb: 138, 78, 96;
-  --pill-glow-rgb: 227, 155, 174;
-  --radius-sm: 10px;
-  --radius-md: 18px;
-  --radius-lg: 32px;
-}
-.invitation-body.design-romantic .section-title,
-.invitation-body.design-romantic .hero-names {
-  font-family: var(--font-great-vibes), cursive;
-  font-weight: 400;
-  letter-spacing: 0.5px;
-}
-.invitation-body.design-romantic .hero-names {
-  font-size: clamp(3.4rem, 13vw, 6.2rem);
-  line-height: 1.05;
-}
-.invitation-body.design-romantic .section-title {
-  font-size: clamp(2.3rem, 8vw, 3.4rem);
+/* Rose-led counterpart to green-pink: dusty rose primary, sage accent */
+.invitation-body.theme-rose-green, .admin-body.theme-rose-green {
+  --bg-cream-light: #FFF7F6;
+  --bg-cream-dark: #F3E7E4;
+  --primary-sage: #C98B92;
+  --primary-sage-hover: #B4767E;
+  --primary-sage-light: #F7E4E4;
+  --secondary-olive: #5B7052;
+  --accent-gold: #8FA98A;
+  --accent-gold-light: #E6EFE3;
+  --text-dark: #43302F;
+  --text-medium: #6B5150;
+  --text-light: #9B7F7E;
+  --border-color: #EFD9D6;
+  --pill-shadow-rgb: 91, 112, 82;
+  --pill-glow-rgb: 201, 139, 146;
 }
 
-/* --- Mewah Emas: ivory & gold, refined serif, sharp corners --- */
-.invitation-body.design-luxury {
-  --bg-cream-light: #FCFAF3;
-  --bg-cream-dark: #F3ECD9;
-  --primary-sage: #C4A24C;
-  --primary-sage-hover: #B08F3A;
-  --primary-sage-light: #F5EDD5;
-  --secondary-olive: #7A6320;
-  --accent-gold: #B8912E;
-  --accent-gold-light: #F7EFD5;
-  --text-dark: #3A3116;
-  --text-medium: #6A5C33;
-  --text-light: #97854E;
-  --border-color: #E7D9AE;
-  --pill-shadow-rgb: 122, 99, 32;
-  --pill-glow-rgb: 196, 162, 76;
-  --font-serif: var(--font-cormorant), Georgia, serif;
-  --radius-sm: 0px;
-  --radius-md: 2px;
-  --radius-lg: 4px;
-}
-.invitation-body.design-luxury .section-title,
-.invitation-body.design-luxury .hero-names {
-  letter-spacing: 1.5px;
-  font-weight: 600;
-}
-.invitation-body.design-luxury .gold-separator {
-  opacity: 1;
-  margin: 40px 0;
-}
-
-/* --- Minimalis: neutral palette, clean sans, no florals --- */
-.invitation-body.design-minimalist {
-  --bg-cream-light: #FAFAFA;
-  --bg-cream-dark: #F0F1F2;
-  --primary-sage: #4B5563;
-  --primary-sage-hover: #374151;
-  --primary-sage-light: #EEF0F2;
-  --secondary-olive: #1F2937;
-  --accent-gold: #9CA3AF;
-  --accent-gold-light: #F3F4F6;
-  --text-dark: #1F2937;
-  --text-medium: #4B5563;
-  --text-light: #9CA3AF;
-  --border-color: #E5E7EB;
-  --pill-shadow-rgb: 31, 41, 55;
-  --pill-glow-rgb: 156, 163, 175;
-  --font-serif: var(--font-poppins), system-ui, sans-serif;
-  --font-body: var(--font-poppins), system-ui, sans-serif;
-  --radius-sm: 2px;
-  --radius-md: 4px;
-  --radius-lg: 8px;
-}
-.invitation-body.design-minimalist .section-corner,
-.invitation-body.design-minimalist .side-leaf-decor,
-.invitation-body.design-minimalist .floral-swirl,
-.invitation-body.design-minimalist .floating-petals-container,
-.invitation-body.design-minimalist .gold-separator,
-.invitation-body.design-minimalist .floral-divider,
-.invitation-body.design-minimalist .floral-header-decor {
-  display: none;
-}
-.invitation-body.design-minimalist .section-title {
-  font-weight: 600;
-  letter-spacing: 0.5px;
+/* Brighter, playful pink primary with fresh green accent */
+.invitation-body.theme-pink-green, .admin-body.theme-pink-green {
+  --bg-cream-light: #FDF7FA;
+  --bg-cream-dark: #F1E8EE;
+  --primary-sage: #E79EBB;
+  --primary-sage-hover: #D687A6;
+  --primary-sage-light: #FBE6EF;
+  --secondary-olive: #4F7A4A;
+  --accent-gold: #79A86F;
+  --accent-gold-light: #E4F0E1;
+  --text-dark: #3B2E38;
+  --text-medium: #5F4E5A;
+  --text-light: #8E7A88;
+  --border-color: #F0DCE7;
+  --pill-shadow-rgb: 79, 122, 74;
+  --pill-glow-rgb: 231, 158, 187;
 }
 
 .invitation-body {

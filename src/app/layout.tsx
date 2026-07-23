@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Lora, Great_Vibes, Cormorant_Garamond, Poppins } from "next/font/google";
+import {
+  Playfair_Display,
+  Lora,
+  Great_Vibes,
+  Cormorant_Garamond,
+  Poppins,
+  Cinzel,
+  Montserrat,
+} from "next/font/google";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -32,6 +40,18 @@ const poppins = Poppins({
   weight: ["300", "400", "500", "600"],
 });
 
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  variable: "--font-cinzel",
+  weight: ["400", "500", "600", "700"],
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
   title: "Undangan Pernikahan Online",
   description: "Buat dan bagikan undangan pernikahan online Anda.",
@@ -57,7 +77,7 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${playfair.variable} ${lora.variable} ${greatVibes.variable} ${cormorant.variable} ${poppins.variable}`}
+      className={`${playfair.variable} ${lora.variable} ${greatVibes.variable} ${cormorant.variable} ${poppins.variable} ${cinzel.variable} ${montserrat.variable}`}
     >
       <head>
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />

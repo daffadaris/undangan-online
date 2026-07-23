@@ -38,6 +38,7 @@ const DESIGNS = [
     pill: "9999px",
     ornament: "floral",
     titleScale: 1,
+    upper: false,
   },
   {
     key: "romantic",
@@ -55,6 +56,7 @@ const DESIGNS = [
     pill: "9999px",
     ornament: "floral",
     titleScale: 1.45,
+    upper: false,
   },
   {
     key: "luxury",
@@ -72,6 +74,7 @@ const DESIGNS = [
     pill: "2px",
     ornament: "gold",
     titleScale: 1.12,
+    upper: false,
   },
   {
     key: "minimalist",
@@ -89,7 +92,100 @@ const DESIGNS = [
     pill: "4px",
     ornament: "none",
     titleScale: 0.88,
+    upper: false,
   },
+  {
+    key: "royal",
+    name: "Royal Navy",
+    note: "Navy pekat & emas, huruf kapital Romawi, sangat formal.",
+    bg: "#F6F7FA",
+    surface: "#E7EAF2",
+    titleFont: "var(--font-cinzel), Georgia, serif",
+    bodyFont: "var(--font-lora), Georgia, serif",
+    titleColor: "#101F35",
+    textColor: "#33465F",
+    accent: "#C9A227",
+    primary: "#1E3A5F",
+    radius: "2px",
+    pill: "2px",
+    ornament: "gold",
+    titleScale: 0.72,
+    upper: true,
+  },
+  {
+    key: "rustic",
+    name: "Rustic Terracotta",
+    note: "Nuansa tanah hangat, kesan kertas kraft, ornamen lembut.",
+    bg: "#FBF6EE",
+    surface: "#F0E4D3",
+    titleFont: "var(--font-playfair), Georgia, serif",
+    bodyFont: "var(--font-lora), Georgia, serif",
+    titleColor: "#3D2A1B",
+    textColor: "#6A5340",
+    accent: "#C98A3F",
+    primary: "#B5714A",
+    radius: "8px",
+    pill: "9999px",
+    ornament: "floral",
+    titleScale: 0.95,
+    upper: false,
+  },
+  {
+    key: "modern",
+    name: "Modern Editorial",
+    note: "Monokrom tegas, huruf kapital tebal, tanpa ornamen.",
+    bg: "#FFFFFF",
+    surface: "#F2F2F2",
+    titleFont: "var(--font-montserrat), system-ui, sans-serif",
+    bodyFont: "var(--font-montserrat), system-ui, sans-serif",
+    titleColor: "#111111",
+    textColor: "#444444",
+    accent: "#C05621",
+    primary: "#111111",
+    radius: "0px",
+    pill: "0px",
+    ornament: "none",
+    titleScale: 0.92,
+    upper: true,
+  },
+  {
+    key: "tropical",
+    name: "Tropis",
+    note: "Hijau teal & daun palem, segar dan lapang.",
+    bg: "#F4FBF8",
+    surface: "#E1F1EA",
+    titleFont: "var(--font-playfair), Georgia, serif",
+    bodyFont: "var(--font-lora), Georgia, serif",
+    titleColor: "#0F3B2E",
+    textColor: "#3B6357",
+    accent: "#E0A458",
+    primary: "#2E9C86",
+    radius: "16px",
+    pill: "9999px",
+    ornament: "floral",
+    titleScale: 1,
+    upper: false,
+  },
+] as const;
+
+/**
+ * Colour palettes mirroring the theme-* blocks in invitation.css.
+ * "auto" is not a real theme class — it means "use the design's own
+ * bundled palette", so the invitation renders without a theme-* class.
+ */
+const THEMES = [
+  { key: "auto", label: "Ikuti Warna Desain (Otomatis)", primary: "", accent: "", bg: "", surface: "", titleColor: "", textColor: "" },
+  { key: "sage", label: "Sage Green & Cream (Elegant & Natural)", primary: "#A8BBA0", accent: "#C9A96E", bg: "#FFFBF5", surface: "#F7EFE5", titleColor: "#2F362E", textColor: "#555E53" },
+  { key: "blue", label: "Royal Blue & Ice Blue (Cool & Royal)", primary: "#8DA9C4", accent: "#D4AF37", bg: "#F4F8FA", surface: "#E6EEF2", titleColor: "#1E2530", textColor: "#455268" },
+  { key: "pink", label: "Rose Pink & Blush (Romantic & Warm)", primary: "#E8A598", accent: "#C9A96E", bg: "#FFF5F6", surface: "#FDE8EA", titleColor: "#3D2D2D", textColor: "#6E5353" },
+  { key: "gold", label: "Luxury Gold & Ivory (Glamorous & Premium)", primary: "#D4AF37", accent: "#AA8B13", bg: "#FCFAF2", surface: "#F4EED8", titleColor: "#3B331A", textColor: "#6B5C30" },
+  { key: "purple", label: "Lavender & Violet (Elegant & Romantic)", primary: "#A78BFA", accent: "#D97706", bg: "#FAF8FC", surface: "#F0EAF5", titleColor: "#2E1065", textColor: "#5B21B6" },
+  { key: "emerald", label: "Emerald Green & Gold (Premium & Natural)", primary: "#34D399", accent: "#D4AF37", bg: "#F7FAF7", surface: "#E8EFE9", titleColor: "#022C22", textColor: "#065F46" },
+  { key: "burgundy", label: "Burgundy & Rose Gold (Classic & Deep)", primary: "#D97706", accent: "#C9A96E", bg: "#FAF5F5", surface: "#F5E6E6", titleColor: "#300008", textColor: "#540010" },
+  { key: "dark", label: "Charcoal & Gold (Modern & Luxury)", primary: "#4E5C47", accent: "#D4AF37", bg: "#1A1D20", surface: "#24292E", titleColor: "#FCFAF2", textColor: "#E2E8F0" },
+  { key: "green-pink", label: "Green & Rose Pink (Organic & Romance)", primary: "#A8BBA0", accent: "#E8A598", bg: "#F7FAF6", surface: "#F2EAE9", titleColor: "#2F362E", textColor: "#6E5353" },
+  { key: "rose-green", label: "Rose & Sage Green (Soft & Elegant)", primary: "#C98B92", accent: "#8FA98A", bg: "#FFF7F6", surface: "#F3E7E4", titleColor: "#43302F", textColor: "#6B5150" },
+  { key: "pink-green", label: "Pink & Fresh Green (Playful & Bright)", primary: "#E79EBB", accent: "#79A86F", bg: "#FDF7FA", surface: "#F1E8EE", titleColor: "#3B2E38", textColor: "#5F4E5A" },
 ] as const;
 
 export default function AdminSettingsPage() {
@@ -836,25 +932,87 @@ export default function AdminSettingsPage() {
             ))}
           </div>
 
-          {/* Live preview of the currently selected design */}
+          {/* Colour theme — overrides the design's bundled palette */}
+          <div className="admin-input-group" style={{ marginTop: "24px" }}>
+            <label className="admin-input-label">Pilih Warna Tema</label>
+            <div className="admin-select-wrap">
+              <select
+                className="admin-input"
+                value={theme}
+                onChange={(e) => setTheme(e.target.value)}
+              >
+                {THEMES.map((t) => (
+                  <option key={t.key} value={t.key}>
+                    {t.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <p className="design-preview-hint" style={{ marginTop: "6px" }}>
+              Pilih <strong>Otomatis</strong> agar warna mengikuti desain yang dipilih, atau pilih
+              palet sendiri untuk menimpa warna bawaan desain. Huruf dan ornamen tetap mengikuti
+              desain.
+            </p>
+          </div>
+
+          <div style={{ marginTop: "12px" }}>
+            <p className="admin-input-label" style={{ marginBottom: "8px" }}>
+              Pratinjau Palet Warna:
+            </p>
+            <div className="admin-flex-row">
+              {THEMES.filter((t) => t.key !== "auto").map((t) => (
+                <button
+                  type="button"
+                  key={t.key}
+                  onClick={() => setTheme(t.key)}
+                  className={`admin-color-preview-item admin-color-pick ${
+                    theme === t.key ? "active" : ""
+                  }`}
+                >
+                  <span className="admin-color-dot" style={{ backgroundColor: t.primary }}></span>
+                  <span className="admin-color-dot" style={{ backgroundColor: t.bg }}></span>
+                  <span style={{ fontSize: "0.85rem", color: "var(--admin-text)" }}>
+                    {t.label.split(" (")[0]}
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Live preview: design supplies the form, theme may override colour */}
           {(() => {
             const d = DESIGNS.find((x) => x.key === design) || DESIGNS[0];
+            const t = THEMES.find((x) => x.key === theme);
+            // An explicit theme overrides the design's bundled palette; "auto"
+            // (or an unknown value) falls back to the design's own colours.
+            const useTheme = t && t.key !== "auto";
+            const pal = {
+              bg: useTheme ? t.bg : d.bg,
+              surface: useTheme ? t.surface : d.surface,
+              titleColor: useTheme ? t.titleColor : d.titleColor,
+              textColor: useTheme ? t.textColor : d.textColor,
+              accent: useTheme ? t.accent : d.accent,
+              primary: useTheme ? t.primary : d.primary,
+            };
             const groom = groomNickname || "Andi";
             const bride = brideNickname || "Sari";
             return (
               <div className="design-preview-wrap">
                 <div className="design-preview-head">
-                  <span className="admin-input-label">Pratinjau Desain: {d.name}</span>
+                  <span className="admin-input-label">
+                    Pratinjau: {d.name}
+                    {useTheme ? ` — warna ${t.label.split(" (")[0]}` : " — warna bawaan desain"}
+                  </span>
                   <span className="design-preview-hint">{d.note}</span>
                 </div>
 
                 <div
                   className="design-preview-stage"
                   style={{
-                    backgroundColor: d.bg,
+                    backgroundColor: pal.bg,
                     borderRadius: d.radius,
                     fontFamily: d.bodyFont,
-                    color: d.textColor,
+                    color: pal.textColor,
                   }}
                 >
                   {d.ornament === "floral" && (
@@ -862,19 +1020,19 @@ export default function AdminSettingsPage() {
                       <svg className="design-preview-corner tl" viewBox="0 0 100 100" aria-hidden="true">
                         <path
                           d="M0 0C30 5 60 25 70 50C75 60 70 75 60 80C50 85 35 75 30 60C20 40 5 20 0 0Z"
-                          fill={d.primary}
+                          fill={pal.primary}
                           opacity="0.25"
                         />
                         <path
                           d="M0 10C15 25 30 40 32 55C33 60 30 65 25 66C20 67 15 62 13 55C10 45 2 25 0 10Z"
-                          fill={d.accent}
+                          fill={pal.accent}
                           opacity="0.3"
                         />
                       </svg>
                       <svg className="design-preview-corner br" viewBox="0 0 100 100" aria-hidden="true">
                         <path
                           d="M0 0C30 5 60 25 70 50C75 60 70 75 60 80C50 85 35 75 30 60C20 40 5 20 0 0Z"
-                          fill={d.primary}
+                          fill={pal.primary}
                           opacity="0.25"
                         />
                       </svg>
@@ -883,11 +1041,11 @@ export default function AdminSettingsPage() {
                   {d.ornament === "gold" && (
                     <span
                       className="design-preview-frame"
-                      style={{ borderColor: d.accent, borderRadius: d.radius }}
+                      style={{ borderColor: pal.accent, borderRadius: d.radius }}
                     />
                   )}
 
-                  <span className="design-preview-eyebrow" style={{ color: d.textColor }}>
+                  <span className="design-preview-eyebrow" style={{ color: pal.textColor }}>
                     The Wedding Of
                   </span>
 
@@ -895,38 +1053,44 @@ export default function AdminSettingsPage() {
                     className="design-preview-names"
                     style={{
                       fontFamily: d.titleFont,
-                      color: d.titleColor,
+                      color: pal.titleColor,
                       fontSize: `${2.6 * d.titleScale}rem`,
+                      textTransform: d.upper ? "uppercase" : "none",
+                      letterSpacing: d.upper ? "2px" : "normal",
                     }}
                   >
                     {groom} &amp; {bride}
                   </span>
 
                   <span className="design-preview-divider">
-                    <span style={{ backgroundColor: d.accent }} />
+                    <span style={{ backgroundColor: pal.accent }} />
                     {d.ornament !== "none" && (
                       <svg viewBox="0 0 24 24" aria-hidden="true">
                         <path
                           d="M12 2C12 2 15 6 15 9C15 12 12 13 12 13C12 13 9 12 9 9C9 6 12 2 12 2Z"
-                          fill={d.primary}
+                          fill={pal.primary}
                         />
-                        <circle cx="12" cy="15" r="2.5" fill={d.accent} />
+                        <circle cx="12" cy="15" r="2.5" fill={pal.accent} />
                       </svg>
                     )}
-                    <span style={{ backgroundColor: d.accent }} />
+                    <span style={{ backgroundColor: pal.accent }} />
                   </span>
 
-                  <span className="design-preview-date" style={{ color: d.textColor }}>
+                  <span className="design-preview-date" style={{ color: pal.textColor }}>
                     08 Agustus 2026
                   </span>
 
                   <span
                     className="design-preview-card"
-                    style={{ backgroundColor: d.surface, borderRadius: d.radius }}
+                    style={{ backgroundColor: pal.surface, borderRadius: d.radius }}
                   >
                     <span
                       className="design-preview-card-title"
-                      style={{ fontFamily: d.titleFont, color: d.titleColor }}
+                      style={{
+                        fontFamily: d.titleFont,
+                        color: pal.titleColor,
+                        textTransform: d.upper ? "uppercase" : "none",
+                      }}
                     >
                       Akad Nikah
                     </span>
@@ -937,7 +1101,7 @@ export default function AdminSettingsPage() {
 
                   <span
                     className="design-preview-btn"
-                    style={{ backgroundColor: d.primary, borderRadius: d.pill, color: "#FFFFFF" }}
+                    style={{ backgroundColor: pal.primary, borderRadius: d.pill, color: "#FFFFFF" }}
                   >
                     Buka Undangan
                   </span>

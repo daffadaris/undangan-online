@@ -952,6 +952,23 @@ input[type="date"].admin-input:hover::-webkit-calendar-picker-indicator {
   color: var(--admin-primary);
 }
 
+/* Clickable palette swatches (buttons, not static chips) */
+.admin-color-pick {
+  cursor: pointer;
+  font-family: var(--font-body);
+  border: 1px solid var(--admin-border);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.admin-color-pick:hover {
+  border-color: var(--admin-primary);
+}
+
+.admin-color-pick.active {
+  border-color: var(--admin-primary);
+  box-shadow: 0 0 0 2px rgba(78, 92, 71, 0.18);
+}
+
 /* ── Live preview of the selected design ── */
 .design-preview-wrap {
   margin-top: 22px;

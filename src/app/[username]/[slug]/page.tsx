@@ -66,7 +66,17 @@ export default async function InvitationPage({ params }: InvitationPageProps) {
   });
 
   return (
-    <div className={`invitation-body theme-${config?.theme || "sage"} design-${config?.design || "classic"}`}>
+    <div
+      className={[
+        "invitation-body",
+        // "auto" means: follow the design's own bundled palette, so no theme
+        // class is emitted. Any other value overrides the design's colours.
+        config?.theme && config.theme !== "auto" ? `theme-${config.theme}` : "",
+        `design-${config?.design || "classic"}`,
+      ]
+        .filter(Boolean)
+        .join(" ")}
+    >
       <OpeningCoverClient
         ownerId={owner.id}
         guest={guest}
