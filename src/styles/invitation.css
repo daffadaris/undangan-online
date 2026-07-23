@@ -170,7 +170,14 @@
   --radius-lg: 28px;
 }
 
-/* -- Design typography & ornament treatments (colour-independent) -- */
+/* ------------------------------------------------------------
+   Design treatments — shape, layout and ornament (colour-agnostic).
+   These deliberately restructure photo frames, cards, timelines and
+   section rhythm so each pack reads as a different design rather
+   than a recolour of the same one.
+   ------------------------------------------------------------ */
+
+/* --- Romantis: script titles, pillowy cards, soft rings --- */
 .invitation-body.design-romantic .section-title,
 .invitation-body.design-romantic .hero-names {
   font-family: var(--font-great-vibes), cursive;
@@ -184,32 +191,102 @@
 .invitation-body.design-romantic .section-title {
   font-size: clamp(2.3rem, 8vw, 3.4rem);
 }
+.invitation-body.design-romantic .event-card {
+  border: none;
+  box-shadow: 0 18px 40px rgba(var(--pill-shadow-rgb), 0.16);
+}
+.invitation-body.design-romantic .event-card::before {
+  border-style: dotted;
+  border-color: var(--primary-sage);
+  opacity: 0.5;
+}
+.invitation-body.design-romantic .couple-photo-frame {
+  border-width: 6px;
+}
 
+/* --- Mewah Emas: rectangular portraits, flat double-framed cards --- */
 .invitation-body.design-luxury .section-title,
 .invitation-body.design-luxury .hero-names {
-  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
   font-weight: 600;
 }
 .invitation-body.design-luxury .gold-separator {
   opacity: 1;
   margin: 40px 0;
 }
+/* Portraits become sharp rectangles instead of circles */
+.invitation-body.design-luxury .couple-photo-frame,
+.invitation-body.design-luxury .couple-photo-frame::after {
+  border-radius: 0;
+}
+.invitation-body.design-luxury .couple-photo-frame {
+  border: 1px solid var(--accent-gold);
+  box-shadow: none;
+}
+.invitation-body.design-luxury .couple-photo-wreath {
+  display: none;
+}
+.invitation-body.design-luxury .event-card {
+  background: transparent;
+  box-shadow: none;
+  border: 1px solid var(--accent-gold);
+}
+.invitation-body.design-luxury .event-card::before {
+  border-color: var(--accent-gold);
+  opacity: 0.45;
+}
+.invitation-body.design-luxury .timeline::after {
+  width: 1px;
+  margin-left: 0;
+  background: var(--accent-gold);
+}
 
+/* --- Minimalis: square photos, flat cards, no alternating bands --- */
 .invitation-body.design-minimalist .section-corner,
 .invitation-body.design-minimalist .side-leaf-decor,
 .invitation-body.design-minimalist .floral-swirl,
 .invitation-body.design-minimalist .floating-petals-container,
 .invitation-body.design-minimalist .gold-separator,
 .invitation-body.design-minimalist .floral-divider,
-.invitation-body.design-minimalist .floral-header-decor {
+.invitation-body.design-minimalist .floral-header-decor,
+.invitation-body.design-minimalist .couple-photo-wreath {
   display: none;
 }
 .invitation-body.design-minimalist .section-title {
   font-weight: 600;
-  letter-spacing: 0.5px;
+  font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+.invitation-body.design-minimalist .invitation-section:nth-child(even) {
+  background-color: var(--bg-cream-light);
+}
+.invitation-body.design-minimalist .couple-photo-frame,
+.invitation-body.design-minimalist .couple-photo-frame::after {
+  border-radius: 0;
+}
+.invitation-body.design-minimalist .couple-photo-frame {
+  border: none;
+  box-shadow: none;
+}
+.invitation-body.design-minimalist .couple-photo-frame::after {
+  border-color: var(--border-color);
+}
+.invitation-body.design-minimalist .event-card {
+  box-shadow: none;
+  border: 1px solid var(--border-color);
+}
+.invitation-body.design-minimalist .event-card::before {
+  display: none;
+}
+.invitation-body.design-minimalist .timeline::after {
+  width: 1px;
+  margin-left: 0;
+  background: var(--border-color);
 }
 
-/* Royal: engraved Roman capitals */
+/* --- Royal Navy: arched portraits, engraved caps, ruled titles --- */
 .invitation-body.design-royal .section-title,
 .invitation-body.design-royal .hero-names {
   text-transform: uppercase;
@@ -222,30 +299,96 @@
 }
 .invitation-body.design-royal .section-title {
   font-size: clamp(1.5rem, 5vw, 2.2rem);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--accent-gold);
 }
 .invitation-body.design-royal .floral-swirl,
-.invitation-body.design-royal .side-leaf-decor {
+.invitation-body.design-royal .side-leaf-decor,
+.invitation-body.design-royal .floating-petals-container,
+.invitation-body.design-royal .couple-photo-wreath {
   display: none;
 }
+/* Arch-topped portraits — the signature royal/cathedral silhouette */
+.invitation-body.design-royal .couple-photo-frame,
+.invitation-body.design-royal .couple-photo-frame::after {
+  border-radius: 50% 50% 6px 6px / 62% 62% 6px 6px;
+}
+.invitation-body.design-royal .couple-photo-frame {
+  border: 2px solid var(--accent-gold);
+  box-shadow: none;
+}
+.invitation-body.design-royal .event-card {
+  background: transparent;
+  box-shadow: none;
+  border: 2px double var(--accent-gold);
+}
+.invitation-body.design-royal .event-card::before {
+  display: none;
+}
+.invitation-body.design-royal .timeline::after {
+  width: 2px;
+  margin-left: -1px;
+  background: var(--accent-gold);
+}
 
-/* Rustic: softer ornaments, relaxed tracking */
+/* --- Rustic: kraft paper grain, italic titles, hand-drawn dashes --- */
+.invitation-body.design-rustic {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='%236E4B2F' fill-opacity='0.05'%3E%3Ccircle cx='8' cy='12' r='1.2'/%3E%3Ccircle cx='34' cy='4' r='1'/%3E%3Ccircle cx='50' cy='22' r='1.3'/%3E%3Ccircle cx='18' cy='38' r='1'/%3E%3Ccircle cx='44' cy='48' r='1.2'/%3E%3Ccircle cx='6' cy='54' r='1'/%3E%3C/g%3E%3C/svg%3E");
+}
 .invitation-body.design-rustic .section-title,
 .invitation-body.design-rustic .hero-names {
+  font-style: italic;
   letter-spacing: 1px;
 }
 .invitation-body.design-rustic .section-corner {
   opacity: 0.55;
 }
+.invitation-body.design-rustic .couple-photo-wreath {
+  display: none;
+}
+/* Rounded-square portraits with a thick paper mount */
+.invitation-body.design-rustic .couple-photo-frame,
+.invitation-body.design-rustic .couple-photo-frame::after {
+  border-radius: 14px;
+}
+.invitation-body.design-rustic .couple-photo-frame {
+  border: 8px solid var(--bg-cream-light);
+  box-shadow: var(--shadow-md);
+}
+.invitation-body.design-rustic .couple-photo-frame::after {
+  border-style: dashed;
+  border-color: var(--secondary-olive);
+  opacity: 0.5;
+}
+.invitation-body.design-rustic .event-card {
+  background: transparent;
+  box-shadow: none;
+  border: 2px dashed var(--primary-sage);
+}
+.invitation-body.design-rustic .event-card::before {
+  display: none;
+}
+.invitation-body.design-rustic .timeline::after {
+  width: 0;
+  border-left: 2px dashed var(--primary-sage);
+  background: none;
+}
 
-/* Modern: editorial slabs of uppercase type, no ornament */
+/* --- Modern Editorial: left-aligned, square photos, rule-led titles --- */
 .invitation-body.design-modern .section-corner,
 .invitation-body.design-modern .side-leaf-decor,
 .invitation-body.design-modern .floral-swirl,
 .invitation-body.design-modern .floating-petals-container,
 .invitation-body.design-modern .gold-separator,
 .invitation-body.design-modern .floral-divider,
-.invitation-body.design-modern .floral-header-decor {
+.invitation-body.design-modern .floral-header-decor,
+.invitation-body.design-modern .couple-photo-wreath {
   display: none;
+}
+/* The one design that abandons centre alignment entirely */
+.invitation-body.design-modern .invitation-section {
+  align-items: flex-start;
+  text-align: left;
 }
 .invitation-body.design-modern .section-title,
 .invitation-body.design-modern .hero-names {
@@ -257,13 +400,73 @@
   font-size: clamp(2.6rem, 11vw, 5rem);
   line-height: 1;
 }
+.invitation-body.design-modern .section-title {
+  border-bottom: 4px solid var(--accent-gold);
+  padding-bottom: 10px;
+}
+.invitation-body.design-modern .invitation-section:nth-child(even) {
+  background-color: var(--bg-cream-light);
+}
+.invitation-body.design-modern .couple-photo-frame,
+.invitation-body.design-modern .couple-photo-frame::after {
+  border-radius: 0;
+}
+.invitation-body.design-modern .couple-photo-frame {
+  border: none;
+  box-shadow: none;
+  filter: grayscale(1);
+  transition: filter 0.4s ease;
+}
+.invitation-body.design-modern .couple-photo-container:hover .couple-photo-frame {
+  filter: grayscale(0);
+}
+.invitation-body.design-modern .couple-photo-frame::after {
+  display: none;
+}
+.invitation-body.design-modern .event-card {
+  box-shadow: none;
+  border: none;
+  border-left: 4px solid var(--primary-sage);
+  background: var(--bg-cream-dark);
+}
+.invitation-body.design-modern .event-card::before {
+  display: none;
+}
+.invitation-body.design-modern .timeline::after {
+  width: 1px;
+  margin-left: 0;
+  background: var(--text-dark);
+}
 
-/* Tropical: keep the leafy decor, drop the gold filigree */
+/* --- Tropis: organic blob portraits, palm texture, airy cards --- */
+.invitation-body.design-tropical {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90' viewBox='0 0 90 90'%3E%3Cg fill='%232E9C86' fill-opacity='0.06'%3E%3Cpath d='M12 8c14 2 22 12 24 26-14-2-22-12-24-26z'/%3E%3Cpath d='M62 44c14 2 22 12 24 26-14-2-22-12-24-26z'/%3E%3C/g%3E%3C/svg%3E");
+}
 .invitation-body.design-tropical .gold-separator {
   opacity: 0.6;
 }
-.invitation-body.design-tropical .side-leaf-decor {
-  opacity: 1;
+.invitation-body.design-tropical .couple-photo-wreath {
+  display: none;
+}
+/* Soft asymmetric leaf/pebble silhouette */
+.invitation-body.design-tropical .couple-photo-frame,
+.invitation-body.design-tropical .couple-photo-frame::after {
+  border-radius: 62% 38% 55% 45% / 52% 56% 44% 48%;
+}
+.invitation-body.design-tropical .couple-photo-frame {
+  border: 5px solid #fff;
+}
+.invitation-body.design-tropical .event-card {
+  border: none;
+  box-shadow: 0 14px 34px rgba(var(--pill-shadow-rgb), 0.14);
+}
+.invitation-body.design-tropical .event-card::before {
+  display: none;
+}
+.invitation-body.design-tropical .timeline::after {
+  width: 2px;
+  margin-left: -1px;
+  background: var(--primary-sage);
 }
 
 .invitation-body.theme-sage, .admin-body.theme-sage {

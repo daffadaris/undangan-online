@@ -39,6 +39,9 @@ const DESIGNS = [
     ornament: "floral",
     titleScale: 1,
     upper: false,
+    photoRadius: "50%",
+    cardStyle: "soft",
+    align: "center",
   },
   {
     key: "romantic",
@@ -57,6 +60,9 @@ const DESIGNS = [
     ornament: "floral",
     titleScale: 1.45,
     upper: false,
+    photoRadius: "50%",
+    cardStyle: "pillow",
+    align: "center",
   },
   {
     key: "luxury",
@@ -74,7 +80,10 @@ const DESIGNS = [
     pill: "2px",
     ornament: "gold",
     titleScale: 1.12,
-    upper: false,
+    upper: true,
+    photoRadius: "0px",
+    cardStyle: "outline",
+    align: "center",
   },
   {
     key: "minimalist",
@@ -92,7 +101,10 @@ const DESIGNS = [
     pill: "4px",
     ornament: "none",
     titleScale: 0.88,
-    upper: false,
+    upper: true,
+    photoRadius: "0px",
+    cardStyle: "flat",
+    align: "center",
   },
   {
     key: "royal",
@@ -111,6 +123,9 @@ const DESIGNS = [
     ornament: "gold",
     titleScale: 0.72,
     upper: true,
+    photoRadius: "50% 50% 6px 6px / 62% 62% 6px 6px",
+    cardStyle: "double",
+    align: "center",
   },
   {
     key: "rustic",
@@ -129,6 +144,9 @@ const DESIGNS = [
     ornament: "floral",
     titleScale: 0.95,
     upper: false,
+    photoRadius: "14px",
+    cardStyle: "dashed",
+    align: "center",
   },
   {
     key: "modern",
@@ -147,6 +165,9 @@ const DESIGNS = [
     ornament: "none",
     titleScale: 0.92,
     upper: true,
+    photoRadius: "0px",
+    cardStyle: "bar",
+    align: "left",
   },
   {
     key: "tropical",
@@ -165,6 +186,9 @@ const DESIGNS = [
     ornament: "floral",
     titleScale: 1,
     upper: false,
+    photoRadius: "62% 38% 55% 45% / 52% 56% 44% 48%",
+    cardStyle: "pillow",
+    align: "center",
   },
 ] as const;
 
@@ -996,6 +1020,17 @@ export default function AdminSettingsPage() {
             };
             const groom = groomNickname || "Andi";
             const bride = brideNickname || "Sari";
+            const italic = d.key === "rustic";
+            // Mirrors the .event-card treatment each design applies
+            const cardBox: React.CSSProperties = {
+              soft: { border: `1px solid ${pal.accent}55` },
+              pillow: { border: "none", boxShadow: `0 10px 24px ${pal.primary}33` },
+              outline: { border: `1px solid ${pal.accent}`, background: "transparent" },
+              flat: { border: `1px solid ${pal.accent}66`, boxShadow: "none" },
+              double: { border: `3px double ${pal.accent}`, background: "transparent" },
+              dashed: { border: `2px dashed ${pal.primary}`, background: "transparent" },
+              bar: { border: "none", borderLeft: `4px solid ${pal.primary}` },
+            }[d.cardStyle] || {};
             return (
               <div className="design-preview-wrap">
                 <div className="design-preview-head">
@@ -1013,6 +1048,8 @@ export default function AdminSettingsPage() {
                     borderRadius: d.radius,
                     fontFamily: d.bodyFont,
                     color: pal.textColor,
+                    alignItems: d.align === "left" ? "flex-start" : "center",
+                    textAlign: d.align === "left" ? "left" : "center",
                   }}
                 >
                   {d.ornament === "floral" && (
@@ -1045,6 +1082,21 @@ export default function AdminSettingsPage() {
                     />
                   )}
 
+                  {/* Portrait silhouette — the clearest structural tell per design */}
+                  <span
+                    className="design-preview-portrait"
+                    style={{
+                      borderRadius: d.photoRadius,
+                      backgroundColor: `${pal.primary}33`,
+                      borderColor: d.key === "modern" ? "transparent" : pal.accent,
+                      filter: d.key === "modern" ? "grayscale(1)" : "none",
+                    }}
+                  >
+                    <span style={{ fontFamily: d.titleFont, color: pal.primary }}>
+                      {groom.charAt(0)}
+                    </span>
+                  </span>
+
                   <span className="design-preview-eyebrow" style={{ color: pal.textColor }}>
                     The Wedding Of
                   </span>
@@ -1057,6 +1109,9 @@ export default function AdminSettingsPage() {
                       fontSize: `${2.6 * d.titleScale}rem`,
                       textTransform: d.upper ? "uppercase" : "none",
                       letterSpacing: d.upper ? "2px" : "normal",
+                      fontStyle: italic ? "italic" : "normal",
+                      borderBottom: d.key === "modern" ? `4px solid ${pal.accent}` : "none",
+                      paddingBottom: d.key === "modern" ? "8px" : "0",
                     }}
                   >
                     {groom} &amp; {bride}
@@ -1082,7 +1137,11 @@ export default function AdminSettingsPage() {
 
                   <span
                     className="design-preview-card"
-                    style={{ backgroundColor: pal.surface, borderRadius: d.radius }}
+                    style={{
+                      backgroundColor: pal.surface,
+                      borderRadius: d.radius,
+                      ...cardBox,
+                    }}
                   >
                     <span
                       className="design-preview-card-title"
@@ -1090,6 +1149,7 @@ export default function AdminSettingsPage() {
                         fontFamily: d.titleFont,
                         color: pal.titleColor,
                         textTransform: d.upper ? "uppercase" : "none",
+                        fontStyle: italic ? "italic" : "normal",
                       }}
                     >
                       Akad Nikah

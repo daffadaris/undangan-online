@@ -1026,6 +1026,17 @@ input[type="date"].admin-input:hover::-webkit-calendar-picker-indicator {
   pointer-events: none;
 }
 
+.design-preview-portrait {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 62px;
+  height: 62px;
+  border: 2px solid;
+  font-size: 1.4rem;
+  z-index: 1;
+}
+
 .design-preview-eyebrow {
   font-size: 0.72rem;
   letter-spacing: 3px;
