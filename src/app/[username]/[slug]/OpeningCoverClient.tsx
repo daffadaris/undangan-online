@@ -56,6 +56,13 @@ export default function OpeningCoverClient({
 
   const handleOpen = () => {
     setIsOpened(true);
+    // Mark opened only on a real guest click — fire-and-forget so a slow or
+    // failed request never blocks the reveal animation.
+    fetch("/api/guests/open", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ guestId: guest.id }),
+    }).catch(() => {});
   };
 
   return (

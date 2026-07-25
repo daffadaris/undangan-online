@@ -52,15 +52,11 @@ export default async function InvitationPage({ params }: InvitationPageProps) {
     return notFound();
   }
 
-  // 3. Track invitation opened
-  if (!guest.openedAt) {
-    await prisma.guest.update({
-      where: { id: guest.id },
-      data: { openedAt: new Date() },
-    });
-  }
+  // Note: "opened" is tracked client-side when the guest clicks "Buka
+  // Undangan" (see OpeningCoverClient), NOT on page load — otherwise
+  // link-preview crawlers and test loads would falsely mark it opened.
 
-  // 4. Fetch wedding config for this owner
+  // 3. Fetch wedding config for this owner
   const config = await prisma.weddingConfig.findUnique({
     where: { userId: owner.id },
   });

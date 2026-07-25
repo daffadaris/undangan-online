@@ -29,7 +29,9 @@ model Guest {
   numberOfGuests Int           @default(1)
   wishes         String?
   wishSentAt     DateTime?
-  openedAt       DateTime?
+  openedAt       DateTime?     // first time the guest opened the invitation
+  lastOpenedAt   DateTime?     // most recent open
+  openCount      Int           @default(0) // total number of opens
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   userId         String?

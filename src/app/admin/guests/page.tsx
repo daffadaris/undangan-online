@@ -13,6 +13,8 @@ interface Guest {
   numberOfGuests: number;
   wishes: string | null;
   openedAt: string | null;
+  lastOpenedAt: string | null;
+  openCount: number;
   owner?: { username: string };
 }
 
@@ -247,6 +249,20 @@ Terima kasih.`;
     return `https://api.whatsapp.com/send?phone=${formattedPhone}&text=${text}`;
   };
 
+  // Format a stored timestamp as "25 Jul 2026, 14.30" in local time; "-" if never.
+  const fmtDateTime = (value: string | null) => {
+    if (!value) return "-";
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return "-";
+    return d.toLocaleString("id-ID", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
   const openEditModal = (guest: Guest) => {
     setSelectedGuest(guest);
     setEditName(guest.name);
@@ -259,14 +275,16 @@ Terima kasih.`;
 
   // Client-side CSV export
   const exportToCSV = () => {
-    const headers = ["Nama", "Grup", "No HP", "Status RSVP", "Pax Kehadiran", "Sudah Dibuka", "Ucapan"];
+    const headers = ["Nama", "Grup", "No HP", "Status RSVP", "Pax Kehadiran", "Dibuka Pertama", "Dibuka Terakhir", "Jumlah Buka", "Ucapan"];
     const rows = guests.map(g => [
       g.name,
       g.group || "-",
       g.phone || "-",
       g.rsvpStatus === "confirmed" ? "Hadir" : g.rsvpStatus === "declined" ? "Berhalangan" : "Pending",
       g.rsvpStatus === "confirmed" ? g.numberOfGuests : 0,
-      g.openedAt ? "Ya" : "Belum",
+      fmtDateTime(g.openedAt),
+      fmtDateTime(g.lastOpenedAt),
+      g.openCount,
       g.wishes || "-"
     ]);
 
@@ -542,7 +560,9 @@ Terima kasih.`;
                   <th>Link Undangan</th>
                   <th>Status</th>
                   <th>Pax</th>
-                  <th>Sudah Dibuka</th>
+                  <th>Dibuka Pertama</th>
+                  <th>Dibuka Terakhir</th>
+                  <th>Jumlah Buka</th>
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -577,7 +597,15 @@ Terima kasih.`;
                       </span>
                     </td>
                     <td>{guest.rsvpStatus === "confirmed" ? guest.numberOfGuests : "-"}</td>
-                    <td>{guest.openedAt ? "Ya" : "Belum"}</td>
+                    <td style={{ whiteSpace: "nowrap" }}>{fmtDateTime(guest.openedAt)}</td>
+                    <td style={{ whiteSpace: "nowrap" }}>{fmtDateTime(guest.lastOpenedAt)}</td>
+                    <td style={{ textAlign: "center" }}>
+                      {guest.openCount > 0 ? (
+                        <span className="badge badge-confirmed">{guest.openCount}×</span>
+                      ) : (
+                        <span style={{ color: "var(--text-muted, #999)" }}>Belum</span>
+                      )}
+                    </td>
                     <td>
                       <div className="table-actions">
                         {guest.phone && (guest.owner?.username || currentUser?.username) && (
