@@ -21,13 +21,14 @@ export default function MusicPlayer({ playTrigger, musicUrl }: MusicPlayerProps)
   const [isYtReady, setIsYtReady] = useState(false);
 
   const defaultMusic = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
-  const sourceUrl = musicUrl || defaultMusic;
+  const isMusicDisabled = musicUrl === "none" || musicUrl === "off" || musicUrl === "disabled";
+  const sourceUrl = isMusicDisabled ? "" : (musicUrl || defaultMusic);
   const ytId = getYoutubeId(sourceUrl);
-  const isYoutube = !!ytId;
+  const isYoutube = !isMusicDisabled && !!ytId;
 
   // 1. Handle Standard Audio Element Lifecycle
   useEffect(() => {
-    if (isYoutube) {
+    if (isMusicDisabled || isYoutube) {
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
@@ -44,7 +45,7 @@ export default function MusicPlayer({ playTrigger, musicUrl }: MusicPlayerProps)
         audioRef.current = null;
       }
     };
-  }, [sourceUrl, isYoutube]);
+  }, [sourceUrl, isYoutube, isMusicDisabled]);
 
   // 2. Handle YouTube Player API Lifecycle
   useEffect(() => {
@@ -156,7 +157,11 @@ export default function MusicPlayer({ playTrigger, musicUrl }: MusicPlayerProps)
           });
       }
     }
-  }, [playTrigger, isYtReady, isYoutube, isPlaying]);
+  }, [playTrigger, isYtReady, isYoutube, isPlaying, isMusicDisabled]);
+
+  if (isMusicDisabled) {
+    return null;
+  }
 
   // Hide floating music button until cover is opened
   if (!playTrigger) {
@@ -177,23 +182,31 @@ export default function MusicPlayer({ playTrigger, musicUrl }: MusicPlayerProps)
     );
   }
 
-  // 4. Handle Mute/Play Toggle
+  // 4. Handle Mute / Play Toggle
   const togglePlay = () => {
     if (isYoutube) {
       if (!ytPlayerRef.current || !isYtReady) return;
       if (isPlaying) {
-        ytPlayerRef.current.pauseVideo();
+        try {
+          ytPlayerRef.current.mute();
+          ytPlayerRef.current.pauseVideo();
+        } catch (e) {}
         setIsPlaying(false);
       } else {
-        ytPlayerRef.current.playVideo();
+        try {
+          ytPlayerRef.current.unMute();
+          ytPlayerRef.current.playVideo();
+        } catch (e) {}
         setIsPlaying(true);
       }
     } else {
       if (!audioRef.current) return;
       if (isPlaying) {
         audioRef.current.pause();
+        audioRef.current.muted = true;
         setIsPlaying(false);
       } else {
+        audioRef.current.muted = false;
         audioRef.current
           .play()
           .then(() => {

@@ -1620,16 +1620,16 @@ Terima kasih.`}
         <div className="admin-card">
           <h2 className="card-title">Musik Latar Belakang (MP3)</h2>
           <div className="admin-input-group">
-            <label className="admin-input-label">URL Berkas Musik (.mp3)</label>
+            <label className="admin-input-label">URL Berkas Musik (.mp3 atau Tautan YouTube)</label>
             <input
               type="text"
               className="admin-input"
               value={musicUrl}
               onChange={(e) => setMusicUrl(e.target.value)}
-              placeholder="https://tautan-musik.com/lagu-nikah.mp3"
+              placeholder="https://tautan-musik.com/lagu-nikah.mp3 (atau ketik 'none' untuk mematikan musik)"
             />
             <p style={{ fontSize: "0.75rem", color: "var(--admin-text-sub)", marginTop: "4px" }}>
-              *Biarkan kosong untuk menggunakan lagu instrumen romantis bawaan sistem.
+              *Biarkan kosong untuk menggunakan lagu instrumen romantis bawaan, atau ketik <code>none</code> / <code>off</code> jika ingin mematikan musik latar secara penuh.
             </p>
           </div>
         </div>
