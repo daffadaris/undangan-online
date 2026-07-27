@@ -25,6 +25,9 @@ export async function GET(request: Request) {
     } else if (userIdParam) {
       // Public: filter by userId from query param
       where.userId = userIdParam;
+    } else {
+      // Public: without userId param, return empty list to prevent cross-tenant leaks
+      return NextResponse.json({ wishes: [] });
     }
 
     const wishes = await prisma.guest.findMany({

@@ -91,6 +91,7 @@ export default async function InvitationPage({ params }: InvitationPageProps) {
             initialRsvpStatus={guest.rsvpStatus}
             initialNumberOfGuests={guest.numberOfGuests}
             initialWishes={guest.wishes}
+            ownerId={owner.id}
           />
         }
       />

@@ -18,7 +18,8 @@ export default function CountdownTimer({ targetDate }: CountdownTimerProps) {
   useEffect(() => {
     setIsClient(true);
     const calculateTime = () => {
-      const difference = +new Date(targetDate) - +new Date();
+      const parsedTarget = new Date(targetDate.includes("T") ? targetDate : `${targetDate}T08:00:00`);
+      const difference = +parsedTarget - +new Date();
       let timeLeftTemp = { days: 0, hours: 0, minutes: 0, seconds: 0 };
 
       if (difference > 0) {

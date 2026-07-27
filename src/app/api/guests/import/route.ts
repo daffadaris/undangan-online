@@ -36,7 +36,7 @@ export async function POST(request: Request) {
       }
 
       try {
-        let baseSlug = slugify(name);
+        let baseSlug = slugify(name) || "tamu";
         let slug = baseSlug;
         let counter = 1;
 

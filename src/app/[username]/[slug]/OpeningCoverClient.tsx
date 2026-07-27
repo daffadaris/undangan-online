@@ -156,9 +156,10 @@ export default function OpeningCoverClient({
           </ScrollReveal>
 
           <RsvpFloatingButton visible={config?.showRsvp !== false} />
-          <MusicPlayer playTrigger={isOpened} musicUrl={config?.musicUrl} />
         </div>
       )}
+
+      <MusicPlayer playTrigger={isOpened} musicUrl={config?.musicUrl} />
     </>
   );
 }

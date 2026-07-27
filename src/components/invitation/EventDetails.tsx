@@ -14,7 +14,8 @@ export default function EventDetails({ config }: EventDetailsProps) {
       month: "long",
       day: "numeric",
     };
-    return new Date(dateStr).toLocaleDateString("id-ID", options);
+    const dateObj = new Date(dateStr.includes("T") ? dateStr : `${dateStr}T00:00:00`);
+    return isNaN(dateObj.getTime()) ? "" : dateObj.toLocaleDateString("id-ID", options);
   };
 
   return (

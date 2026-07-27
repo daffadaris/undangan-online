@@ -144,10 +144,38 @@ export default function MusicPlayer({ playTrigger, musicUrl }: MusicPlayerProps)
           })
           .catch((err) => {
             console.warn("Autoplay was blocked by browser. User needs to interact.", err);
+            const handleUserGesture = () => {
+              if (audioRef.current) {
+                audioRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+              }
+              document.removeEventListener("click", handleUserGesture);
+              document.removeEventListener("touchstart", handleUserGesture);
+            };
+            document.addEventListener("click", handleUserGesture);
+            document.addEventListener("touchstart", handleUserGesture);
           });
       }
     }
-  }, [playTrigger, isYtReady, isYoutube]);
+  }, [playTrigger, isYtReady, isYoutube, isPlaying]);
+
+  // Hide floating music button until cover is opened
+  if (!playTrigger) {
+    return (
+      <div
+        style={{
+          position: "fixed",
+          top: "-9999px",
+          left: "-9999px",
+          width: "1px",
+          height: "1px",
+          opacity: 0,
+          pointerEvents: "none",
+        }}
+      >
+        {isYoutube && <div id="youtube-audio-player"></div>}
+      </div>
+    );
+  }
 
   // 4. Handle Mute/Play Toggle
   const togglePlay = () => {

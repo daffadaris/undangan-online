@@ -54,7 +54,7 @@ export async function POST(request: Request) {
 
     const targetUserId = user.userId;
 
-    let baseSlug = slugify(name);
+    let baseSlug = slugify(name) || "tamu";
     let slug = baseSlug;
     let counter = 1;
 
