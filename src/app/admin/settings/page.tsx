@@ -267,7 +267,14 @@ export default function AdminSettingsPage() {
   const [showGallery, setShowGallery] = useState(true);
   const [showAkad, setShowAkad] = useState(true);
   const [showResepsi, setShowResepsi] = useState(true);
+  const [showDressCode, setShowDressCode] = useState(true);
   const [whatsappTemplate, setWhatsappTemplate] = useState("");
+
+  // QRIS & Dress Code
+  const [qrisImage, setQrisImage] = useState("");
+  const [dressCodeTitle, setDressCodeTitle] = useState("Panduan Busana / Dress Code");
+  const [dressCodeDescription, setDressCodeDescription] = useState("Tanpa mengurangi rasa hormat, kami memohon Bapak/Ibu/Saudara/i untuk berkenan mengenakan busana bertema warna berikut:");
+  const [dressCodeColorsText, setDressCodeColorsText] = useState("#A8BBA0, #FFF8DC, #C9A96E, #2F362E");
 
   // Upload States
   const [uploadingField, setUploadingField] = useState<string | null>(null);
@@ -321,10 +328,21 @@ export default function AdminSettingsPage() {
             setShowGallery(config.showGallery !== false);
             setShowAkad(config.showAkad !== false);
             setShowResepsi(config.showResepsi !== false);
+            setShowDressCode(config.showDressCode !== false);
             setWhatsappTemplate(config.whatsappTemplate || "");
             setGroomImagePosition(config.groomImagePosition || "center");
             setBrideImagePosition(config.brideImagePosition || "center");
             setHeroImagePosition(config.heroImagePosition || "center");
+            setQrisImage(config.qrisImage || "");
+            setDressCodeTitle(config.dressCodeTitle || "Panduan Busana / Dress Code");
+            setDressCodeDescription(config.dressCodeDescription || "Tanpa mengurangi rasa hormat, kami memohon Bapak/Ibu/Saudara/i untuk berkenan mengenakan busana bertema warna berikut:");
+
+            try {
+              const colors = JSON.parse(config.dressCodeColors || "[]");
+              setDressCodeColorsText(Array.isArray(colors) && colors.length > 0 ? colors.join(", ") : "#A8BBA0, #FFF8DC, #C9A96E, #2F362E");
+            } catch (e) {
+              setDressCodeColorsText("#A8BBA0, #FFF8DC, #C9A96E, #2F362E");
+            }
 
             try {
               const gallery = JSON.parse(config.galleryImages || "[]");
@@ -472,10 +490,20 @@ export default function AdminSettingsPage() {
           showGallery,
           showAkad,
           showResepsi,
+          showDressCode,
           whatsappTemplate,
           groomImagePosition,
           brideImagePosition,
           heroImagePosition,
+          qrisImage,
+          dressCodeTitle,
+          dressCodeDescription,
+          dressCodeColors: JSON.stringify(
+            dressCodeColorsText
+              .split(",")
+              .map((c) => c.trim())
+              .filter(Boolean)
+          ),
         }),
       });
 
@@ -852,10 +880,42 @@ export default function AdminSettingsPage() {
         {/* Gift Accounts */}
         <div className="admin-card">
           <div className="card-title">
-            <span>Rekening Kado Digital</span>
+            <span>Rekening &amp; QRIS Kado Digital</span>
             <button type="button" className="admin-btn" onClick={addGiftItem}>
               + Tambah Rekening
             </button>
+          </div>
+
+          {/* QRIS Upload Block */}
+          <div className="admin-input-group" style={{ marginBottom: "25px", paddingBottom: "20px", borderBottom: "1px dashed var(--admin-border)" }}>
+            <label className="admin-input-label">Tautan / Gambar Barcode QRIS</label>
+            <input
+              type="text"
+              className="admin-input"
+              value={qrisImage}
+              onChange={(e) => setQrisImage(e.target.value)}
+              placeholder="https://tautan-gambar-anda.com/qris.jpg"
+              style={{ marginBottom: "10px" }}
+            />
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e, setQrisImage, "qris")}
+                style={{ display: "none" }}
+                id="upload-qris"
+              />
+              <label
+                htmlFor="upload-qris"
+                className="admin-btn-outline"
+                style={{ padding: "6px 12px", fontSize: "0.8rem", cursor: "pointer", display: "inline-block" }}
+              >
+                {uploadingField === "qris" ? "Mengunggah..." : "📷 Unggah Gambar QRIS"}
+              </label>
+              {qrisImage && (
+                <span style={{ fontSize: "0.8rem", color: "var(--admin-primary)", fontWeight: 600 }}>✓ Gambar QRIS Tersedia</span>
+              )}
+            </div>
           </div>
 
           {giftInfo.length === 0 ? (
@@ -1469,6 +1529,61 @@ export default function AdminSettingsPage() {
               <span className="admin-toggle-track"></span>
               Tampilkan Jadwal Resepsi
             </label>
+
+            <label className="admin-toggle">
+              <input
+                type="checkbox"
+                id="toggle-dresscode"
+                checked={showDressCode}
+                onChange={(e) => setShowDressCode(e.target.checked)}
+              />
+              <span className="admin-toggle-track"></span>
+              Tampilkan Panduan Dress Code
+            </label>
+          </div>
+        </div>
+
+        {/* Pengaturan Dress Code */}
+        <div className="admin-card">
+          <h2 className="card-title">Pengaturan Dress Code &amp; Panduan Busana</h2>
+          <p style={{ color: "var(--admin-text-sub)", fontSize: "0.85rem", marginBottom: "15px" }}>
+            Atur judul, deskripsi petunjuk pakaian, serta warna palet dress code tamu.
+          </p>
+
+          <div className="admin-input-group">
+            <label className="admin-input-label">Judul Seksi Dress Code</label>
+            <input
+              type="text"
+              className="admin-input"
+              value={dressCodeTitle}
+              onChange={(e) => setDressCodeTitle(e.target.value)}
+              placeholder="Panduan Busana / Dress Code"
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label className="admin-input-label">Deskripsi / Petunjuk Busana</label>
+            <textarea
+              className="admin-input"
+              rows={3}
+              value={dressCodeDescription}
+              onChange={(e) => setDressCodeDescription(e.target.value)}
+              placeholder="Contoh: Tanpa mengurangi rasa hormat, kami memohon tamu undangan mengenakan busana bertema warna berikut..."
+            />
+          </div>
+
+          <div className="admin-input-group">
+            <label className="admin-input-label">Kode Warna Palet (Pisahkan dengan koma)</label>
+            <input
+              type="text"
+              className="admin-input"
+              value={dressCodeColorsText}
+              onChange={(e) => setDressCodeColorsText(e.target.value)}
+              placeholder="#A8BBA0, #FFF8DC, #C9A96E, #2F362E"
+            />
+            <p style={{ fontSize: "0.75rem", color: "var(--admin-text-sub)", marginTop: "4px" }}>
+              *Masukkan kode warna hex seperti <code>#A8BBA0, #FFF8DC, #C9A96E</code>.
+            </p>
           </div>
         </div>
 

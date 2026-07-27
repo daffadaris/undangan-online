@@ -76,6 +76,11 @@ export async function PUT(request: Request) {
       groomImagePosition: body.groomImagePosition,
       brideImagePosition: body.brideImagePosition,
       heroImagePosition: body.heroImagePosition,
+      qrisImage: body.qrisImage,
+      showDressCode: body.showDressCode,
+      dressCodeTitle: body.dressCodeTitle,
+      dressCodeDescription: body.dressCodeDescription,
+      dressCodeColors: body.dressCodeColors,
     };
 
     const config = await prisma.weddingConfig.upsert({

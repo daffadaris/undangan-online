@@ -79,6 +79,11 @@ model WeddingConfig {
   groomImagePosition String?   @default("center")
   brideImagePosition String?   @default("center")
   heroImagePosition  String?   @default("center")
+  qrisImage          String?
+  showDressCode      Boolean   @default(true)
+  dressCodeTitle     String    @default("Panduan Busana / Dress Code")
+  dressCodeDescription String  @default("Baju Kurung / Batik / Busana Formal")
+  dressCodeColors    String    @default("[\"#A8BBA0\", \"#FFF8DC\", \"#C9A96E\", \"#2F362E\"]") // JSON array
   userId         String?   @unique
   owner          User?     @relation(fields: [userId], references: [id])
 }

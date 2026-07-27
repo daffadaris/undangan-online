@@ -15,6 +15,7 @@ import {
 } from "@/components/invitation/FloralDecor";
 import ScrollReveal from "@/components/invitation/ScrollReveal";
 import GallerySection from "@/components/invitation/GallerySection";
+import DressCodeSection from "@/components/invitation/DressCodeSection";
 
 interface OpeningCoverClientProps {
   ownerId: string;
@@ -105,6 +106,15 @@ export default function OpeningCoverClient({
             <>
               <FloralSwirl />
               <ScrollReveal animation="fade-left">{eventDetailsSection}</ScrollReveal>
+            </>
+          )}
+
+          {config?.showDressCode !== false && (
+            <>
+              <FloralSwirl />
+              <ScrollReveal animation="fade-right">
+                <DressCodeSection config={config} />
+              </ScrollReveal>
             </>
           )}
 
