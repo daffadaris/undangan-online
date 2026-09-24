@@ -77,6 +77,12 @@ browser and Chrome keep separate cookies and so count as two devices for one rea
    `router.refresh()`; the content reveals once the server re-renders with `access="open"`.
    A 403 flips the cover to the blocked notice.
 4. `/api/rsvp` refuses browsers that aren't in the guest's `deviceIds`.
+5. Once opened, [ScreenshotGuard](../src/components/invitation/ScreenshotGuard.tsx) adds
+   screenshot *deterrents* (web pages can't truly block OS screenshots): a tiled
+   "Undangan khusus {nama}" watermark so leaks are traceable, a cover screen when the window loses
+   focus or a PrintScreen / Cmd+Shift+3/4/5 / Win+Shift+S / print shortcut fires, and no text
+   selection, image long-press/right-click/drag, or printing. DRM-style black screenshots
+   (Netflix) only apply to encrypted video, so they aren't an option here.
 
 Owners manage slots from `/admin/guests` ("Perangkat" column, "Reset Perangkat", "Maks.
 Perangkat"). The client only ever receives `{ id, name }` for the guest, never `deviceIds`.

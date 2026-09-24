@@ -17,6 +17,7 @@ import {
 import ScrollReveal from "@/components/invitation/ScrollReveal";
 import GallerySection from "@/components/invitation/GallerySection";
 import DressCodeSection from "@/components/invitation/DressCodeSection";
+import ScreenshotGuard from "@/components/invitation/ScreenshotGuard";
 
 // "open": content is rendered. "locked": Mode Privat, this browser hasn't
 // claimed the link yet — only the cover is sent. "blocked": every slot for
@@ -199,6 +200,7 @@ export default function OpeningCoverClient({
           </ScrollReveal>
 
           <RsvpFloatingButton visible={config?.showRsvp !== false} />
+          {config?.privateMode && <ScreenshotGuard guestName={guest.name} />}
         </div>
       )}
 

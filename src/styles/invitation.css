@@ -807,6 +807,62 @@
   cursor: wait;
 }
 
+/* Mode Privat screenshot deterrents (ScreenshotGuard) */
+.ss-guard {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none; /* iOS long-press "Save Image" */
+}
+
+.ss-guard img {
+  -webkit-user-drag: none;
+}
+
+.ss-guard input,
+.ss-guard textarea {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.ss-watermark {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  pointer-events: none;
+  background-repeat: repeat;
+}
+
+.ss-shield {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  background: var(--bg-cream-light);
+  text-align: center;
+  cursor: pointer;
+}
+
+.ss-shield-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.2rem, 4vw, 1.5rem);
+  color: var(--secondary-olive);
+}
+
+.ss-shield-text {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+@media print {
+  body.ss-guard * {
+    visibility: hidden !important;
+  }
+}
+
 /* Sections General */
 .invitation-section {
   position: relative;
