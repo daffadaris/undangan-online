@@ -45,6 +45,10 @@ async function recompress(dataUrl, maxEdge) {
   const m = /^data:([\w.+/-]+);base64,([\s\S]*)$/.exec(dataUrl || "");
   if (!m || !/^image\/(jpe?g|png|webp)$/i.test(m[1])) return null; // skip gif/svg/urls
   const input = Buffer.from(m[2], "base64");
+  // Already compressed (a previous run or a browser upload): re-encoding WebP
+  // again only stacks up quality loss.
+  const meta = await sharp(input).metadata();
+  if (meta.format === "webp" && Math.max(meta.width || 0, meta.height || 0) <= maxEdge) return null;
   const output = await sharp(input)
     .rotate() // respect EXIF orientation before it is stripped
     .resize({ width: maxEdge, height: maxEdge, fit: "inside", withoutEnlargement: true })
