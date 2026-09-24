@@ -53,6 +53,10 @@ export default function OpeningCoverClient({
   const [clickedOpen, setClickedOpen] = useState(false);
   const [isClaiming, setIsClaiming] = useState(false);
   const [claimBlocked, setClaimBlocked] = useState(false);
+  // Mobile browsers only allow audio started inside the tap itself, so music
+  // starts on the "Buka Undangan" tap — not after the Mode Privat claim
+  // round-trip, by which point the gesture has expired.
+  const [musicStarted, setMusicStarted] = useState(false);
   const blocked = access === "blocked" || claimBlocked;
   // After a successful claim the server re-renders with access "open"; reveal
   // only once the content has actually arrived.
@@ -73,6 +77,7 @@ export default function OpeningCoverClient({
   }, [isOpened]);
 
   const handleOpen = async () => {
+    setMusicStarted(true);
     if (access === "locked") {
       setIsClaiming(true);
       try {
@@ -88,6 +93,7 @@ export default function OpeningCoverClient({
         }
         if (res.status === 403) setClaimBlocked(true);
       } catch {}
+      setMusicStarted(false);
       setIsClaiming(false);
       return;
     }
@@ -207,7 +213,7 @@ export default function OpeningCoverClient({
       )}
 
       {guarded && <ScreenshotGuard />}
-      <MusicPlayer playTrigger={isOpened} musicUrl={config?.musicUrl} />
+      <MusicPlayer playTrigger={musicStarted} musicUrl={config?.musicUrl} />
     </>
   );
 }

@@ -38,6 +38,7 @@ export default function MusicPlayer({ playTrigger, musicUrl }: MusicPlayerProps)
 
     audioRef.current = new Audio(sourceUrl);
     audioRef.current.loop = true;
+    audioRef.current.addEventListener("pause", () => setIsPlaying(false));
 
     return () => {
       if (audioRef.current) {
@@ -129,7 +130,20 @@ export default function MusicPlayer({ playTrigger, musicUrl }: MusicPlayerProps)
 
   // 3. Handle Play Trigger (When Buka Undangan is clicked)
   useEffect(() => {
-    if (!playTrigger) return;
+    if (!playTrigger) {
+      // e.g. the Mode Privat claim was rejected after music already started
+      // isPlaying follows via the audio "pause" event / YouTube onStateChange.
+      if (isPlaying) {
+        if (isYoutube) {
+          try {
+            ytPlayerRef.current?.pauseVideo();
+          } catch {}
+        } else {
+          audioRef.current?.pause();
+        }
+      }
+      return;
+    }
 
     if (isYoutube) {
       if (ytPlayerRef.current && isYtReady) {
@@ -161,25 +175,6 @@ export default function MusicPlayer({ playTrigger, musicUrl }: MusicPlayerProps)
 
   if (isMusicDisabled) {
     return null;
-  }
-
-  // Hide floating music button until cover is opened
-  if (!playTrigger) {
-    return (
-      <div
-        style={{
-          position: "fixed",
-          top: "-9999px",
-          left: "-9999px",
-          width: "1px",
-          height: "1px",
-          opacity: 0,
-          pointerEvents: "none",
-        }}
-      >
-        {isYoutube && <div id="youtube-audio-player"></div>}
-      </div>
-    );
   }
 
   // 4. Handle Mute / Play Toggle
@@ -238,45 +233,49 @@ export default function MusicPlayer({ playTrigger, musicUrl }: MusicPlayerProps)
         </div>
       )}
 
-      {/* Control Button */}
-      <button
-        onClick={togglePlay}
-        className={`music-player-btn ${isPlaying ? "music-playing" : ""}`}
-        title={isPlaying ? "Mute Music" : "Play Music"}
-      >
-        {isPlaying ? (
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="var(--secondary-olive)"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M9 18V5l12-2v13" />
-            <circle cx="6" cy="18" r="3" />
-            <circle cx="18" cy="16" r="3" />
-          </svg>
-        ) : (
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="var(--text-light)"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <line x1="1" y1="1" x2="23" y2="23" />
-            <path d="M9 18V5l12-2v13" />
-            <circle cx="6" cy="18" r="3" stroke="var(--text-light)" />
-            <circle cx="18" cy="16" r="3" stroke="var(--text-light)" />
-          </svg>
-        )}
-      </button>
+      {/* Control Button — hidden until the cover is opened. The iframe
+          container above must stay mounted either way, or the YouTube player
+          is destroyed when playTrigger flips. */}
+      {playTrigger && (
+        <button
+          onClick={togglePlay}
+          className={`music-player-btn ${isPlaying ? "music-playing" : ""}`}
+          title={isPlaying ? "Mute Music" : "Play Music"}
+        >
+          {isPlaying ? (
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--secondary-olive)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M9 18V5l12-2v13" />
+              <circle cx="6" cy="18" r="3" />
+              <circle cx="18" cy="16" r="3" />
+            </svg>
+          ) : (
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="var(--text-light)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="1" y1="1" x2="23" y2="23" />
+              <path d="M9 18V5l12-2v13" />
+              <circle cx="6" cy="18" r="3" stroke="var(--text-light)" />
+              <circle cx="18" cy="16" r="3" stroke="var(--text-light)" />
+            </svg>
+          )}
+        </button>
+      )}
     </>
   );
 }
