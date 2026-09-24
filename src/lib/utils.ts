@@ -10,6 +10,14 @@ export function slugify(text: string): string {
     .replace(/-+$/, ""); // Trim - from end of text
 }
 
+// 4 random base36 chars (~1.7M combos) appended to guest slugs so links can't
+// be guessed from a guest's name.
+export function randomSuffix(): string {
+  const alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
+  const bytes = crypto.getRandomValues(new Uint8Array(4));
+  return Array.from(bytes, (b) => alphabet[b % alphabet.length]).join("");
+}
+
 export function buildWhatsappMessage(
   guestName: string,
   guestSlug: string,

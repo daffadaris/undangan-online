@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import "@/styles/admin.css";
+import { parseDeviceIds } from "@/lib/privacy";
 
 interface Guest {
   id: string;
@@ -15,6 +16,8 @@ interface Guest {
   openedAt: string | null;
   lastOpenedAt: string | null;
   openCount: number;
+  deviceIds: string; // JSON array (Mode Privat)
+  maxDevices: number;
   owner?: { username: string };
 }
 
@@ -50,6 +53,7 @@ export default function AdminGuestsPage() {
   const [editGroup, setEditGroup] = useState("");
   const [editRsvp, setEditRsvp] = useState("");
   const [editPax, setEditPax] = useState(1);
+  const [editMaxDevices, setEditMaxDevices] = useState(2);
 
   // CSV Import state
   const [csvRows, setCsvRows] = useState<CSVRow[]>([]);
@@ -61,6 +65,7 @@ export default function AdminGuestsPage() {
   // Origin for links
   const [origin, setOrigin] = useState("");
   const [weddingConfig, setWeddingConfig] = useState<any>(null);
+  const privateMode = weddingConfig?.privateMode === true;
   const [whatsappTemplate, setWhatsappTemplate] = useState("");
 
   // Super admin: user filter
@@ -151,6 +156,7 @@ export default function AdminGuestsPage() {
           group: editGroup,
           rsvpStatus: editRsvp,
           numberOfGuests: editPax,
+          maxDevices: editMaxDevices,
         }),
       });
 
@@ -170,6 +176,24 @@ export default function AdminGuestsPage() {
     try {
       const res = await fetch(`/api/guests/${id}`, {
         method: "DELETE",
+      });
+
+      if (res.ok) {
+        fetchGuests();
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleResetDevices = async (guest: Guest) => {
+    if (!confirm(`Reset perangkat untuk ${guest.name}? Link ini bisa dibuka lagi di perangkat baru.`)) return;
+
+    try {
+      const res = await fetch(`/api/guests/${guest.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resetDevices: true }),
       });
 
       if (res.ok) {
@@ -270,6 +294,7 @@ Terima kasih.`;
     setEditGroup(guest.group || "");
     setEditRsvp(guest.rsvpStatus);
     setEditPax(guest.numberOfGuests >= 1 ? guest.numberOfGuests : 1);
+    setEditMaxDevices(guest.maxDevices >= 1 ? guest.maxDevices : 2);
     setShowEditModal(true);
   };
 
@@ -563,6 +588,7 @@ Terima kasih.`;
                   <th>Dibuka Pertama</th>
                   <th>Dibuka Terakhir</th>
                   <th>Jumlah Buka</th>
+                  {privateMode && <th>Perangkat</th>}
                   <th>Aksi</th>
                 </tr>
               </thead>
@@ -606,6 +632,22 @@ Terima kasih.`;
                         <span style={{ color: "var(--text-muted, #999)" }}>Belum</span>
                       )}
                     </td>
+                    {privateMode && (
+                      <td className="device-cell">
+                        {(() => {
+                          const used = parseDeviceIds(guest.deviceIds).length;
+                          const full = used >= guest.maxDevices;
+                          return (
+                            <span
+                              className={`badge ${full ? "badge-declined" : used > 0 ? "badge-confirmed" : "badge-pending"}`}
+                              title={full ? "Link sudah terkunci ke perangkat maksimal" : undefined}
+                            >
+                              {used}/{guest.maxDevices}
+                            </span>
+                          );
+                        })()}
+                      </td>
+                    )}
                     <td>
                       <div className="table-actions">
                         {guest.phone && (guest.owner?.username || currentUser?.username) && (
@@ -624,6 +666,11 @@ Terima kasih.`;
                             <button className="action-btn" title="Edit Tamu" onClick={() => openEditModal(guest)}>
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
                             </button>
+                            {privateMode && parseDeviceIds(guest.deviceIds).length > 0 && (
+                              <button className="action-btn" title="Reset Perangkat" onClick={() => handleResetDevices(guest)}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>
+                              </button>
+                            )}
                             <button className="action-btn" title="Hapus Tamu" style={{ color: "#EF4444" }} onClick={() => handleDeleteGuest(guest.id)}>
                               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
                             </button>
@@ -760,6 +807,20 @@ Terima kasih.`;
                       <option value="5">5 Orang</option>
                     </select>
                   </div>
+                </div>
+              )}
+
+              {privateMode && (
+                <div className="admin-input-group">
+                  <label className="admin-input-label">Maks. Perangkat (Mode Privat)</label>
+                  <input
+                    type="number"
+                    className="admin-input"
+                    min={1}
+                    max={10}
+                    value={editMaxDevices}
+                    onChange={(e) => setEditMaxDevices(Number(e.target.value))}
+                  />
                 </div>
               )}
 

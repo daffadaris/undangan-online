@@ -36,7 +36,9 @@ page.tsx (server)
 - Section toggles are checked as `config?.showX !== false`, so a missing config still renders
   everything.
 - Music autoplay is triggered by the same `isOpened` flag — the user gesture on "Buka Undangan" is
-  what satisfies browser autoplay policy.
+  what satisfies browser autoplay policy. In Mode Privat's `locked` state the reveal waits for the
+  claim + refresh round-trip, so on a very slow connection the gesture can expire and the guest has
+  to tap the music button.
 
 ## Components
 
@@ -55,6 +57,29 @@ page.tsx (server)
 | [MusicPlayer](../src/components/invitation/MusicPlayer.tsx) | Background audio with play/pause control |
 | [FloralDecor](../src/components/invitation/FloralDecor.tsx) | 452 lines of inline SVG ornaments: `FloralHeaderDecor`, `FloralSwirl`, `GoldSeparator`, `FloatingPetals`, `SectionCorners`, `SideLeafDecor{Left,Right}` |
 | [ScrollReveal](../src/components/invitation/ScrollReveal.tsx) | IntersectionObserver reveal wrapper |
+
+## Mode Privat
+
+Opt-in per wedding (`WeddingConfig.privateMode`). It stops a guest's link from being passed
+around by letting it open on only `Guest.maxDevices` browsers (default 2, since WhatsApp's in-app
+browser and Chrome keep separate cookies and so count as two devices for one real guest).
+
+1. [src/proxy.ts](../src/proxy.ts) gives every browser hitting `/{username}/{slug}` a random,
+   httpOnly `inv_dev` cookie (1 year). Nothing else about the device is stored.
+2. [page.tsx](../src/app/[username]/[slug]/page.tsx) calls `deviceAccess()` from
+   [src/lib/privacy.ts](../src/lib/privacy.ts) and passes `access` to `OpeningCoverClient`:
+   - `open` — browser already claimed the link (or Mode Privat is off): rendered as normal.
+   - `locked` — a slot is free but this browser hasn't claimed it: **only the cover** is sent
+     (nicknames + music URL). No sections, no full config, so nothing to scrape.
+   - `blocked` — all slots are taken by other browsers: the cover shows
+     "Undangan Bersifat Pribadi" instead of the button.
+3. In `locked`, "Buka Undangan" awaits `POST /api/guests/open`, which claims the slot, then calls
+   `router.refresh()`; the content reveals once the server re-renders with `access="open"`.
+   A 403 flips the cover to the blocked notice.
+4. `/api/rsvp` refuses browsers that aren't in the guest's `deviceIds`.
+
+Owners manage slots from `/admin/guests` ("Perangkat" column, "Reset Perangkat", "Maks.
+Perangkat"). The client only ever receives `{ id, name }` for the guest, never `deviceIds`.
 
 ## RSVP flow
 

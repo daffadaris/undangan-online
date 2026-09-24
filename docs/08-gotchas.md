@@ -58,6 +58,15 @@ not curl, an extension, or devtools.
 - `POST /api/upload` has **no auth check** — any caller can push 5 MB through the base64 encoder.
 - `POST /api/rsvp` is public by design (guests aren't logged in), but it takes a raw `guestId` with
   no owner check, so a known/guessed id lets anyone overwrite that guest's RSVP and wish.
+  **Partially fixed**: with Mode Privat on, only browsers that claimed the link may RSVP.
+
+## Mode Privat traps
+
+- **One guest, two "devices".** WhatsApp/Instagram in-app browsers keep their own cookie jar, so a
+  guest who opens the link in WhatsApp and later in Chrome uses 2 slots. That's why
+  `maxDevices` defaults to 2 — use "Reset Perangkat" when a guest gets locked out.
+- Clearing cookies or using incognito also counts as a new device.
+- It's a deterrent, not DRM: someone with a claimed browser can still screenshot the invitation.
 
 ## Data & schema traps
 
@@ -85,6 +94,5 @@ not curl, an extension, or devtools.
 
 ## Cosmetic
 
-- `redirect` is imported but unused in [[username]/[slug]/page.tsx](../src/app/[username]/[slug]/page.tsx#L2).
 - `package.json` still carries the scaffold name `"temp-app"`.
 - `ADMIN_PASSWORD` remains in `.env` but nothing reads it since the move to per-user bcrypt auth.

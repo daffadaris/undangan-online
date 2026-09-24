@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { slugify } from "@/lib/utils";
+import { slugify, randomSuffix } from "@/lib/utils";
 import { getCurrentUser } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -54,7 +54,8 @@ export async function POST(request: Request) {
 
     const targetUserId = user.userId;
 
-    let baseSlug = slugify(name) || "tamu";
+    // Random suffix keeps links unguessable (/owner/budi-x7k2, not /owner/budi).
+    const baseSlug = `${slugify(name) || "tamu"}-${randomSuffix()}`;
     let slug = baseSlug;
     let counter = 1;
 

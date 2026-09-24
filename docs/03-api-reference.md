@@ -20,7 +20,7 @@ All handlers live under [src/app/api](../src/app/api). Conventions:
 | Method | Auth | Behaviour |
 |---|---|---|
 | `GET` | any logged-in | Lists guests ordered by `createdAt desc`, `include: { owner: { username } }`. Owners are forced to their own `userId`; super admin may pass `?userId=` |
-| `POST` | any logged-in | Body `{ name, phone?, group?, userId? }`. Generates a unique slug via `slugify` + counter. `userId` is honoured only for super admin, otherwise the session's user |
+| `POST` | any logged-in | Body `{ name, phone?, group?, userId? }`. Generates a unique slug via `slugify(name)-randomSuffix()` + counter. `userId` is honoured only for super admin, otherwise the session's user |
 
 `numberOfGuests` is **not** accepted at creation — new guests always start at the schema default 1,
 `rsvpStatus` `pending`.
@@ -29,7 +29,7 @@ All handlers live under [src/app/api](../src/app/api). Conventions:
 
 | Method | Auth | Behaviour |
 |---|---|---|
-| `PUT` | owner of the row, or super admin | Body `{ name, phone, group, rsvpStatus, numberOfGuests, wishes }`, all optional — omitted keys keep their stored value. Writes `numberOfGuests: status === "confirmed" ? clamp(pax, 1, 5) : 0`. Empty strings are normalised to `null` |
+| `PUT` | owner of the row, or super admin | Body `{ name, phone, group, rsvpStatus, numberOfGuests, wishes, maxDevices, resetDevices }`, all optional — omitted keys keep their stored value. Writes `numberOfGuests: status === "confirmed" ? clamp(pax, 1, 5) : 0` and `maxDevices: clamp(n, 1, 10)`. `resetDevices: true` empties `deviceIds` ("Reset Perangkat"). Empty strings are normalised to `null` |
 | `DELETE` | owner of the row, or super admin | Hard delete |
 
 ## `/api/guests/import`
@@ -44,9 +44,22 @@ Slug generation is the same unique-suffix loop as single creation.
 `POST`, **public — no authentication, no ownership check**. Body
 `{ guestId, rsvpStatus, numberOfGuests, wishes }`.
 
-- Requires `guestId`; anyone who knows a guest id can overwrite that guest's RSVP.
+- Requires `guestId`; anyone who knows a guest id can overwrite that guest's RSVP — **unless** the
+  owner has Mode Privat on, in which case the request's `inv_dev` cookie must be in the guest's
+  `deviceIds` or it gets `403 { reason: "device_limit" }`.
 - `wishes !== undefined` also stamps `wishSentAt = new Date()`.
 - Pax is zeroed unless `rsvpStatus === "confirmed"`.
+
+## `/api/guests/open`
+
+`POST`, public. Body `{ guestId }`. Called when the guest clicks "Buka Undangan" (never on page
+load, so link-preview crawlers don't count). Bumps `openCount`, sets `lastOpenedAt`, and sets
+`openedAt` on the first open.
+
+With Mode Privat on it first checks the `inv_dev` cookie: a browser already in `deviceIds` passes;
+a new one is appended while `deviceIds.length < maxDevices`; otherwise it returns
+`403 { reason: "device_limit" }` without counting the open (`reason: "no_device"` when the cookie is
+missing).
 
 ## `/api/wishes`
 

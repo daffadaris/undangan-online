@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import { DEVICE_COOKIE, deviceAccess } from "@/lib/privacy";
 
 export async function POST(request: Request) {
   try {
@@ -8,6 +10,25 @@ export async function POST(request: Request) {
 
     if (!guestId) {
       return NextResponse.json({ error: "Missing guest ID" }, { status: 400 });
+    }
+
+    // Mode Privat: only browsers that claimed this guest's link may RSVP for it.
+    const guest = await prisma.guest.findUnique({
+      where: { id: guestId },
+      select: {
+        deviceIds: true,
+        maxDevices: true,
+        owner: { select: { weddingConfig: { select: { privateMode: true } } } },
+      },
+    });
+    if (!guest) {
+      return NextResponse.json({ error: "Guest not found" }, { status: 404 });
+    }
+    if (guest.owner?.weddingConfig?.privateMode) {
+      const deviceId = (await cookies()).get(DEVICE_COOKIE)?.value;
+      if (deviceAccess(guest, deviceId) !== "registered") {
+        return NextResponse.json({ error: "Device not allowed", reason: "device_limit" }, { status: 403 });
+      }
     }
 
     // Confirmed guests are always 1-5 pax; anything else (missing, 0, out of range)

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import OpeningCover from "@/components/invitation/OpeningCover";
 import MusicPlayer from "@/components/invitation/MusicPlayer";
 import RsvpFloatingButton from "@/components/invitation/RsvpFloatingButton";
@@ -17,21 +18,26 @@ import ScrollReveal from "@/components/invitation/ScrollReveal";
 import GallerySection from "@/components/invitation/GallerySection";
 import DressCodeSection from "@/components/invitation/DressCodeSection";
 
+// "open": content is rendered. "locked": Mode Privat, this browser hasn't
+// claimed the link yet — only the cover is sent. "blocked": every slot for
+// this link is taken by other browsers.
+export type InvitationAccess = "open" | "locked" | "blocked";
+
 interface OpeningCoverClientProps {
-  ownerId: string;
-  guest: any;
+  access: InvitationAccess;
+  guest: { id: string; name: string };
   config: any;
-  heroSection: React.ReactNode;
-  coupleSection: React.ReactNode;
-  countdownSection: React.ReactNode;
-  eventDetailsSection: React.ReactNode;
-  loveStorySection: React.ReactNode;
-  giftInfoSection: React.ReactNode;
-  rsvpFormSection: React.ReactNode;
+  heroSection?: React.ReactNode;
+  coupleSection?: React.ReactNode;
+  countdownSection?: React.ReactNode;
+  eventDetailsSection?: React.ReactNode;
+  loveStorySection?: React.ReactNode;
+  giftInfoSection?: React.ReactNode;
+  rsvpFormSection?: React.ReactNode;
 }
 
 export default function OpeningCoverClient({
-  ownerId,
+  access,
   guest,
   config,
   heroSection,
@@ -42,7 +48,14 @@ export default function OpeningCoverClient({
   giftInfoSection,
   rsvpFormSection,
 }: OpeningCoverClientProps) {
-  const [isOpened, setIsOpened] = useState(false);
+  const router = useRouter();
+  const [clickedOpen, setClickedOpen] = useState(false);
+  const [isClaiming, setIsClaiming] = useState(false);
+  const [claimBlocked, setClaimBlocked] = useState(false);
+  const blocked = access === "blocked" || claimBlocked;
+  // After a successful claim the server re-renders with access "open"; reveal
+  // only once the content has actually arrived.
+  const isOpened = clickedOpen && access === "open";
 
   React.useEffect(() => {
     if (!isOpened) {
@@ -55,8 +68,27 @@ export default function OpeningCoverClient({
     };
   }, [isOpened]);
 
-  const handleOpen = () => {
-    setIsOpened(true);
+  const handleOpen = async () => {
+    if (access === "locked") {
+      setIsClaiming(true);
+      try {
+        const res = await fetch("/api/guests/open", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ guestId: guest.id }),
+        });
+        if (res.ok) {
+          setClickedOpen(true);
+          router.refresh();
+          return;
+        }
+        if (res.status === 403) setClaimBlocked(true);
+      } catch {}
+      setIsClaiming(false);
+      return;
+    }
+
+    setClickedOpen(true);
     // Mark opened only on a real guest click — fire-and-forget so a slow or
     // failed request never blocks the reveal animation.
     fetch("/api/guests/open", {
@@ -73,6 +105,7 @@ export default function OpeningCoverClient({
         isOpened={isOpened}
         onOpen={handleOpen}
         config={config}
+        status={blocked ? "blocked" : isClaiming && !isOpened ? "opening" : "idle"}
       />
 
       {isOpened && (

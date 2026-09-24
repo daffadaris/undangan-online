@@ -983,6 +983,17 @@ input[type="date"].admin-input:hover::-webkit-calendar-picker-indicator {
   margin-bottom: 12px;
 }
 
+.admin-card-hint {
+  font-size: 0.85rem;
+  color: var(--admin-text-sub);
+  margin-bottom: 15px;
+}
+
+.device-cell {
+  text-align: center;
+  white-space: nowrap;
+}
+
 .design-preview-hint {
   font-size: 0.8rem;
   color: var(--admin-text-sub);

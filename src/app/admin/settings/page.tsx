@@ -268,6 +268,7 @@ export default function AdminSettingsPage() {
   const [showAkad, setShowAkad] = useState(true);
   const [showResepsi, setShowResepsi] = useState(true);
   const [showDressCode, setShowDressCode] = useState(true);
+  const [privateMode, setPrivateMode] = useState(false);
   const [whatsappTemplate, setWhatsappTemplate] = useState("");
 
   // QRIS & Dress Code
@@ -329,6 +330,7 @@ export default function AdminSettingsPage() {
             setShowAkad(config.showAkad !== false);
             setShowResepsi(config.showResepsi !== false);
             setShowDressCode(config.showDressCode !== false);
+            setPrivateMode(config.privateMode === true);
             setWhatsappTemplate(config.whatsappTemplate || "");
             setGroomImagePosition(config.groomImagePosition || "center");
             setBrideImagePosition(config.brideImagePosition || "center");
@@ -491,6 +493,7 @@ export default function AdminSettingsPage() {
           showAkad,
           showResepsi,
           showDressCode,
+          privateMode,
           whatsappTemplate,
           groomImagePosition,
           brideImagePosition,
@@ -1541,6 +1544,25 @@ export default function AdminSettingsPage() {
               Tampilkan Panduan Dress Code
             </label>
           </div>
+        </div>
+
+        {/* Mode Privat */}
+        <div className="admin-card">
+          <h2 className="card-title">Mode Privat</h2>
+          <p className="admin-card-hint">
+            Setiap link hanya bisa dibuka di perangkat terbatas (default 2 per tamu), sehingga link yang
+            disebar ke orang lain tidak bisa dibuka. Batas dan reset perangkat diatur per tamu di menu Tamu.
+          </p>
+          <label className="admin-toggle">
+            <input
+              type="checkbox"
+              id="toggle-private-mode"
+              checked={privateMode}
+              onChange={(e) => setPrivateMode(e.target.checked)}
+            />
+            <span className="admin-toggle-track"></span>
+            Aktifkan Mode Privat
+          </label>
         </div>
 
         {/* Pengaturan Dress Code */}

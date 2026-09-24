@@ -32,6 +32,8 @@ model Guest {
   openedAt       DateTime?     // first time the guest opened the invitation
   lastOpenedAt   DateTime?     // most recent open
   openCount      Int           @default(0) // total number of opens
+  deviceIds      String        @default("[]") // JSON array of browser ids allowed to open this link (Mode Privat)
+  maxDevices     Int           @default(2) // how many browsers may claim this link in Mode Privat
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   userId         String?
@@ -84,6 +86,7 @@ model WeddingConfig {
   dressCodeTitle     String    @default("Panduan Busana / Dress Code")
   dressCodeDescription String  @default("Baju Kurung / Batik / Busana Formal")
   dressCodeColors    String    @default("[\"#A8BBA0\", \"#FFF8DC\", \"#C9A96E\", \"#2F362E\"]") // JSON array
+  privateMode        Boolean   @default(false) // limit each guest link to Guest.maxDevices browsers
   userId         String?   @unique
   owner          User?     @relation(fields: [userId], references: [id])
 }

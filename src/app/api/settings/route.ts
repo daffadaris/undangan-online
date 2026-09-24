@@ -81,6 +81,7 @@ export async function PUT(request: Request) {
       dressCodeTitle: body.dressCodeTitle,
       dressCodeDescription: body.dressCodeDescription,
       dressCodeColors: body.dressCodeColors,
+      privateMode: body.privateMode,
     };
 
     const config = await prisma.weddingConfig.upsert({

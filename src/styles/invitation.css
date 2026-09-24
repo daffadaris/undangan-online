@@ -778,6 +778,35 @@
   font-style: italic;
 }
 
+/* Mode Privat: shown instead of "Buka Undangan" when the link is in use on other devices */
+.cover-private-notice {
+  max-width: 420px;
+  width: 100%;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--accent-gold);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+}
+
+.cover-private-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.1rem, 4vw, 1.35rem);
+  color: var(--secondary-olive);
+  margin-bottom: var(--space-xs);
+}
+
+.cover-private-text {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+.cover-inner .btn-primary:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
 /* Sections General */
 .invitation-section {
   position: relative;

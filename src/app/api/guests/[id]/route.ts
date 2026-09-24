@@ -17,7 +17,7 @@ export async function PUT(
 
     const { id } = await params;
     const body = await request.json();
-    const { name, phone, group, rsvpStatus, numberOfGuests, wishes } = body;
+    const { name, phone, group, rsvpStatus, numberOfGuests, wishes, maxDevices, resetDevices } = body;
 
     // Verify ownership
     const existing = await prisma.guest.findUnique({ where: { id } });
@@ -33,6 +33,8 @@ export async function PUT(
     const nextStatus = rsvpStatus === undefined ? existing.rsvpStatus : rsvpStatus;
     const requestedPax = numberOfGuests === undefined ? existing.numberOfGuests : numberOfGuests;
     const pax = Math.min(5, Math.max(1, Math.round(Number(requestedPax)) || 1));
+    const requestedDevices = maxDevices === undefined ? existing.maxDevices : maxDevices;
+    const deviceLimit = Math.min(10, Math.max(1, Math.round(Number(requestedDevices)) || 2));
 
     const guest = await prisma.guest.update({
       where: { id },
@@ -43,6 +45,9 @@ export async function PUT(
         rsvpStatus: nextStatus,
         numberOfGuests: nextStatus === "confirmed" ? pax : 0,
         wishes: wishes === undefined ? existing.wishes : wishes || null,
+        maxDevices: deviceLimit,
+        // "Reset Perangkat": forget every browser that claimed this link (Mode Privat).
+        ...(resetDevices === true ? { deviceIds: "[]" } : {}),
       },
     });
 

@@ -12,11 +12,10 @@ function getPrismaInstance(): PrismaClient {
       authToken: process.env.TURSO_AUTH_TOKEN,
     });
   } else {
-    const Database = require("better-sqlite3");
     const { PrismaBetterSqlite3 } = require("@prisma/adapter-better-sqlite3");
     const dbPath = (process.env.DATABASE_URL || "file:./dev.db").replace(/^file:/, "");
-    const db = new Database(dbPath);
-    adapter = new PrismaBetterSqlite3(db);
+    // Prisma 7's adapter takes a { url } config, not a better-sqlite3 instance.
+    adapter = new PrismaBetterSqlite3({ url: dbPath });
   }
 
   return new PrismaClient({ adapter });
