@@ -57,6 +57,9 @@ export default function OpeningCoverClient({
   // After a successful claim the server re-renders with access "open"; reveal
   // only once the content has actually arrived.
   const isOpened = clickedOpen && access === "open";
+  // "locked"/"blocked" only happen in Mode Privat (and get a trimmed config),
+  // so guard those too — the cover as well as the opened invitation.
+  const guarded = access !== "open" || config?.privateMode === true;
 
   React.useEffect(() => {
     if (!isOpened) {
@@ -200,10 +203,10 @@ export default function OpeningCoverClient({
           </ScrollReveal>
 
           <RsvpFloatingButton visible={config?.showRsvp !== false} />
-          {config?.privateMode && <ScreenshotGuard />}
         </div>
       )}
 
+      {guarded && <ScreenshotGuard />}
       <MusicPlayer playTrigger={isOpened} musicUrl={config?.musicUrl} />
     </>
   );

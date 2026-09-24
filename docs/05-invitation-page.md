@@ -77,7 +77,7 @@ browser and Chrome keep separate cookies and so count as two devices for one rea
    `router.refresh()`; the content reveals once the server re-renders with `access="open"`.
    A 403 flips the cover to the blocked notice.
 4. `/api/rsvp` refuses browsers that aren't in the guest's `deviceIds`.
-5. Once opened, [ScreenshotGuard](../src/components/invitation/ScreenshotGuard.tsx) adds
+5. On the cover and the opened invitation alike, [ScreenshotGuard](../src/components/invitation/ScreenshotGuard.tsx) adds
    screenshot *deterrents* (web pages can't truly block OS screenshots): on desktop only, a cover
    screen when the window loses focus or a PrintScreen / Cmd+Shift+3/4/5 / Win+Shift+S / print
    shortcut fires; on every device, no text selection, image long-press/right-click/drag, or
