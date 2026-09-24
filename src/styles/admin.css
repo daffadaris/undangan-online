@@ -526,8 +526,9 @@ input[type="date"].admin-input:hover::-webkit-calendar-picker-indicator {
   background: none;
   border: 1px solid var(--admin-border);
   border-radius: var(--radius-sm);
-  width: 32px;
-  height: 32px;
+  /* Mobile first: touch-sized by default, compact on desktop */
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -539,6 +540,13 @@ input[type="date"].admin-input:hover::-webkit-calendar-picker-indicator {
 .action-btn:hover {
   background-color: var(--admin-bg);
   color: var(--admin-primary);
+}
+
+@media (min-width: 769px) {
+  .action-btn {
+    width: 32px;
+    height: 32px;
+  }
 }
 
 /* Settings Form Sections */

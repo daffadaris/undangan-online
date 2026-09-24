@@ -200,7 +200,7 @@ export default function OpeningCoverClient({
           </ScrollReveal>
 
           <RsvpFloatingButton visible={config?.showRsvp !== false} />
-          {config?.privateMode && <ScreenshotGuard guestName={guest.name} />}
+          {config?.privateMode && <ScreenshotGuard />}
         </div>
       )}
 

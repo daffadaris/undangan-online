@@ -815,6 +815,7 @@ Terima kasih.`;
                   <label className="admin-input-label">Maks. Perangkat (Mode Privat)</label>
                   <input
                     type="number"
+                    inputMode="numeric"
                     className="admin-input"
                     min={1}
                     max={10}

@@ -824,14 +824,6 @@
   user-select: text;
 }
 
-.ss-watermark {
-  position: fixed;
-  inset: 0;
-  z-index: 95;
-  pointer-events: none;
-  background-repeat: repeat;
-}
-
 .ss-shield {
   position: fixed;
   inset: 0;
@@ -841,9 +833,11 @@
   align-items: center;
   justify-content: center;
   gap: var(--space-xs);
+  padding: env(safe-area-inset-top) var(--space-lg) env(safe-area-inset-bottom);
   background: var(--bg-cream-light);
   text-align: center;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .ss-shield-title {
