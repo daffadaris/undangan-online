@@ -61,7 +61,23 @@ To develop against local SQLite instead of production, comment out `TURSO_DATABA
 `POST /api/upload` returns a **base64 data URL** (≤ 5 MB) that is stored directly in
 `WeddingConfig`. Nothing is written to `public/uploads` any more — that directory and
 `/api/upload/[filename]` only serve pre-existing files, and neither works on a serverless host.
-Large images therefore inflate every config read; keep uploads small.
+
+Keeping images small and off the page:
+
+- **Compressed on upload** — the settings page runs every photo through
+  [compressImage](../src/lib/compressImage.ts) in the browser first: long edge ≤ 1600 px (hero,
+  gallery) / 1200 px (portraits), WebP q0.8 (JPEG where the browser can't encode WebP), and only if
+  smaller. **QRIS is uploaded untouched** — lossy re-encoding can make a QR unscannable.
+- **Served, not inlined** — the invitation page passes the config through `withMediaUrls()`
+  ([src/lib/media.ts](../src/lib/media.ts)), which swaps each data URL for
+  `/api/media/{userId}/{field|gallery-N}?v={sha1}`. That route decodes and serves the bytes with
+  `Cache-Control: …, max-age=31536000, immutable` (the hash changes when the image does). Inlining
+  made a 5-photo invitation ~2.7 MB of HTML (images sent twice, never cached); now it is ~60 KB and
+  gallery photos really lazy-load. With Mode Privat on, the route only serves browsers that claimed
+  one of the owner's guest links, and uses `private` caching. SVGs are served with a sandboxing CSP.
+- **Existing images** — `node scripts/compress-images.js` (dry run) / `--apply` recompresses what is
+  already stored the same way (sharp), skipping QRIS and anything that wouldn't shrink. It writes the
+  originals to `image-backup-<timestamp>.json` (gitignored — real photos) *before* updating.
 
 ## Deploy notes
 

@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import "@/styles/admin.css";
+import { compressImage } from "@/lib/compressImage";
 import { useAdminTheme } from "../layout";
 
 interface LoveStoryItem {
@@ -387,7 +388,10 @@ export default function AdminSettingsPage() {
 
     setUploadingField(fieldName);
     const formData = new FormData();
-    formData.append("file", file);
+    // QRIS stays byte-exact: lossy re-encoding can make a QR unscannable.
+    const upload =
+      fieldName === "qris" ? file : await compressImage(file, { maxEdge: fieldName === "hero" ? 1600 : 1200 });
+    formData.append("file", upload);
 
     try {
       const res = await fetch("/api/upload", {
@@ -419,7 +423,7 @@ export default function AdminSettingsPage() {
 
     setUploadingField("gallery");
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", await compressImage(file, { maxEdge: 1600 }));
 
     try {
       const res = await fetch("/api/upload", {

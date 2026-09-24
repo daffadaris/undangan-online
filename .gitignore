@@ -51,3 +51,6 @@ next-env.d.ts
 
 # DB backups (contain guest PII)
 turso-backup.json
+
+# originals saved by scripts/compress-images.js (contain real photos)
+image-backup-*.json

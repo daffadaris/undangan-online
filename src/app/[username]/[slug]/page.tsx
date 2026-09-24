@@ -11,6 +11,7 @@ import LoveStory from "@/components/invitation/LoveStory";
 import GiftInfo from "@/components/invitation/GiftInfo";
 import RsvpForm from "@/components/invitation/RsvpForm";
 import { DEVICE_COOKIE, deviceAccess } from "@/lib/privacy";
+import { withMediaUrls } from "@/lib/media";
 import "@/styles/invitation.css";
 
 export const dynamic = "force-dynamic";
@@ -58,10 +59,12 @@ export default async function InvitationPage({ params }: InvitationPageProps) {
   // Undangan" (see OpeningCoverClient), NOT on page load — otherwise
   // link-preview crawlers and test loads would falsely mark it opened.
 
-  // 3. Fetch wedding config for this owner
-  const config = await prisma.weddingConfig.findUnique({
+  // 3. Fetch wedding config for this owner. Images are swapped for cacheable
+  // /api/media URLs instead of being inlined as base64 (see src/lib/media.ts).
+  const storedConfig = await prisma.weddingConfig.findUnique({
     where: { userId: owner.id },
   });
+  const config = storedConfig ? withMediaUrls(storedConfig, owner.id) : null;
 
   // Mode Privat: a browser that hasn't claimed this guest's link only gets the
   // cover — none of the invitation content (venue, gifts, QRIS…) is sent until

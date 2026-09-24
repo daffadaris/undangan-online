@@ -29,6 +29,8 @@ page.tsx (server)
         RsvpFloatingButton + MusicPlayer
 ```
 
+- Images reach the components as `/api/media/…` URLs, not base64 — `page.tsx` runs the config
+  through `withMediaUrls()`; see [07-operations.md](07-operations.md#media-handling).
 - While `isOpened` is false the wrapper sets `document.body.style.overflow = "hidden"` so the cover
   cannot be scrolled past; the effect cleans up on unmount.
 - Every section is wrapped in `<ScrollReveal animation="…">` (`fade-up`, `fade-left`, `fade-right`,

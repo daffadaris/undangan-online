@@ -40,6 +40,7 @@ export default function GallerySection({ config }: GallerySectionProps) {
               alt={`Wedding Gallery ${index + 1}`}
               className="gallery-image"
               loading="lazy"
+              decoding="async"
             />
           </div>
         ))}
