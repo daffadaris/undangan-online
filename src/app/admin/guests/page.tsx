@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import "@/styles/admin.css";
-import { parseDeviceIds } from "@/lib/privacy";
+import { parseDeviceIds, DEFAULT_MAX_DEVICES } from "@/lib/privacy";
 
 interface Guest {
   id: string;
@@ -55,7 +55,7 @@ export default function AdminGuestsPage() {
   const [editGroup, setEditGroup] = useState("");
   const [editRsvp, setEditRsvp] = useState("");
   const [editPax, setEditPax] = useState(1);
-  const [editMaxDevices, setEditMaxDevices] = useState(2);
+  const [editMaxDevices, setEditMaxDevices] = useState(DEFAULT_MAX_DEVICES);
 
   // CSV Import state
   const [csvRows, setCsvRows] = useState<CSVRow[]>([]);
@@ -297,7 +297,7 @@ Terima kasih.`;
     setEditGroup(guest.group || "");
     setEditRsvp(guest.rsvpStatus);
     setEditPax(guest.numberOfGuests >= 1 ? guest.numberOfGuests : 1);
-    setEditMaxDevices(guest.maxDevices >= 1 ? guest.maxDevices : 2);
+    setEditMaxDevices(guest.maxDevices >= 1 ? guest.maxDevices : DEFAULT_MAX_DEVICES);
     setShowEditModal(true);
   };
 

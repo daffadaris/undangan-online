@@ -63,8 +63,9 @@ not curl, an extension, or devtools.
 ## Mode Privat traps
 
 - **One guest, two "devices".** WhatsApp/Instagram in-app browsers keep their own cookie jar, so a
-  guest who opens the link in WhatsApp and later in Chrome uses 2 slots. That's why
-  `maxDevices` defaults to 2 — use "Reset Perangkat" when a guest gets locked out.
+  guest who opens the link in WhatsApp and later in Chrome uses 2 slots. With the default
+  `maxDevices` of 1 that guest is locked out of the second one — use "Reset Perangkat", or raise
+  "Maks. Perangkat" to 2 for guests likely to switch.
 - Clearing cookies or using incognito also counts as a new device.
 - It's a deterrent, not DRM: someone with a claimed browser can still screenshot the invitation.
 

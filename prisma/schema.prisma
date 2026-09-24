@@ -33,7 +33,7 @@ model Guest {
   lastOpenedAt   DateTime?     // most recent open
   openCount      Int           @default(0) // total number of opens
   deviceIds      String        @default("[]") // JSON array of browser ids allowed to open this link (Mode Privat)
-  maxDevices     Int           @default(2) // how many browsers may claim this link in Mode Privat
+  maxDevices     Int           @default(1) // how many browsers may claim this link in Mode Privat
   checkinCode    String?       @unique // 8-char code in the guest's door QR (Check-in QR)
   checkedInAt    DateTime?     // when the usher scanned the guest in
   checkedInCount Int           @default(0) // pax admitted at check-in

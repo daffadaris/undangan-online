@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { slugify, randomSuffix, newCheckinCode } from "@/lib/utils";
 import { getCurrentUser } from "@/lib/auth";
+import { DEFAULT_MAX_DEVICES } from "@/lib/privacy";
 
 export const dynamic = "force-dynamic";
 
@@ -73,6 +74,7 @@ export async function POST(request: Request) {
         phone: phone || null,
         group: group || null,
         checkinCode: newCheckinCode(),
+        maxDevices: DEFAULT_MAX_DEVICES,
         userId: targetUserId,
       },
     });

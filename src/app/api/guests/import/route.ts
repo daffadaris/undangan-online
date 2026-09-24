@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { slugify, randomSuffix, newCheckinCode } from "@/lib/utils";
 import { getCurrentUser } from "@/lib/auth";
+import { DEFAULT_MAX_DEVICES } from "@/lib/privacy";
 
 export async function POST(request: Request) {
   try {
@@ -55,6 +56,7 @@ export async function POST(request: Request) {
             phone: (guest.phone || "").trim() || null,
             group: (guest.group || "").trim() || null,
             checkinCode: newCheckinCode(),
+            maxDevices: DEFAULT_MAX_DEVICES,
             userId: targetUserId,
           },
         });

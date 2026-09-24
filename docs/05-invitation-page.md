@@ -63,8 +63,9 @@ page.tsx (server)
 ## Mode Privat
 
 Opt-in per wedding (`WeddingConfig.privateMode`). It stops a guest's link from being passed
-around by letting it open on only `Guest.maxDevices` browsers (default 2, since WhatsApp's in-app
-browser and Chrome keep separate cookies and so count as two devices for one real guest).
+around by letting it open on only `Guest.maxDevices` browsers (default 1 — note WhatsApp's in-app
+browser and Chrome keep separate cookies, so one real guest switching between them needs a reset or
+a limit of 2).
 
 1. [src/proxy.ts](../src/proxy.ts) gives every browser hitting `/{username}/{slug}` a random,
    httpOnly `inv_dev` cookie (1 year). Nothing else about the device is stored.

@@ -6,6 +6,10 @@
 
 export const DEVICE_COOKIE = "inv_dev";
 
+// Default slots per guest link. Set explicitly on create: the production
+// column was added with SQL DEFAULT 2, which SQLite can't alter in place.
+export const DEFAULT_MAX_DEVICES = 1;
+
 export type DeviceAccess = "registered" | "available" | "blocked";
 
 export function parseDeviceIds(raw: string | null | undefined): string[] {

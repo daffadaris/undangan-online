@@ -31,7 +31,7 @@ Source of truth: [prisma/schema.prisma](../prisma/schema.prisma). Provider `sqli
 | `wishSentAt` | DateTime? | Set on every RSVP submit that includes a wish |
 | `openedAt` | DateTime? | Set once, on first page view |
 | `deviceIds` | String @default("[]") | JSON array of `inv_dev` browser ids that claimed this link (Mode Privat). Parse with `parseDeviceIds()` from [src/lib/privacy.ts](../src/lib/privacy.ts) |
-| `maxDevices` | Int @default(2) | Mode Privat slot limit for this link, clamped to 1–10 by `PUT /api/guests/[id]` |
+| `maxDevices` | Int @default(1) | Mode Privat slot limit for this link, clamped to 1–10 by `PUT /api/guests/[id]`. Set explicitly to `DEFAULT_MAX_DEVICES` on create — the production column still has SQL `DEFAULT 2` |
 | `checkinCode` | String? @unique | 8 uppercase hex chars (`newCheckinCode()`), set on create; `/api/rsvp` fills it if missing when a guest confirms. Encoded in the door QR |
 | `checkedInAt` | DateTime? | Set when an usher checks the guest in; null = not arrived |
 | `checkedInCount` | Int @default(0) | Pax admitted at check-in (`max(1, numberOfGuests)`) |

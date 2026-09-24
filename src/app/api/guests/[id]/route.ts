@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getCurrentUser } from "@/lib/auth";
+import { DEFAULT_MAX_DEVICES } from "@/lib/privacy";
 
 export async function PUT(
   request: Request,
@@ -34,7 +35,7 @@ export async function PUT(
     const requestedPax = numberOfGuests === undefined ? existing.numberOfGuests : numberOfGuests;
     const pax = Math.min(5, Math.max(1, Math.round(Number(requestedPax)) || 1));
     const requestedDevices = maxDevices === undefined ? existing.maxDevices : maxDevices;
-    const deviceLimit = Math.min(10, Math.max(1, Math.round(Number(requestedDevices)) || 2));
+    const deviceLimit = Math.min(10, Math.max(1, Math.round(Number(requestedDevices)) || DEFAULT_MAX_DEVICES));
 
     const guest = await prisma.guest.update({
       where: { id },

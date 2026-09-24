@@ -1557,7 +1557,7 @@ export default function AdminSettingsPage() {
         <div className="admin-card">
           <h2 className="card-title">Mode Privat</h2>
           <p className="admin-card-hint">
-            Setiap link hanya bisa dibuka di perangkat terbatas (default 2 per tamu), sehingga link yang
+            Setiap link hanya bisa dibuka di perangkat terbatas (default 1 per tamu), sehingga link yang
             disebar ke orang lain tidak bisa dibuka. Batas dan reset perangkat diatur per tamu di menu Tamu.
           </p>
           <label className="admin-toggle">
