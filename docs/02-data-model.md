@@ -32,6 +32,9 @@ Source of truth: [prisma/schema.prisma](../prisma/schema.prisma). Provider `sqli
 | `openedAt` | DateTime? | Set once, on first page view |
 | `deviceIds` | String @default("[]") | JSON array of `inv_dev` browser ids that claimed this link (Mode Privat). Parse with `parseDeviceIds()` from [src/lib/privacy.ts](../src/lib/privacy.ts) |
 | `maxDevices` | Int @default(2) | Mode Privat slot limit for this link, clamped to 1–10 by `PUT /api/guests/[id]` |
+| `checkinCode` | String? @unique | 8 uppercase hex chars (`newCheckinCode()`), set on create; `/api/rsvp` fills it if missing when a guest confirms. Encoded in the door QR |
+| `checkedInAt` | DateTime? | Set when an usher checks the guest in; null = not arrived |
+| `checkedInCount` | Int @default(0) | Pax admitted at check-in (`max(1, numberOfGuests)`) |
 | `createdAt` / `updatedAt` | DateTime | `updatedAt` drives the dashboard "recent RSVP" list |
 | `userId` | String? | Owner FK, indexed. Null = legacy row |
 
@@ -65,7 +68,9 @@ One row per owner (`userId @unique`); upserted by `PUT /api/settings`. Groups of
 - **Section toggles**: `showLoveStory`, `showGiftInfo`, `showRsvp`, `showGallery`, `showAkad`,
   `showResepsi` — all `Boolean @default(true)`; the invitation checks `!== false`
 - **Privacy**: `privateMode` — `Boolean @default(false)`. When on, each guest link only opens on
-  `Guest.maxDevices` browsers (see [05-invitation-page.md](05-invitation-page.md#mode-privat))
+  `Guest.maxDevices` browsers (see [05-invitation-page.md](05-invitation-page.md#mode-privat));
+  `qrCheckin` — `Boolean @default(false)`, shows confirmed guests a one-time door QR
+  (see [05-invitation-page.md](05-invitation-page.md#check-in-qr))
 
 All date/time fields are **strings**, not `DateTime` — they are rendered verbatim, except
 `akadDate`, which `CountdownTimer` parses as the countdown target.
@@ -105,4 +110,6 @@ running migrations. Treat `schema.prisma` as authoritative and the migration fol
 Additive column changes on a database that already holds data go through small `ALTER TABLE … ADD
 COLUMN` scripts that touch both local `dev.db` and Turso and skip columns that already exist —
 e.g. [scripts/add-open-tracking-columns.js](../scripts/add-open-tracking-columns.js) and
-[scripts/add-private-mode-columns.js](../scripts/add-private-mode-columns.js).
+[scripts/add-private-mode-columns.js](../scripts/add-private-mode-columns.js),
+[scripts/add-checkin-columns.js](../scripts/add-checkin-columns.js) (also backfills codes and creates
+the `Guest_checkinCode_key` unique index).

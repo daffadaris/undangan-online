@@ -34,6 +34,9 @@ model Guest {
   openCount      Int           @default(0) // total number of opens
   deviceIds      String        @default("[]") // JSON array of browser ids allowed to open this link (Mode Privat)
   maxDevices     Int           @default(2) // how many browsers may claim this link in Mode Privat
+  checkinCode    String?       @unique // 8-char code in the guest's door QR (Check-in QR)
+  checkedInAt    DateTime?     // when the usher scanned the guest in
+  checkedInCount Int           @default(0) // pax admitted at check-in
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
   userId         String?
@@ -87,6 +90,7 @@ model WeddingConfig {
   dressCodeDescription String  @default("Baju Kurung / Batik / Busana Formal")
   dressCodeColors    String    @default("[\"#A8BBA0\", \"#FFF8DC\", \"#C9A96E\", \"#2F362E\"]") // JSON array
   privateMode        Boolean   @default(false) // limit each guest link to Guest.maxDevices browsers
+  qrCheckin          Boolean   @default(false) // show confirmed guests a one-time door QR
   userId         String?   @unique
   owner          User?     @relation(fields: [userId], references: [id])
 }

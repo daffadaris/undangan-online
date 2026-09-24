@@ -112,6 +112,8 @@ export default async function InvitationPage({ params }: InvitationPageProps) {
               initialNumberOfGuests={guest.numberOfGuests}
               initialWishes={guest.wishes}
               ownerId={owner.id}
+              qrCheckin={config?.qrCheckin === true}
+              initialCheckinCode={guest.checkinCode}
             />
           }
         />

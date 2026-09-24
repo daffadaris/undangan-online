@@ -49,6 +49,7 @@ Slug generation is the same unique-suffix loop as single creation.
   `deviceIds` or it gets `403 { reason: "device_limit" }`.
 - `wishes !== undefined` also stamps `wishSentAt = new Date()`.
 - Pax is zeroed unless `rsvpStatus === "confirmed"`.
+- Returns only `{ rsvpStatus, numberOfGuests, checkinCode }` — never phone or device ids.
 
 ## `/api/guests/open`
 
@@ -60,6 +61,17 @@ With Mode Privat on it first checks the `inv_dev` cookie: a browser already in `
 a new one is appended while `deviceIds.length < maxDevices`; otherwise it returns
 `403 { reason: "device_limit" }` without counting the open (`reason: "no_device"` when the cookie is
 missing).
+
+## `/api/checkin`
+
+Owner only (super admin gets 403); every lookup is scoped to the session's `userId`. Codes are
+matched case-insensitively.
+
+| Method | Behaviour |
+|---|---|
+| `GET` | `{ confirmedGuests, confirmedPax, arrivedGuests, arrivedPax }` for the check-in screen |
+| `POST` | Body `{ code }`. Sets `checkedInAt` + `checkedInCount` once — conditional `updateMany` so two ushers scanning the same QR can't both admit it. `404 not_found`, `409 already` (with the guest and time) |
+| `DELETE` | Body `{ code }`. Undoes a check-in |
 
 ## `/api/wishes`
 

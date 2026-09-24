@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { DEVICE_COOKIE, deviceAccess } from "@/lib/privacy";
+import { newCheckinCode } from "@/lib/utils";
 
 export async function POST(request: Request) {
   try {
@@ -18,6 +19,7 @@ export async function POST(request: Request) {
       select: {
         deviceIds: true,
         maxDevices: true,
+        checkinCode: true,
         owner: { select: { weddingConfig: { select: { privateMode: true } } } },
       },
     });
@@ -45,9 +47,17 @@ export async function POST(request: Request) {
       updateData.wishSentAt = new Date();
     }
 
+    // Guests created outside the app (seed/restore scripts) may lack a door code.
+    if (rsvpStatus === "confirmed" && !guest.checkinCode) {
+      updateData.checkinCode = newCheckinCode();
+    }
+
+    // Public endpoint: return only what the invitation needs — never phone
+    // numbers or Mode Privat device ids.
     const updatedGuest = await prisma.guest.update({
       where: { id: guestId },
       data: updateData,
+      select: { rsvpStatus: true, numberOfGuests: true, checkinCode: true },
     });
 
     return NextResponse.json({ success: true, guest: updatedGuest });

@@ -269,6 +269,7 @@ export default function AdminSettingsPage() {
   const [showResepsi, setShowResepsi] = useState(true);
   const [showDressCode, setShowDressCode] = useState(true);
   const [privateMode, setPrivateMode] = useState(false);
+  const [qrCheckin, setQrCheckin] = useState(false);
   const [whatsappTemplate, setWhatsappTemplate] = useState("");
 
   // QRIS & Dress Code
@@ -331,6 +332,7 @@ export default function AdminSettingsPage() {
             setShowResepsi(config.showResepsi !== false);
             setShowDressCode(config.showDressCode !== false);
             setPrivateMode(config.privateMode === true);
+            setQrCheckin(config.qrCheckin === true);
             setWhatsappTemplate(config.whatsappTemplate || "");
             setGroomImagePosition(config.groomImagePosition || "center");
             setBrideImagePosition(config.brideImagePosition || "center");
@@ -494,6 +496,7 @@ export default function AdminSettingsPage() {
           showResepsi,
           showDressCode,
           privateMode,
+          qrCheckin,
           whatsappTemplate,
           groomImagePosition,
           brideImagePosition,
@@ -1562,6 +1565,25 @@ export default function AdminSettingsPage() {
             />
             <span className="admin-toggle-track"></span>
             Aktifkan Mode Privat
+          </label>
+        </div>
+
+        {/* Check-in QR */}
+        <div className="admin-card">
+          <h2 className="card-title">Check-in QR</h2>
+          <p className="admin-card-hint">
+            Tamu yang mengonfirmasi hadir mendapat QR sekali pakai di undangannya. Penerima tamu memindainya
+            di menu Check-in Tamu — screenshot yang disebar tidak bisa dipakai masuk dua kali.
+          </p>
+          <label className="admin-toggle">
+            <input
+              type="checkbox"
+              id="toggle-qr-checkin"
+              checked={qrCheckin}
+              onChange={(e) => setQrCheckin(e.target.checked)}
+            />
+            <span className="admin-toggle-track"></span>
+            Aktifkan Check-in QR
           </label>
         </div>
 

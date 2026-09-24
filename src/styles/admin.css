@@ -1132,3 +1132,142 @@ input[type="date"].admin-input:hover::-webkit-calendar-picker-indicator {
 }
 
 
+
+/* Check-in page (/admin/checkin) — mobile first: the usher holds a phone */
+.checkin-page {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.checkin-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.checkin-stat {
+  background: var(--admin-card-bg);
+  border: 1px solid var(--admin-border);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+}
+
+.checkin-stat-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--admin-primary);
+}
+
+.checkin-stat-value small {
+  font-size: 1rem;
+  font-weight: normal;
+  color: var(--admin-text-sub);
+}
+
+.checkin-stat-label {
+  font-size: 0.8rem;
+  color: var(--admin-text-sub);
+}
+
+.checkin-scanner {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+}
+
+.checkin-video {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  background: #111;
+}
+
+.checkin-video-off {
+  display: none;
+}
+
+.checkin-big-btn {
+  width: 100%;
+  min-height: 52px;
+  font-size: 1rem;
+}
+
+.checkin-camera-error {
+  font-size: 0.85rem;
+  color: #B91C1C;
+}
+
+.checkin-result {
+  border-radius: var(--radius-md);
+  padding: 24px 16px;
+  text-align: center;
+  border: 2px solid;
+}
+
+.checkin-result-ok {
+  background: #ECFDF5;
+  border-color: #10B981;
+}
+
+.checkin-result-already {
+  background: #FFFBEB;
+  border-color: #F59E0B;
+}
+
+.checkin-result-not_found,
+.checkin-result-error {
+  background: #FEF2F2;
+  border-color: #EF4444;
+}
+
+.checkin-result-status {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--admin-text);
+}
+
+.checkin-result-name {
+  font-size: 1.25rem;
+  margin-top: 8px;
+  color: var(--admin-text);
+}
+
+.checkin-result-meta {
+  font-size: 0.9rem;
+  color: var(--admin-text-sub);
+  margin-top: 4px;
+}
+
+.checkin-result-warn {
+  font-size: 0.85rem;
+  color: #B45309;
+  margin-top: 8px;
+}
+
+.checkin-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.checkin-manual {
+  margin-top: 24px;
+}
+
+.checkin-manual-row {
+  display: flex;
+  gap: 8px;
+}
+
+.checkin-manual-row .admin-input {
+  flex: 1;
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}

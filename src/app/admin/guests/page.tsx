@@ -18,6 +18,8 @@ interface Guest {
   openCount: number;
   deviceIds: string; // JSON array (Mode Privat)
   maxDevices: number;
+  checkedInAt: string | null;
+  checkedInCount: number;
   owner?: { username: string };
 }
 
@@ -66,6 +68,7 @@ export default function AdminGuestsPage() {
   const [origin, setOrigin] = useState("");
   const [weddingConfig, setWeddingConfig] = useState<any>(null);
   const privateMode = weddingConfig?.privateMode === true;
+  const qrCheckin = weddingConfig?.qrCheckin === true;
   const [whatsappTemplate, setWhatsappTemplate] = useState("");
 
   // Super admin: user filter
@@ -588,6 +591,7 @@ Terima kasih.`;
                   <th>Dibuka Pertama</th>
                   <th>Dibuka Terakhir</th>
                   <th>Jumlah Buka</th>
+                  {qrCheckin && <th>Check-in</th>}
                   {privateMode && <th>Perangkat</th>}
                   <th>Aksi</th>
                 </tr>
@@ -632,6 +636,17 @@ Terima kasih.`;
                         <span style={{ color: "var(--text-muted, #999)" }}>Belum</span>
                       )}
                     </td>
+                    {qrCheckin && (
+                      <td className="device-cell">
+                        {guest.checkedInAt ? (
+                          <span className="badge badge-confirmed" title={fmtDateTime(guest.checkedInAt)}>
+                            {guest.checkedInCount} org
+                          </span>
+                        ) : (
+                          "-"
+                        )}
+                      </td>
+                    )}
                     {privateMode && (
                       <td className="device-cell">
                         {(() => {

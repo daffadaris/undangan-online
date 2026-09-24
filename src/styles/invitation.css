@@ -1714,6 +1714,57 @@
   color: #c5221f;
 }
 
+/* Check-in QR door pass (mobile first: fills the phone width, capped on desktop) */
+.checkin-card {
+  margin-top: var(--space-lg);
+  padding: var(--space-lg) var(--space-md);
+  border: 1px dashed var(--primary-sage);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.85);
+  text-align: center;
+}
+
+.checkin-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: var(--secondary-olive);
+}
+
+.checkin-card-hint {
+  font-size: 0.85rem;
+  color: var(--text-light);
+  margin: var(--space-xs) 0 var(--space-md);
+}
+
+.checkin-qr {
+  width: min(100%, 260px);
+  aspect-ratio: 1;
+  margin: 0 auto;
+  padding: 10px;
+  background: #fff; /* QR needs a white quiet zone whatever the theme */
+  border-radius: var(--radius-md);
+}
+
+.checkin-qr img,
+.checkin-qr-placeholder {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.checkin-code {
+  margin-top: var(--space-md);
+  font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  font-size: 1.35rem;
+  letter-spacing: 0.2em;
+  color: var(--secondary-olive);
+}
+
+.checkin-pax {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
 .wishes-wrapper {
   width: 100%;
   max-width: 500px;

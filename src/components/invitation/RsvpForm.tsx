@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { FloralHeaderDecor, SectionCorners } from "./FloralDecor";
+import CheckinQr from "./CheckinQr";
 
 interface Wish {
   id: string;
@@ -19,6 +20,9 @@ interface RsvpFormProps {
   initialNumberOfGuests: number;
   initialWishes: string | null;
   ownerId?: string;
+  // Check-in QR: show the door pass once attendance is confirmed
+  qrCheckin?: boolean;
+  initialCheckinCode?: string | null;
 }
 
 export default function RsvpForm({
@@ -28,6 +32,8 @@ export default function RsvpForm({
   initialNumberOfGuests,
   initialWishes,
   ownerId,
+  qrCheckin = false,
+  initialCheckinCode = null,
 }: RsvpFormProps) {
   const [rsvpStatus, setRsvpStatus] = useState(initialRsvpStatus);
   // A declined/pending guest is stored with 0 pax, which matches no option in the
@@ -36,6 +42,12 @@ export default function RsvpForm({
     initialNumberOfGuests >= 1 ? initialNumberOfGuests : 1
   );
   const [wishes, setWishes] = useState(initialWishes || "");
+  // What the server last saved — the QR follows this, not the unsaved picker.
+  const [saved, setSaved] = useState({
+    rsvpStatus: initialRsvpStatus,
+    numberOfGuests: initialNumberOfGuests,
+    checkinCode: initialCheckinCode,
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState<string | null>(null);
   
@@ -81,6 +93,8 @@ export default function RsvpForm({
       });
 
       if (res.ok) {
+        const data = await res.json();
+        if (data.guest) setSaved(data.guest);
         setSubmitMessage("Konfirmasi berhasil dikirim. Terima kasih!");
         fetchWishes();
       } else {
@@ -175,6 +189,10 @@ export default function RsvpForm({
             <p className={`rsvp-submit-msg ${submitMessage.includes("berhasil") ? "success" : "error"}`}>
               {submitMessage}
             </p>
+          )}
+
+          {qrCheckin && saved.rsvpStatus === "confirmed" && saved.checkinCode && (
+            <CheckinQr code={saved.checkinCode} pax={Math.max(1, saved.numberOfGuests)} />
           )}
         </form>
 

@@ -18,6 +18,13 @@ export function randomSuffix(): string {
   return Array.from(bytes, (b) => alphabet[b % alphabet.length]).join("");
 }
 
+// 8 uppercase hex chars for the door QR — short enough for an usher to type
+// if the camera can't read it. Same format the migration backfills with.
+export function newCheckinCode(): string {
+  const bytes = crypto.getRandomValues(new Uint8Array(4));
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("").toUpperCase();
+}
+
 export function buildWhatsappMessage(
   guestName: string,
   guestSlug: string,

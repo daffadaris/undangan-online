@@ -46,6 +46,14 @@ The workhorse. Features:
   `claimed/maxDevices` (red when full), a "Reset Perangkat" row action that PUTs
   `{ resetDevices: true }`, and a "Maks. Perangkat" field in the edit modal.
 
+### `/admin/checkin` — [checkin/page.tsx](../src/app/admin/checkin/page.tsx) (client, owners only)
+Door check-in for Check-in QR, built for the usher's phone: arrival stats, a camera scanner
+(`getUserMedia` + `jsqr`, so it works on iOS Safari too; needs HTTPS), a green/amber/red result card
+with vibration and "Batalkan check-in", and manual code entry. Opening
+`/admin/checkin?code=…` (what the QR encodes, so a phone's normal camera app works) checks in
+immediately — the usher must already be logged in on that phone. The guests table shows a
+"Check-in" column when `qrCheckin` is on.
+
 ### `/admin/wishes` — [wishes/page.tsx](../src/app/admin/wishes/page.tsx)
 Guestbook viewer over `GET /api/wishes`. "Delete wish" does **not** delete the guest — it sends
 `PUT /api/guests/{id}` with `{ wishes: null }`. That partial payload has damaging side effects;
@@ -54,7 +62,7 @@ see [08-gotchas.md](08-gotchas.md#deleting-a-wish-wipes-phone-group-and-pax).
 ### `/admin/settings` — [settings/page.tsx](../src/app/admin/settings/page.tsx) (1121 lines, client)
 One giant controlled form mirroring every `WeddingConfig` column: couple, akad, resepsi,
 love story repeater, gift accounts repeater, gallery, media uploads with crop-position selectors,
-theme picker, section visibility toggles, the "Mode Privat" toggle (`privateMode`), and the WhatsApp template. `handleSave` PUTs the whole
+theme picker, section visibility toggles, the "Mode Privat" and "Check-in QR" toggles, and the WhatsApp template. `handleSave` PUTs the whole
 object to `/api/settings`. Image inputs go through `POST /api/upload` and store the returned
 base64 data URL in the field.
 

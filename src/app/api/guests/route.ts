@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { slugify, randomSuffix } from "@/lib/utils";
+import { slugify, randomSuffix, newCheckinCode } from "@/lib/utils";
 import { getCurrentUser } from "@/lib/auth";
 
 export const dynamic = "force-dynamic";
@@ -72,6 +72,7 @@ export async function POST(request: Request) {
         slug,
         phone: phone || null,
         group: group || null,
+        checkinCode: newCheckinCode(),
         userId: targetUserId,
       },
     });

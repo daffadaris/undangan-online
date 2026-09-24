@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { slugify, randomSuffix } from "@/lib/utils";
+import { slugify, randomSuffix, newCheckinCode } from "@/lib/utils";
 import { getCurrentUser } from "@/lib/auth";
 
 export async function POST(request: Request) {
@@ -54,6 +54,7 @@ export async function POST(request: Request) {
             slug,
             phone: (guest.phone || "").trim() || null,
             group: (guest.group || "").trim() || null,
+            checkinCode: newCheckinCode(),
             userId: targetUserId,
           },
         });

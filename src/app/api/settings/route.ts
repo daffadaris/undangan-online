@@ -82,6 +82,7 @@ export async function PUT(request: Request) {
       dressCodeDescription: body.dressCodeDescription,
       dressCodeColors: body.dressCodeColors,
       privateMode: body.privateMode,
+      qrCheckin: body.qrCheckin,
     };
 
     const config = await prisma.weddingConfig.upsert({

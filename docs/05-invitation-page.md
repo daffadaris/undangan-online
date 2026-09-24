@@ -87,6 +87,14 @@ browser and Chrome keep separate cookies and so count as two devices for one rea
 Owners manage slots from `/admin/guests` ("Perangkat" column, "Reset Perangkat", "Maks.
 Perangkat"). The client only ever receives `{ id, name }` for the guest, never `deviceIds`.
 
+## Check-in QR
+
+Opt-in per wedding (`WeddingConfig.qrCheckin`). Once a guest's **saved** RSVP is `confirmed`,
+`RsvpForm` shows [CheckinQr](../src/components/invitation/CheckinQr.tsx): a QR of
+`{origin}/admin/checkin?code={checkinCode}` (generated client-side with `qrcode`), the code in text,
+and "Berlaku untuk N orang". A forwarded screenshot of the QR only gets in once — the second scan
+shows "Sudah check-in". See `/api/checkin` in [03-api-reference.md](03-api-reference.md).
+
 ## RSVP flow
 
 [RsvpForm.tsx](../src/components/invitation/RsvpForm.tsx):
